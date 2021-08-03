@@ -1,0 +1,6 @@
+/* You can add global styles to this file, and also import other style files */
+
+beagle-list-view[data-beagle-id="charactersList"] .beagle-text,
+beagle-list-view[data-beagle-id="categoriesList"] .beagle-text {
+  white-space: nowrap;
+}

@@ -1,0 +1,23 @@
+android:
+    - android/**
+    - common/**
+    - buildSrc/**
+
+backend:
+    - backend/**
+    - common/**
+    - buildSrc/**
+
+iOS: iOS/**
+
+flutter: flutter/**
+
+schema: schema/**
+
+CI/CD:
+    - danger/**
+    - fastlane/**
+    - .github/**
+    - gradle/**
+
+documentation: doc/**

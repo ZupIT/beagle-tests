@@ -1,0 +1,28 @@
+{
+  "name": "common",
+  "version": "1.0.0",
+  "description": "runner",
+  "scripts": {
+    "test": "yarn run test:angular:9 && yarn run test:react && yarn run test:angular:8",
+    "test:react": "cypress-tags run --browser chrome --headless --env baseUrl=http://localhost:3000",
+    "test:angular:9": "cypress-tags run --browser chrome --headless --env baseUrl=http://localhost:4200",
+    "test:angular:8": "cypress-tags run --browser chrome --headless --env baseUrl=http://localhost:4201",
+    "cypress:open": "cypress open --env baseUrl=http://localhost:4200"
+  },
+  "cypress-cucumber-preprocessor": {
+    "step_definitions": "cypress/support/steps"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^14.14.26",
+    "cypress": "7.6.0",
+    "cypress-cucumber-preprocessor": "4.0.0",
+    "cypress-image-snapshot": "^4.0.1",
+    "cypress-wait-until": "^1.7.1",
+    "lodash": "^4.17.20",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {}
+}

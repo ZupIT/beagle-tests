@@ -1,0 +1,19 @@
+{
+  "name": "@zup-it/beagle-web-components",
+  "version": "0.0.0",
+  "license": "Apache-2.0",
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "sh ./bin/check-license.sh"
+    }
+  },
+  "devDependencies": {
+    "husky": "^4.2.5"
+  }
+}
