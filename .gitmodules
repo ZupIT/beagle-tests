@@ -1,3 +1,6 @@
 [submodule "beagle-android"]
 	path = beagle-android
 	url = git@github.com:ZupIT/beagle-android.git
+[submodule "beagle-backend-kotlin"]
+	path = beagle-backend-kotlin
+	url = git@github.com:ZupIT/beagle-backend-kotlin.git
