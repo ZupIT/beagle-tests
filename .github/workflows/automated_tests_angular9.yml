@@ -17,7 +17,7 @@
 name: Beagle Angular 9 UI tests
 
 
-on: 
+on:
   workflow_dispatch:
   # invoked by merges to main (pushing a branch to main)
   # src: https://github.community/t/trigger-workflow-only-on-pull-request-merge/17359/2
@@ -48,6 +48,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          submodules: 'true'
 
       ##################################################################################################
       # Caching - Start

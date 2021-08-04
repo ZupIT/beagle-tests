@@ -33,6 +33,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
+          submodules: 'true'
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
         with:
@@ -52,7 +53,7 @@ jobs:
           gradle-path: ~/.gradle
         with:
           path: ${{ env.gradle-path }}
-          key: ${{ runner.os }}-build-${{ env.gradle-cache-key }}-${{ hashFiles('backend/buildSrc/**') }}
+          key: ${{ runner.os }}-build-${{ env.gradle-cache-key }}-${{ hashFiles('beagle-backend-kotlin/buildSrc/**') }}
           restore-keys: ${{ runner.os }}-build-${{ env.gradle-cache-key }}
 
       - name: Build test BFF image
@@ -85,6 +86,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
+          submodules: 'true'
 
       - run: git branch
 
@@ -104,7 +106,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           secrets: |
-              beagle/core/*
+            beagle/core/*
           parse-json: true
       - name: Build project app-android to generate the .apk file
         env:
