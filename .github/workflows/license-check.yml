@@ -1,5 +1,5 @@
 name: Check License Lines
-on: [pull_request]
+on: [ pull_request ]
 jobs:
   license-header-check:
     name: PR Check
