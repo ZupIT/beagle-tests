@@ -55,6 +55,7 @@
     "web\\apps\\angular8\\e2e\\",
     "web/apps/angular9/e2e/",
     "web\\apps\\angular9\\e2e\\",
-    ".svg"
+    ".svg",
+    ".yarnc"
   ]
 }
