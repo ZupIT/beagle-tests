@@ -35,7 +35,7 @@ Use the flag ```--recurse-submodules``` since it will automatically initialize a
 
 ```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git```
 
-Execute the following commands ff you already cloned the project and want to update the submodules: 
+Execute the following commands if you already cloned the project and want to update the submodules: 
 
 ```git submodule init```
 ```git submodule update```
