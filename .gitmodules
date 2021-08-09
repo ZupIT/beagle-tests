@@ -4,3 +4,6 @@
 [submodule "beagle-backend-kotlin"]
 	path = beagle-backend-kotlin
 	url = git@github.com:ZupIT/beagle-backend-kotlin.git
+[submodule "beagle-web-angular"]
+	path = beagle-web-angular
+	url = https://github.com/ZupIT/beagle-web-angular
