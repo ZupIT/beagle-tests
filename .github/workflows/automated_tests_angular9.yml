@@ -18,6 +18,10 @@ name: Beagle Angular 9 UI tests
 
 
 on:
+  schedule:
+    # runs every weekday at 00:00
+    # src: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+    - cron: '0 0 * * 1-5'
   workflow_dispatch:
   # invoked by merges to main (pushing a branch to main)
   # src: https://github.community/t/trigger-workflow-only-on-pull-request-merge/17359/2
