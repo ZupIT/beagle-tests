@@ -6,7 +6,7 @@
 	url = git@github.com:ZupIT/beagle-backend-kotlin.git
 [submodule "beagle-web-angular"]
 	path = beagle-web-angular
-	url = https://github.com/ZupIT/beagle-web-angular
+	url = git@github.com:ZupIT/beagle-web-angular.git
 [submodule "beagle-ios"]
 	path = beagle-ios
-	url = https://github.com/ZupIT/beagle-ios
+	url = git@github.com:ZupIT/beagle-ios.git
