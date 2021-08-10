@@ -16,6 +16,7 @@
 	
 import Beagle
 import os.log
+import Foundation
 
 public class BeagleLoggerDefault: BeagleLoggerType {
 

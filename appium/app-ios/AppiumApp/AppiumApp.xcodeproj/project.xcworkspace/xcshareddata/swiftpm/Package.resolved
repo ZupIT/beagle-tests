@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "YogaKit",
+        "repositoryURL": "https://github.com/ZupIT/yoga.git",
+        "state": {
+          "branch": null,
+          "revision": "ed609289e4351f5e809d165989d1c607874a5151",
+          "version": "1.19.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

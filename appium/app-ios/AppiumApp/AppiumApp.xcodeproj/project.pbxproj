@@ -3,41 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		5C296393258BB014000194EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C296392258BB014000194EE /* AppDelegate.swift */; };
 		5C29639C258BB016000194EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C29639B258BB016000194EE /* Assets.xcassets */; };
 		5C29639F258BB016000194EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5C29639D258BB016000194EE /* LaunchScreen.storyboard */; };
-		5C2963AA258BB0E7000194EE /* Beagle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2963A8258BB0E7000194EE /* Beagle.framework */; };
-		5C2963AB258BB0E7000194EE /* Beagle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2963A8258BB0E7000194EE /* Beagle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5C2963B1258BB3BD000194EE /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963B0258BB3BD000194EE /* CustomNavigationController.swift */; };
 		5C2963BB258BB457000194EE /* BeagleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963B5258BB457000194EE /* BeagleConfig.swift */; };
 		5C2963BC258BB457000194EE /* BeagleLoggerDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963B7258BB457000194EE /* BeagleLoggerDefault.swift */; };
 		5C2963BD258BB457000194EE /* HttpRequestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963B9258BB457000194EE /* HttpRequestBuilder.swift */; };
 		5C2963BE258BB457000194EE /* NetworkClientDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963BA258BB457000194EE /* NetworkClientDefault.swift */; };
 		5C2963C0258BB513000194EE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963BF258BB513000194EE /* MainViewController.swift */; };
-		5C2963C3258BB542000194EE /* ViewLayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C2963C2258BB542000194EE /* ViewLayoutHelper.swift */; };
 		A0F9DF1D25A628B5004F8B55 /* DeepLinkScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF1C25A628B5004F8B55 /* DeepLinkScreenManager.swift */; };
 		A0F9DF2C25A62DEF004F8B55 /* AnalyticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF2B25A62DEF004F8B55 /* AnalyticsViewController.swift */; };
 		A0F9DF2F25A636E3004F8B55 /* LocalAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF2E25A636E2004F8B55 /* LocalAnalyticsProvider.swift */; };
+		ADBC129526C2EBE600B2C024 /* ViewLayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBC129426C2EBE600B2C024 /* ViewLayoutHelper.swift */; };
+		ADBC129926C2EF1800B2C024 /* Beagle in Frameworks */ = {isa = PBXBuildFile; productRef = ADBC129826C2EF1800B2C024 /* Beagle */; };
 		ADE324BF262762BE0004A563 /* DeepLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE324BE262762BE0004A563 /* DeepLinkViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		5C2963AE258BB0E7000194EE /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				5C2963AB258BB0E7000194EE /* Beagle.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		5C29638F258BB014000194EE /* AppiumApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppiumApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,10 +37,11 @@
 		5C2963B9258BB457000194EE /* HttpRequestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequestBuilder.swift; sourceTree = "<group>"; };
 		5C2963BA258BB457000194EE /* NetworkClientDefault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkClientDefault.swift; sourceTree = "<group>"; };
 		5C2963BF258BB513000194EE /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
-		5C2963C2258BB542000194EE /* ViewLayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLayoutHelper.swift; sourceTree = "<group>"; };
 		A0F9DF1C25A628B5004F8B55 /* DeepLinkScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkScreenManager.swift; sourceTree = "<group>"; };
 		A0F9DF2B25A62DEF004F8B55 /* AnalyticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewController.swift; sourceTree = "<group>"; };
 		A0F9DF2E25A636E2004F8B55 /* LocalAnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAnalyticsProvider.swift; sourceTree = "<group>"; };
+		ADBC129426C2EBE600B2C024 /* ViewLayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLayoutHelper.swift; sourceTree = "<group>"; };
+		ADBC129626C2EEB600B2C024 /* beagle-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "beagle-ios"; path = "../../../beagle-ios"; sourceTree = "<group>"; };
 		ADE324BE262762BE0004A563 /* DeepLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C2963AA258BB0E7000194EE /* Beagle.framework in Frameworks */,
+				ADBC129926C2EF1800B2C024 /* Beagle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -74,6 +60,7 @@
 		5C296386258BB014000194EE = {
 			isa = PBXGroup;
 			children = (
+				ADBC129626C2EEB600B2C024 /* beagle-ios */,
 				5C296391258BB014000194EE /* AppiumApp */,
 				5C296390258BB014000194EE /* Products */,
 				5C2963A7258BB0E7000194EE /* Frameworks */,
@@ -91,7 +78,6 @@
 		5C296391258BB014000194EE /* AppiumApp */ = {
 			isa = PBXGroup;
 			children = (
-				5C2963C1258BB52E000194EE /* Common */,
 				5C2963B4258BB457000194EE /* BeagleConfig */,
 				5C296392258BB014000194EE /* AppDelegate.swift */,
 				5C29639B258BB016000194EE /* Assets.xcassets */,
@@ -100,6 +86,7 @@
 				5C2963BF258BB513000194EE /* MainViewController.swift */,
 				ADE324BE262762BE0004A563 /* DeepLinkViewController.swift */,
 				A0F9DF2B25A62DEF004F8B55 /* AnalyticsViewController.swift */,
+				ADBC129426C2EBE600B2C024 /* ViewLayoutHelper.swift */,
 			);
 			path = AppiumApp;
 			sourceTree = "<group>";
@@ -150,15 +137,6 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		5C2963C1258BB52E000194EE /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				5C2963C2258BB542000194EE /* ViewLayoutHelper.swift */,
-			);
-			name = Common;
-			path = ../../../../../iOS/Common;
-			sourceTree = "<group>";
-		};
 		A0F9DF1B25A62895004F8B55 /* DeepLink */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,13 +163,15 @@
 				5C29638B258BB014000194EE /* Sources */,
 				5C29638C258BB014000194EE /* Frameworks */,
 				5C29638D258BB014000194EE /* Resources */,
-				5C2963AE258BB0E7000194EE /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = AppiumApp;
+			packageProductDependencies = (
+				ADBC129826C2EF1800B2C024 /* Beagle */,
+			);
 			productName = AppiumApp;
 			productReference = 5C29638F258BB014000194EE /* AppiumApp.app */;
 			productType = "com.apple.product-type.application";
@@ -249,9 +229,9 @@
 				A0F9DF1D25A628B5004F8B55 /* DeepLinkScreenManager.swift in Sources */,
 				5C2963BE258BB457000194EE /* NetworkClientDefault.swift in Sources */,
 				5C2963BD258BB457000194EE /* HttpRequestBuilder.swift in Sources */,
-				5C2963C3258BB542000194EE /* ViewLayoutHelper.swift in Sources */,
 				5C2963BC258BB457000194EE /* BeagleLoggerDefault.swift in Sources */,
 				ADE324BF262762BE0004A563 /* DeepLinkViewController.swift in Sources */,
+				ADBC129526C2EBE600B2C024 /* ViewLayoutHelper.swift in Sources */,
 				A0F9DF2C25A62DEF004F8B55 /* AnalyticsViewController.swift in Sources */,
 				5C296393258BB014000194EE /* AppDelegate.swift in Sources */,
 				A0F9DF2F25A636E3004F8B55 /* LocalAnalyticsProvider.swift in Sources */,
@@ -448,6 +428,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ADBC129826C2EF1800B2C024 /* Beagle */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Beagle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5C296387258BB014000194EE /* Project object */;
 }
