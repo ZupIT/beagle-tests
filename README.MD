@@ -16,7 +16,7 @@ Please visit Beagle's website https://usebeagle.io/ for more information
 
 ### About beagle-tests
 
-This project contains tests that validate user interface of apps that use Beagle. The main project folders are:
+This project contains tests that validate user interface of apps that use Beagle. The main project test folders are:
 
 - [appium](./appium): Android and iOS tests. Refer to [Beagle's wiki](https://github.com/ZupIT/beagle/wiki/Mobile-tests-with-Appium) 
   to get detailed info about Beagle's Appium tests implementation
@@ -27,7 +27,11 @@ This project contains tests that validate user interface of apps that use Beagle
 
 - [beagle-android](./beagle-android): A [GitHub Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), used as a dependency for mobile tests
 
+- [beagle-ios](./beagle-ios): A GitHub Submodule, used as a dependency for mobile tests
+
 - [beagle-backend-kotlin](./beagle-backend-kotlin): A GitHub Submodule, used as a dependency for the bff-server project
+
+- [beagle-web-angular](./beagle-web-angular): A GitHub Submodule, used as a dependency for the web projects
 
 ### Cloning the main project and its submodules
 

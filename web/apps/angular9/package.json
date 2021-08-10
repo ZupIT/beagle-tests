@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "yarn beagle view-engine && ng serve"
+    "serve": "yarn beagle view-engine && ng serve",
+    "preinstall": "yarn --cwd ../../../beagle-web-angular && yarn --cwd ../../../beagle-web-angular build"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +21,7 @@
     "@angular/platform-browser": "~9.1.12",
     "@angular/platform-browser-dynamic": "~9.1.12",
     "@angular/router": "~9.1.12",
-    "@zup-it/beagle-angular": "^1.9.6",
+    "@zup-it/beagle-angular": "file:../../../beagle-web-angular/dist",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

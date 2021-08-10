@@ -75,7 +75,7 @@ jobs:
         run: |
           set -e
           xcodebuild -showsdks
-          xcodebuild  -workspace iOS/Beagle.xcworkspace -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 11' -quiet
+          xcodebuild  -workspace beagle-ios/Beagle.xcworkspace -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 11' -quiet
 
 
       ##################################################################################################
