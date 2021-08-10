@@ -7,3 +7,6 @@
 [submodule "beagle-web-angular"]
 	path = beagle-web-angular
 	url = https://github.com/ZupIT/beagle-web-angular
+[submodule "beagle-ios"]
+	path = beagle-ios
+	url = https://github.com/ZupIT/beagle-ios
