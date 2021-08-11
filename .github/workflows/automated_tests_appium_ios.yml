@@ -35,6 +35,12 @@ jobs:
 
       - run: git branch
 
+      - name: Setup JDK (11)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
       ##################################################################################################
       # Caching - Start
       ##################################################################################################
@@ -75,7 +81,7 @@ jobs:
         run: |
           set -e
           xcodebuild -showsdks
-          xcodebuild  -workspace beagle-ios/Beagle.xcworkspace -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 11' -quiet
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 11' -quiet
 
 
       ##################################################################################################
