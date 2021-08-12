@@ -16,10 +16,15 @@
 
 package br.com.zup.beagle.cucumber.steps
 
+import br.com.zup.beagle.setup.SuiteSetup
+import br.com.zup.beagle.utils.AppiumUtil
+import io.appium.java_client.ios.IOSTouchAction
+import io.appium.java_client.touch.offset.PointOption
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
+import org.openqa.selenium.By
 
 class TouchScreenSteps : AbstractStep() {
 
@@ -51,10 +56,20 @@ class TouchScreenSteps : AbstractStep() {
                     waitForElementWithTextToBeClickable("Click here!").click()
                 }
                 "Image 1" -> {
-                    safeClickOnElement(waitForImageElements()[0])
+                    if (SuiteSetup.isAndroid())
+                        safeClickOnElement(waitForImageElements()[0])
+                    else {
+                        sleep(300)
+                        AppiumUtil.iOStapOnCenterOfElement(getDriver(), waitForImageElements()[0])
+                    }
                 }
                 "Image 2" -> {
-                    safeClickOnElement(waitForImageElements()[1])
+                    if (SuiteSetup.isAndroid())
+                        safeClickOnElement(waitForImageElements()[1])
+                    else {
+                        sleep(300)
+                        AppiumUtil.iOStapOnCenterOfElement(getDriver(), waitForImageElements()[1])
+                    }
                 }
             }
 

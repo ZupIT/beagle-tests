@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-@scrollview @android @ios
+@scrollView @android @ios
 Feature: ScrollView Component Validation
 
   As a Beagle developer/user
