@@ -693,16 +693,13 @@ class ListViewScreenSteps : AbstractStep() {
     private fun getTextChildrenElementsOfListView(listViewElement: MobileElement): List<MobileElement> {
 
         val lastChildOfListViewLocator: By = if (SuiteSetup.isIos()) {
-            MobileBy.iOSClassChain("**/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextView")
+            MobileBy.iOSClassChain("**/XCUIElementTypeCell/XCUIElementTypeOther/**/XCUIElementTypeTextView")
 
         } else {
             By.xpath(".//android.view.ViewGroup//android.view.ViewGroup//android.widget.TextView")
         }
 
-        return waitForChildrenElementsToBePresent(
-            listViewElement,
-            lastChildOfListViewLocator
-        )
+        return waitForChildrenElementsToBePresent(listViewElement, lastChildOfListViewLocator)
 
     }
 
