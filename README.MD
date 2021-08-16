@@ -12,37 +12,36 @@
 
 Beagle is a server-driven library that enables building screens for mobile and web using the same JSON.
 
-Please visit Beagle's website https://usebeagle.io/ for more information 
+Please visit Beagle's website https://usebeagle.io/ for more information
 
 ### About beagle-tests
 
 This project contains tests that validate user interface of apps that use Beagle. The main project test folders are:
 
-- [appium](./appium): Android and iOS tests. Refer to [Beagle's wiki](https://github.com/ZupIT/beagle/wiki/Mobile-tests-with-Appium) 
+- [appium](./appium): Android and iOS tests. Refer to [Beagle's wiki](https://github.com/ZupIT/beagle/wiki/Mobile-tests-with-Appium)
   to get detailed info about Beagle's Appium tests implementation
 
 - [bff-server](./bff-server): A Backend for Frontend (BFF) project that provides JSONs used by the mobile and web projects
 
 - [web](./web): Angular and React tests
 
-- [beagle-android](./beagle-android): A [GitHub Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), used as a dependency for mobile tests
+- beagle-android: A [GitHub Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), used as a dependency for mobile tests
 
-- [beagle-ios](./beagle-ios): A GitHub Submodule, used as a dependency for mobile tests
+- beagle-ios: A GitHub Submodule, used as a dependency for mobile tests
 
-- [beagle-backend-kotlin](./beagle-backend-kotlin): A GitHub Submodule, used as a dependency for the bff-server project
+- beagle-backend-kotlin: A GitHub Submodule, used as a dependency for the bff-server project
 
-- [beagle-web-angular](./beagle-web-angular): A GitHub Submodule, used as a dependency for the web projects
+- beagle-web-angular: A GitHub Submodule, used as a dependency for the web projects
 
 ### Cloning the main project and its submodules
 
-Use the flag ```--recurse-submodules``` since it will automatically initialize and update each submodule in the repository, including nested submodules if any of the submodules in the repository have submodules themselves (src: https://git-scm.com/book/en/v2/Git-Tools-Submodules): 
+Use the flag ```--recurse-submodules``` since it will automatically initialize and update each submodule in the repository, including nested submodules if any of the submodules in the repository have submodules themselves (src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
 ```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git```
 
-Execute the following commands if you already cloned the project and want to update the submodules: 
+Execute the following commands if you already cloned the project and want to update the submodules:
 
-```git submodule init```
-```git submodule update```
+```git submodule init && git submodule update```
 
 ### Contributing Guide
 
@@ -62,7 +61,6 @@ Please read the [code] so that you can understand what actions will and will not
 Beagle is Apache 2.0 licensed, as found in the [LICENSE][l] file.
 
 [l]: https://github.com/ZupIT/beagle/blob/main/LICENSE.txt
-
 
 
 
