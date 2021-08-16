@@ -806,4 +806,11 @@ object AppiumUtil {
 
         return screenshot
     }
+
+    @Synchronized
+    fun iOStapOnCenterOfElement(driver: AppiumDriver<*>, element: MobileElement) {
+        val x = element.center.x
+        val y = element.center.y
+        IOSTouchAction(driver).tap(PointOption.point(x, y)).perform()
+    }
 }
