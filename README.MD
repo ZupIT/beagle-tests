@@ -25,13 +25,13 @@ This project contains tests that validate user interface of apps that use Beagle
 
 - [web](./web): Angular and React tests
 
-- [beagle-android](./beagle-android): A [GitHub Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), used as a dependency for mobile tests
+- beagle-android: A [GitHub Submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), used as a dependency for mobile tests
 
-- [beagle-ios](./beagle-ios): A GitHub Submodule, used as a dependency for mobile tests
+- beagle-ios: A GitHub Submodule, used as a dependency for mobile tests
 
-- [beagle-backend-kotlin](./beagle-backend-kotlin): A GitHub Submodule, used as a dependency for the bff-server project
+- beagle-backend-kotlin: A GitHub Submodule, used as a dependency for the bff-server project
 
-- [beagle-web-angular](./beagle-web-angular): A GitHub Submodule, used as a dependency for the web projects
+- beagle-web-angular: A GitHub Submodule, used as a dependency for the web projects
 
 ### Cloning the main project and its submodules
 
@@ -41,8 +41,7 @@ Use the flag ```--recurse-submodules``` since it will automatically initialize a
 
 Execute the following commands if you already cloned the project and want to update the submodules: 
 
-```git submodule init```
-```git submodule update```
+```git submodule init && git submodule update```
 
 ### Contributing Guide
 
