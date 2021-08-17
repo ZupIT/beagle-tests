@@ -33,7 +33,11 @@ Given(/that I'm on the listView page/, () => {
 })
 
 When(/I scroll the listview with id \"(.*)\" to the end/, (elementId) => {
-  ElementUtils.getElementByAttributeValue('data-beagle-id', elementId).scrollTo('right')
+  ElementUtils.getElementByAttributeValue('data-beagle-id', elementId).within(() =>
+    // the scroll works better in child element beagle-dynamic-list   
+    cy.get('beagle-dynamic-list')
+      .scrollTo('right', { duration: 1500, })
+  )
 })
 
 When(/I scroll to the bottom of the infinite scroll listview/, () => {

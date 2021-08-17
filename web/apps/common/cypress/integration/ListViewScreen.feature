@@ -27,19 +27,17 @@ Feature: ListView Component Validation
     Scenario: ListView 01 - whole page validation
         Then the current page screenshot should be identical to image "ListViewWholePage"
 
-    # depends on https://github.com/ZupIT/beagle-web-angular/issues/280
-    # Scenario: ListView 02 - characters listview 1 scroll validation
-    #     When I scroll the listview with id "charactersList" to the end
-    #     Then the current page screenshot should be identical to image "ListViewCharacters1Scrolled"
+    Scenario: ListView 02 - characters listview 1 scroll validation
+        When I scroll the listview with id "charactersList" to the end
+        Then the current page screenshot should be identical to image "ListViewCharacters1Scrolled"
 
     Scenario: ListView 03 - characters listview 2 validation
         When I click on a button with exact text "next"
         Then the current page screenshot should be identical to image "ListViewCharacters2"
 
-    # depends on https://github.com/ZupIT/beagle-web-angular/issues/280
-    # Scenario: ListView 04 - characters listview 2 scroll validation
-    #     When I scroll the listview with id "charactersList" to the end
-    #     Then the current page screenshot should be identical to image "ListViewCharacters2Scrolled"
+    Scenario: ListView 04 - characters listview 2 scroll validation
+        When I scroll the listview with id "charactersList" to the end
+        Then the current page screenshot should be identical to image "ListViewCharacters2Scrolled"
 
     Scenario: ListView 05 - infinite scroll listview
         When I scroll to the bottom of the infinite scroll listview
