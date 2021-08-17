@@ -36,7 +36,7 @@ When(/I scroll the listview with id \"(.*)\" to the end/, (elementId) => {
   ElementUtils.getElementByAttributeValue('data-beagle-id', elementId).within(() =>
     // the scroll works better in child element beagle-dynamic-list   
     cy.get('beagle-dynamic-list')
-      .scrollTo('right', { duration: 1500, })
+      .scrollTo('right', { duration: 1500})
   )
 })
 
