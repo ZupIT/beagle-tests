@@ -131,6 +131,7 @@ object ListViewScreenBuilder {
     )
 
     private fun charactersListView() = ListView(
+        isScrollIndicatorVisible = true,
         direction = ListDirection.HORIZONTAL,
         onInit = listOf(
             SendRequest(
@@ -223,6 +224,7 @@ object ListViewScreenBuilder {
 
     private fun categoriesListView(): ListView {
         return ListView(
+            isScrollIndicatorVisible = true,
             key = "id",
             direction = ListDirection.VERTICAL,
             dataSource = valueOf(Genre.createMock()),
@@ -248,6 +250,7 @@ object ListViewScreenBuilder {
 
     private fun categoriesBooksListView(): ListView {
         return ListView(
+            isScrollIndicatorVisible = true,
             key = "title",
             onInit = listOf(
                 SendRequest(
@@ -297,6 +300,7 @@ object ListViewScreenBuilder {
 
     private fun bookCharactersListView(): ListView {
         return ListView(
+            isScrollIndicatorVisible = true,
             direction = ListDirection.VERTICAL,
             dataSource = expressionOf("@{item.characters}"),
             templates = listOf(Template(view = Container(
@@ -325,6 +329,7 @@ object ListViewScreenBuilder {
     private fun createThirdListView(listHeight: Int?): ListView {
 
         val listView = ListView(
+            isScrollIndicatorVisible = true,
             useParentScroll = true,
             scrollEndThreshold = 80,
             direction = ListDirection.VERTICAL,
