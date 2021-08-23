@@ -17,14 +17,12 @@
 package br.com.zup.beagle.automatedtests.controllers
 
 import br.com.zup.beagle.automatedtests.builders.AccessibilityScreenBuilder
-import br.com.zup.beagle.automatedtests.builders.AnalyticsScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.BuilderKotlinDslScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.ClickActionScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.ExpressionEscapingScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.NewAnalyticsScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.SafeAreaScreenBuilder
 import br.com.zup.beagle.automatedtests.constants.ACCESSIBILITY_ENDPOINT
-import br.com.zup.beagle.automatedtests.constants.ANALYTICS_ENDPOINT
 import br.com.zup.beagle.automatedtests.constants.EXPRESSION_ESCAPING_ENDPOINT
 import br.com.zup.beagle.automatedtests.constants.IMAGE_WEB
 import br.com.zup.beagle.automatedtests.constants.KOTLIN_DSL_ENDPOINT
@@ -47,9 +45,6 @@ class GeneralController {
 
     @GetMapping(SCREEN_ACTION_CLICK_ENDPOINT)
     fun getActionClick() = ClickActionScreenBuilder.build()
-
-    @GetMapping(ANALYTICS_ENDPOINT)
-    fun getAnalyticsScreen() = AnalyticsScreenBuilder.build()
 
     @GetMapping(NEW_ANALYTICS_ENDPOINT)
     fun getNewAnalyticsScreen() = NewAnalyticsScreenBuilder.build()

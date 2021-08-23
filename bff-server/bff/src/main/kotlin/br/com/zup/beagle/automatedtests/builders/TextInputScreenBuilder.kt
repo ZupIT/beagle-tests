@@ -17,11 +17,11 @@
 package br.com.zup.beagle.automatedtests.builders
 
 import br.com.zup.beagle.ext.setStyle
-import br.com.zup.beagle.ext.unitReal
 import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.context.ContextData
 import br.com.zup.beagle.widget.context.expressionOf
+import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Size
 import br.com.zup.beagle.widget.core.TextInputType
@@ -119,7 +119,7 @@ object TextInputScreenBuilder {
             Container(
                 context = ContextData(id = "isDisabled", value = true),
                 children = listOf(
-                    TextInput(placeholder = "Standard text with disabled field", disabled = true),
+                    TextInput(placeholder = valueOf("Standard text with disabled field"), disabled = valueOf(true)),
                     TextInput(placeholder = expressionOf("@{placeholderValue}"),
                         disabled = expressionOf("@{isDisabled}")
                     )
@@ -229,7 +229,7 @@ object TextInputScreenBuilder {
                 hidden = true)
         ),
         children = listOf(
-            TextInput(value = "this text is hidden", hidden = true),
+            TextInput(value = valueOf("this text is hidden"), hidden = valueOf(true)),
             TextInput(value = expressionOf("@{isHiddenWithExpression.placeholder}"),
                 hidden = expressionOf("@{isHiddenWithExpression.hidden}")
             ),
