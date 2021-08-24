@@ -43,8 +43,10 @@ internal class DatabaseLocalStore(
         }
 
 
-        val newRowId = database.insertWithOnConflict(ScreenEntry.TABLE_NAME, null, values,
-            SQLiteDatabase.CONFLICT_REPLACE)
+        val newRowId = database.insertWithOnConflict(
+            ScreenEntry.TABLE_NAME, null, values,
+            SQLiteDatabase.CONFLICT_REPLACE
+        )
         if (newRowId == -1L) {
             BeagleMessageLogs.logDataNotInsertedOnDatabase(key, value)
         }
@@ -145,10 +147,10 @@ internal open class BeagleSQLiteDatabase(
 ) {
     override fun onCreate(db: SQLiteDatabase?) {
         val createTableQuery = "CREATE TABLE ${ScreenEntry.TABLE_NAME} (" +
-            "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-            "${ScreenEntry.KEY_COLUMN_NAME} TEXT NOT NULL UNIQUE," +
-            "${ScreenEntry.VALUE_COLUMN_NAME} TEXT NOT NULL" +
-            ")"
+                "${BaseColumns._ID} INTEGER PRIMARY KEY," +
+                "${ScreenEntry.KEY_COLUMN_NAME} TEXT NOT NULL UNIQUE," +
+                "${ScreenEntry.VALUE_COLUMN_NAME} TEXT NOT NULL" +
+                ")"
         db?.execSQL(createTableQuery)
     }
 

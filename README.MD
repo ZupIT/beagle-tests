@@ -10,13 +10,13 @@
 
 ### What is Beagle?
 
-Beagle is a server-driven library that enables building screens for mobile and web using the same JSON.
+Beagle is a server-driven set of libraries that enable building screens for mobile and web using the same JSON.
 
 Please visit Beagle's website https://usebeagle.io/ for more information
 
 ### About beagle-tests
 
-This project contains tests that validate user interface of apps that use Beagle. The main project test folders are:
+This project contains tests that validate user interface of apps that use Beagle. The main folders are:
 
 - [appium](./appium): Android and iOS tests. Refer to [Beagle's wiki](https://github.com/ZupIT/beagle/wiki/Mobile-tests-with-Appium)
   to get detailed info about Beagle's Appium tests implementation
@@ -41,7 +41,7 @@ Use the flag ```--recurse-submodules``` since it will automatically initialize a
 
 Execute the following commands if you already cloned the project and want to update the submodules:
 
-```git submodule init && git submodule update```
+```git submodule update --remote```
 
 ### Contributing Guide
 

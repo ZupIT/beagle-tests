@@ -47,7 +47,7 @@ class SuiteSetupPlugin : EventListener {
 
                 // cleans screenshot temp dir
                 try {
-                    val screenShotsFolder: File = File("${SuiteSetup.ERROR_SCREENSHOTS_FOLDER}")
+                    val screenShotsFolder: File = File("${SuiteSetup.ERROR_SCREENSHOTS_ROOT_DIR}")
                     if (screenShotsFolder.exists())
                         FileUtils.cleanDirectory(screenShotsFolder!!)
                 } catch (exception: Exception) {

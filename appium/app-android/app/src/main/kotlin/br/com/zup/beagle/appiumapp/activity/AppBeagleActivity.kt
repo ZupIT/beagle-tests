@@ -16,6 +16,7 @@
 
 package br.com.zup.beagle.appiumapp.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,7 +28,6 @@ import androidx.appcompat.widget.Toolbar
 import br.com.zup.beagle.android.annotation.RegisterController
 import br.com.zup.beagle.android.utils.newServerDrivenIntent
 import br.com.zup.beagle.android.view.BeagleActivity
-import br.com.zup.beagle.android.view.ScreenRequest
 import br.com.zup.beagle.android.view.ServerDrivenState
 import br.com.zup.beagle.appiumapp.R
 
@@ -38,7 +38,7 @@ class AppBeagleActivity : BeagleActivity() {
     private val mToolbar: Toolbar by lazy { findViewById<Toolbar>(R.id.custom_toolbar) }
     private val mButton: Button by lazy { findViewById<Button>(R.id.btn_retry) }
     private val mFrame: FrameLayout by lazy { findViewById<FrameLayout>(R.id.server_driven_container) }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_beagle)
@@ -78,9 +78,9 @@ class AppBeagleActivity : BeagleActivity() {
             super.onBackPressed()
     }
 
-    companion object {
-        fun newAppIntent(context: Context, screenRequest: ScreenRequest): Intent {
-            return context.newServerDrivenIntent<AppBeagleActivity>(screenRequest)
-        }
-    }
+//    companion object {
+//        fun newAppIntent(context: Context, screenRequest: ScreenRequest): Intent {
+//            return context.newServerDrivenIntent<AppBeagleActivity>(screenRequest)
+//        }
+//    }
 }
