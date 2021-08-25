@@ -35,11 +35,13 @@ This project contains tests that validate user interface of apps that use Beagle
 
 ### Cloning the main project and its submodules
 
-Use the flag ```--recurse-submodules``` since it will automatically initialize and update each submodule in the repository, including nested submodules if any of the submodules in the repository have submodules themselves (src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
+Use the following command to automatically initialize and update each submodule in the repository, including nested 
+submodules if any of the submodules in the repository have submodules themselves 
+(src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
-```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git```
+```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git && git submodule update --remote```
 
-Execute the following commands if you already cloned the project and want to update the submodules:
+If you already cloned the project and want only to update the submodules, execute the following command:
 
 ```git submodule update --remote```
 
