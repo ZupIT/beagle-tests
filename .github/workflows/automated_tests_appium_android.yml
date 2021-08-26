@@ -34,6 +34,13 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
+
+      - name: Update submodules
+        run: git submodule update --init --recursive --remote
+
+      - name: Print branch info
+        run: git branch
+
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
         with:
@@ -43,8 +50,6 @@ jobs:
           secrets: |
             beagle/core/*
           parse-json: true
-
-      - run: git branch
 
       - name: Cache gradle dependencies of project backend
         uses: actions/cache@v2
