@@ -38,7 +38,7 @@ class AppBeagleActivity : BeagleActivity() {
     private val mToolbar: Toolbar by lazy { findViewById<Toolbar>(R.id.custom_toolbar) }
     private val mButton: Button by lazy { findViewById<Button>(R.id.btn_retry) }
     private val mFrame: FrameLayout by lazy { findViewById<FrameLayout>(R.id.server_driven_container) }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_beagle)
@@ -78,9 +78,4 @@ class AppBeagleActivity : BeagleActivity() {
             super.onBackPressed()
     }
 
-//    companion object {
-//        fun newAppIntent(context: Context, screenRequest: ScreenRequest): Intent {
-//            return context.newServerDrivenIntent<AppBeagleActivity>(screenRequest)
-//        }
-//    }
 }
