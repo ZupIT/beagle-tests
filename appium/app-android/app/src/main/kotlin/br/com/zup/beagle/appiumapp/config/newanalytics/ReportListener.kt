@@ -16,9 +16,10 @@
 
 package br.com.zup.beagle.appiumapp.config.newanalytics
 
-import br.com.zup.beagle.newanalytics.AnalyticsRecord
+import br.com.zup.beagle.android.analytics.AnalyticsRecord
+
 
 interface ReportListener {
 
-    fun onReport(report : AnalyticsRecord)
+    fun onReport(report: AnalyticsRecord)
 }

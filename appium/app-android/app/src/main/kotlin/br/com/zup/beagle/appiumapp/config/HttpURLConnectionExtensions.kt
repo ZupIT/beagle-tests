@@ -16,7 +16,6 @@
 
 package br.com.zup.beagle.appiumapp.config
 
-import java.lang.Exception
 import java.net.HttpURLConnection
 
 internal fun HttpURLConnection.getSafeResponseCode(): Int? {

@@ -27,6 +27,7 @@ jobs:
   bff_config_job:
     name: BFF configuration job
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     env:
       BFF_NAME: automated-test-bff
     steps:
@@ -34,6 +35,13 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
+
+      - name: Update submodules
+        run: git submodule update --init --recursive --remote
+
+      - name: Print branch info
+        run: git branch
+
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
         with:
@@ -43,8 +51,6 @@ jobs:
           secrets: |
             beagle/core/*
           parse-json: true
-
-      - run: git branch
 
       - name: Cache gradle dependencies of project backend
         uses: actions/cache@v2
@@ -82,6 +88,7 @@ jobs:
     needs: bff_config_job
     name: Tests job
     runs-on: macos-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v2
         with:

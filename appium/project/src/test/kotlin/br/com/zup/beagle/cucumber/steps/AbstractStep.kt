@@ -487,7 +487,7 @@ abstract class AbstractStep {
         val queryScreenshotFile = getAppScreenShot()
         val resultFile =
             File(
-                "${SuiteSetup.ERROR_SCREENSHOTS_FOLDER}/Comparison-" +
+                "${SuiteSetup.ERROR_SCREENSHOTS_ROOT_DIR}/${SuiteSetup.getPlatformDetails()}Comparison-" +
                         "${FilenameUtils.removeExtension(databaseScreenshotFile.name)}-${System.currentTimeMillis()}.png"
             )
 
@@ -539,11 +539,12 @@ abstract class AbstractStep {
          *  because the latter changes its value after driver initialization
          */
         val deviceName = SuiteSetup.getDeviceName().trim()
+        val platformVersion = SuiteSetup.getPlatformVersion().trim()
 
         val dataBaseFolderPath = if (SuiteSetup.isAndroid())
-            SuiteSetup.SCREENSHOTS_DATABASE_FOLDER + "/android/" + deviceName
+            SuiteSetup.SCREENSHOTS_DATABASE_ROOT_DIR + "/android/$platformVersion/$deviceName"
         else
-            SuiteSetup.SCREENSHOTS_DATABASE_FOLDER + "/ios/" + deviceName
+            SuiteSetup.SCREENSHOTS_DATABASE_ROOT_DIR + "/ios/$platformVersion/$deviceName"
 
         if (!File(dataBaseFolderPath).exists())
             throw Exception(

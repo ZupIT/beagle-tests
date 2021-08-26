@@ -50,11 +50,18 @@ jobs:
   angular9_tests:
     name: Main job
     runs-on: macos-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
+
+      - name: Update submodules
+        run: git submodule update --init --recursive --remote
+
+      - name: Print branch info
+        run: git branch
 
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
