@@ -27,6 +27,7 @@ jobs:
   bff_config_job:
     name: BFF configuration job
     runs-on: ubuntu-20.04
+    timeout-minutes: 10
     env:
       BFF_NAME: automated-test-bff
     steps:
@@ -87,6 +88,7 @@ jobs:
     needs: bff_config_job
     name: Tests job
     runs-on: macos-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v2
         with:

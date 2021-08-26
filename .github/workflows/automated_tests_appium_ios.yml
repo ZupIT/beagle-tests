@@ -27,6 +27,7 @@ jobs:
   appium_tests:
     name: Tests job
     runs-on: macos-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v2
         with:
