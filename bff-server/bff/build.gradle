@@ -18,13 +18,12 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
-    id 'kotlin'
-    id 'org.springframework.boot' version '2.5.4'
+    id 'org.springframework.boot' version '2.3.5.RELEASE'
 }
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.5.21'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.4'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.3.5.RELEASE'
     implementation "br.com.zup.beagle:beagle-spring-starter:1.0.0-local"
     implementation "br.com.zup.beagle:beagle-micronaut-starter:1.0.0-local"
 }

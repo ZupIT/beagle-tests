@@ -21,7 +21,6 @@ import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.context.ContextData
 import br.com.zup.beagle.widget.context.expressionOf
-import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Size
 import br.com.zup.beagle.widget.core.TextInputType
@@ -32,7 +31,6 @@ import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.layout.ScrollView
 import br.com.zup.beagle.widget.ui.ImagePath
-import br.com.zup.beagle.widget.ui.Text
 import br.com.zup.beagle.widget.ui.TextInput
 
 data class TextInputReadOnly(val value: String, val isReadOnly: Boolean)
@@ -80,8 +78,7 @@ object TextInputScreenBuilder {
                         textInputWritingTexts("writing text",
                             "writing text with expression", TextInputType.TEXT),
                         textInputTypeNumber(),
-                        textInputActions(),
-                        textInputHidden()
+                        textInputActions()
                     )
                 ).setStyle {
                     this.size = Size(height = UnitValue.percent(100.0))
@@ -117,11 +114,11 @@ object TextInputScreenBuilder {
             value = "Standard text with disabled field with expression"),
         children = listOf(
             Container(
-                context = ContextData(id = "isDisabled", value = true),
+                context = ContextData(id = "isEnabled", value = false),
                 children = listOf(
-                    TextInput(placeholder = valueOf("Standard text with disabled field"), disabled = valueOf(true)),
+                    TextInput(placeholder = "Standard text with disabled field"),
                     TextInput(placeholder = expressionOf("@{placeholderValue}"),
-                        disabled = expressionOf("@{isDisabled}")
+                        enabled = expressionOf("@{isDisabled}")
                     )
                 )
             )
@@ -219,21 +216,6 @@ object TextInputScreenBuilder {
                 onBlur = listOf(
                     SetContext(contextId = "textInputActions", path = "blur", value = "DidOnBlur"))
             )
-        )
-    )
-
-    private fun textInputHidden() = Container(
-        context = ContextData(
-            id = "isHiddenWithExpression",
-            value = TextInputHidden(placeholder = "this text is hidden with expression",
-                hidden = true)
-        ),
-        children = listOf(
-            TextInput(value = valueOf("this text is hidden"), hidden = valueOf(true)),
-            TextInput(value = expressionOf("@{isHiddenWithExpression.placeholder}"),
-                hidden = expressionOf("@{isHiddenWithExpression.hidden}")
-            ),
-            Text("There are two hidden input fields above")
         )
     )
 }
