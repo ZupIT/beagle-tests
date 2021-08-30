@@ -37,8 +37,6 @@ data class TextInputReadOnly(val value: String, val isReadOnly: Boolean)
 
 data class TextInputType(val placeholder: String, val textInputType: TextInputType)
 
-data class TextInputHidden(val placeholder: String, val hidden: Boolean)
-
 object TextInputScreenBuilder {
 
     fun build() = Screen(
@@ -116,9 +114,9 @@ object TextInputScreenBuilder {
             Container(
                 context = ContextData(id = "isEnabled", value = false),
                 children = listOf(
-                    TextInput(placeholder = "Standard text with disabled field"),
+                    TextInput(placeholder = "Standard text with disabled field", enabled = false),
                     TextInput(placeholder = expressionOf("@{placeholderValue}"),
-                        enabled = expressionOf("@{isDisabled}")
+                        enabled = expressionOf("@{isEnabled}")
                     )
                 )
             )

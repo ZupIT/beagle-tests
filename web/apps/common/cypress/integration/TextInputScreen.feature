@@ -57,16 +57,6 @@ Feature: TextInput Validation
             | is Read Only                 |
             | is Read Only with expression |
 
-#   This behavior does not exist on the web
-#   Scenario Outline: TextInput 05 - validate keyboard appears on Focus
-#       When I click in the textInput with the placeholder <textInputSecondPlan>
-#       Then verify if the text <textInputSecondPlan> is in the second plan
-
-#       Examples:
-#           | textInputSecondPlan                           |
-#           | is a textInput in second plan                 |
-#           | is a textInput in second plan with expression |
-
     Scenario Outline: TextInput 06 - validate textInput of type number
         Then validate textInput component of type number with hint <textInputTypeNumber>
 
@@ -74,21 +64,21 @@ Feature: TextInput Validation
             | textInputTypeNumber                      |
             | is textInput type number                 |
             | is textInput type number with expression |
- 
-   Scenario: TextInput 07 - validate textInput with action onFocus
+
+    Scenario: TextInput 07 - validate textInput with action onFocus
         When I click the textInput with the placeholder action validation
         Then the textInput with the placeholder Unordered actions will change its value to DidOnFocus
 
-   Scenario: TextInput 08 - validate textInput with action onChange
+    Scenario: TextInput 08 - validate textInput with action onChange
         When I click the textInput with the placeholder action validation
         And I type anything on textInput with the placeholder action validation
         Then the textInput with the placeholder Unordered actions will change its value to DidOnChange
-   
+
     Scenario: TextInput 09 - validate textInput with action onBlur
         When I click the textInput with the placeholder action validation
         And I click the textInput with the placeholder is textInput type number
         Then the textInput with the placeholder Unordered actions will change its value to DidOnBlur
-    
+
     Scenario: TextInput 10 - validate the actions of the textInput when they're executed in sequence
         When I click the textInput with the placeholder action order
         And I type anything on textInput with the placeholder action order

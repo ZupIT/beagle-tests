@@ -52,19 +52,9 @@ jobs:
             beagle/core/*
           parse-json: true
 
-      - name: Cache gradle dependencies of project backend
-        uses: actions/cache@v2
-        env:
-          gradle-cache-key: backend-tests-gradle-cache
-          gradle-path: ~/.gradle
-        with:
-          path: ${{ env.gradle-path }}
-          key: ${{ runner.os }}-build-${{ env.gradle-cache-key }}-${{ hashFiles('beagle-backend-kotlin/buildSrc/**') }}
-          restore-keys: ${{ runner.os }}-build-${{ env.gradle-cache-key }}
-
       - name: Build test BFF image
         working-directory: bff-server
-        run: ./gradlew --build-cache bff:bootBuildImage --imageName="$BFF_NAME"
+        run: ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
@@ -103,16 +93,6 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
 
-      - name: Cache gradle dependencies of project app-android
-        uses: actions/cache@v2
-        env:
-          gradle-cache-key: app-android-tests-gradle-cache
-          gradle-path: ~/.gradle
-        with:
-          path: ${{ env.gradle-path }}
-          key: ${{ runner.os }}-build-${{ env.gradle-cache-key }}-${{ hashFiles('appium/app-android/buildSrc/**') }}
-          restore-keys: ${{ runner.os }}-build-${{ env.gradle-cache-key }}
-
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
         with:
@@ -129,7 +109,7 @@ jobs:
           BFF_URL: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BFF_URL }}
         run: | # builds the app replacing localhost for the $BFF_URL
           sed -i --expression "s@http://10.0.2.2:8080@$BFF_URL@g" $BEAGLE_CONFIG_FILE
-          bash ./appium/app-android/gradlew --build-cache -p appium/app-android assembleDebug
+          bash ./appium/app-android/gradlew assembleDebug -p appium/app-android
           # sed -i --expression "s@$BFF_URL@http://10.0.2.2:8080@g" $BEAGLE_CONFIG_FILE
 
       - name: Upload .apk file in BrowserStack and run the Appium test suite

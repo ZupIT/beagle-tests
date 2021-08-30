@@ -24,18 +24,16 @@ Feature: TextInput Validation
     Given the Beagle application did launch with the textInput on screen
 
   Scenario: TextInput 01: validate textInput place holders and visibility
-    Then validate place holders and visibility:
-      | PLACE-HOLDER                                      | VISIBILITY | ENABLED |
-      | TextInput test                                    | true       | true    |
-      | TextInput with expression                         | true       | true    |
-      | TextInput placeholder                             | true       | true    |
-      | TextInput placeholder with expression             | true       | true    |
-      | Standard text with disabled field                 | true       | false   |
-      | Standard text with disabled field with expression | true       | false   |
-      | is Read Only                                      | true       | false   |
-      | is Read Only with expression                      | true       | false   |
-      | this text is hidden                               | false      | false   |
-      | this text is with expression                      | false      | false   |
+    Then validate placeholders:
+      | PLACE-HOLDER                                      | ENABLED | READONLY |
+      | TextInput test                                    | true    | false    |
+      | TextInput with expression                         | true    | false    |
+      | TextInput placeholder                             | true    | false    |
+      | TextInput placeholder with expression             | true    | false    |
+      | Standard text with disabled field                 | false   | true     |
+      | Standard text with disabled field with expression | false   | true     |
+      | is Read Only                                      | true    | true     |
+      | is Read Only with expression                      | true    | true     |
 
 
   Scenario: TextInput 02: validate textInput clicks and inputs

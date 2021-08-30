@@ -270,15 +270,13 @@ abstract class AbstractStep {
                     genericKeyboardCloseButtonLocator,
                     DEFAULT_ELEMENT_WAIT_TIME_IN_MILL
                 ).click()
-            } else {
+            } else if (elementExists(numericKeyboardCloseButtonLocator)) {
                 AppiumUtil.waitForElementToBeClickable(
                     getDriver(),
                     numericKeyboardCloseButtonLocator,
                     DEFAULT_ELEMENT_WAIT_TIME_IN_MILL
                 ).click()
             }
-
-
         }
     }
 
@@ -431,7 +429,7 @@ abstract class AbstractStep {
 
     protected fun isTextFieldNumeric(elementText: String): Boolean {
         val textElement = waitForElementWithValueToBeClickable(elementText, nativeLocator = false)
-        textElement.click()
+        textElement.clear()
         sleep(1000) // TouchActions sometimes get called before an element is ready to write
         if (SuiteSetup.isAndroid()) {
             val androidActions = AndroidTouchAction(getDriver())

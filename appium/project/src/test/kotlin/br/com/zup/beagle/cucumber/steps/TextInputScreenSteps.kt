@@ -36,7 +36,7 @@ class TextInputScreenSteps : AbstractStep() {
         waitForElementWithValueToBeClickable("Beagle Text Input")
     }
 
-    @Then("^validate place holders and visibility:$")
+    @Then("^validate placeholders:$")
     fun validatePlaceHoldersAndVisibility(dataTable: DataTable) {
         val rows = dataTable.asLists()
         for ((lineCount, columns) in rows.withIndex()) {
@@ -45,14 +45,23 @@ class TextInputScreenSteps : AbstractStep() {
                 continue
 
             val placeHolder = columns[0]!!
-            val isVisible = columns[1]!!.toString().toBoolean()
-            val isEnabled = columns[2]!!.toString().toBoolean()
+            val customTextValue = "$placeHolder-2"
+            val enabled = columns[1]!!.toString().toBoolean()
+            val readOnly = columns[2]!!.toString().toBoolean()
 
-            if (!isVisible) {
-                waitForElementWithValueToBeInvisible(placeHolder, ignoreCase = true)
-            } else {
-                val element = waitForElementWithValueToBePresent(placeHolder, ignoreCase = true)
-                Assert.assertEquals(element.isEnabled, isEnabled)
+            val element = waitForElementWithValueToBePresent(placeHolder, nativeLocator = false)
+            if (!enabled){
+                Assert.assertFalse(element.isEnabled)
+            } else if (!readOnly){
+                element.clear()
+                element.sendKeys(customTextValue)
+                Assert.assertEquals(element.text, customTextValue)
+                Assert.assertTrue(element.isEnabled)
+            } else{ // enabled and readOnly
+                element.clear()
+                element.sendKeys(customTextValue)
+                Assert.assertNotEquals(element.text, customTextValue)
+                Assert.assertFalse(element.isEnabled)
             }
         }
     }
