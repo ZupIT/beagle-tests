@@ -527,7 +527,7 @@ abstract class AbstractStep {
 
     // currently, only Android has an element that is present in all screens
     private fun getAndroidBaseElementXpath(): By {
-        return if (SuiteSetup.isAndroid()) By.id("android:id/content") else By.id("")
+        return By.id("android:id/content")
     }
 
     private fun getScreenshotDatabaseFolderPath(): String {
