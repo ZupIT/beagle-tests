@@ -25,6 +25,7 @@ import br.com.zup.beagle.utils.SwipeDirection
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileBy
 import io.appium.java_client.MobileElement
+import io.appium.java_client.TouchAction
 import io.appium.java_client.android.AndroidTouchAction
 import io.appium.java_client.ios.IOSTouchAction
 import io.appium.java_client.touch.offset.PointOption
@@ -429,8 +430,16 @@ abstract class AbstractStep {
 
     protected fun isTextFieldNumeric(elementText: String): Boolean {
         val textElement = waitForElementWithValueToBeClickable(elementText, nativeLocator = false)
-        textElement.clear()
+
+        // bring up keyboard
+        if (SuiteSetup.isAndroid()) {
+            textElement.click()
+        } else {
+            textElement.clear()
+        }
+
         sleep(1000) // TouchActions sometimes get called before an element is ready to write
+
         if (SuiteSetup.isAndroid()) {
             val androidActions = AndroidTouchAction(getDriver())
             androidActions.press(PointOption.point(500, 1700)).release().perform() // digit 5
@@ -527,7 +536,7 @@ abstract class AbstractStep {
 
     // currently, only Android has an element that is present in all screens
     private fun getAndroidBaseElementXpath(): By {
-        return By.id("android:id/content")
+        return By.id("br.com.zup.beagle.appiumapp:id/beagle_default_id")//By.id("android:id/content")
     }
 
     private fun getScreenshotDatabaseFolderPath(): String {

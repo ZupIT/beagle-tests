@@ -50,16 +50,19 @@ class TextInputScreenSteps : AbstractStep() {
             val readOnly = columns[2]!!.toString().toBoolean()
 
             val element = waitForElementWithValueToBePresent(placeHolder, nativeLocator = false)
-            if (!enabled){
+            if (!enabled) {
                 Assert.assertFalse(element.isEnabled)
-            } else if (!readOnly){
+            } else if (!readOnly) {
                 element.clear()
                 element.sendKeys(customTextValue)
                 Assert.assertEquals(element.text, customTextValue)
                 Assert.assertTrue(element.isEnabled)
-            } else{ // enabled and readOnly
+            } else { // enabled and readOnly
                 element.clear()
-                element.sendKeys(customTextValue)
+                try {
+                    element.sendKeys(customTextValue)
+                } catch (e: Exception) {
+                }
                 Assert.assertNotEquals(element.text, customTextValue)
                 Assert.assertFalse(element.isEnabled)
             }
