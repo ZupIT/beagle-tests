@@ -35,6 +35,9 @@ class ImageScreenSteps : AbstractStep() {
     @Given("^that I'm on the image screen$")
     fun checkImageScreen() {
         waitForElementWithTextToBeClickable(textContainedInImage, likeSearch = true, ignoreCase = false)
+
+        // update database image
+        //registerCurrentScreenInDatabase("ImageScreen")
     }
 
     @Then("^take a screenshot from ImageScreenBuilder and assert it is identical to the (.*) image$")

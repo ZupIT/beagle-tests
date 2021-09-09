@@ -16,8 +16,8 @@
 
 package br.com.zup.beagle.automatedtests.builders
 
-import br.com.zup.beagle.newanalytics.ActionAnalyticsConfig
-import br.com.zup.beagle.newanalytics.ActionAnalyticsProperties
+import br.com.zup.beagle.analytics.ActionAnalyticsConfig
+import br.com.zup.beagle.analytics.ActionAnalyticsProperties
 import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.Confirm
 import br.com.zup.beagle.widget.action.Navigate

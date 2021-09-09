@@ -17,7 +17,6 @@
 package br.com.zup.beagle.automatedtests.builders
 
 import br.com.zup.beagle.automatedtests.constants.SCREEN_ACTION_CLICK_ENDPOINT
-import br.com.zup.beagle.ext.applyFlex
 import br.com.zup.beagle.ext.setStyle
 import br.com.zup.beagle.widget.core.AlignItems
 import br.com.zup.beagle.widget.core.Flex

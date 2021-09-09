@@ -72,28 +72,23 @@ jobs:
       ##################################################################################################
       # Caching - Start
       ##################################################################################################
-      # Yarn caching:
-      # https://stackoverflow.com/questions/61010294/how-to-cache-yarn-packages-in-github-actions
-      # https://github.com/actions/cache/blob/master/examples.md#node---yarn
-      - name: Get Yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache Yarn dependencies
+      - name: Cache fastlane dependences
         uses: actions/cache@v2
-        id: yarn-cache
+        env:
+          fastlane-cache-key: fastlane-cache-test
+          fastlane-path: ~/.gem
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          path: ${{ env.fastlane-path }}
+          key: ${{ runner.os }}-build-${{ env.fastlane-cache-key }}-${{ hashFiles('Gemfile.lock') }}
       ##################################################################################################
       # Caching - end
       ##################################################################################################
 
-      - name: Build and start BFF
-        run: |
-          bff-server/gradlew bootRun -p bff-server/bff 2>&1 &
+      - name: Install Fastlane
+        run: bundle config set path '~/.gem' && bundle install
+
+      - name: Build and start the BFF server
+        run: bash fastlane/automatedTests/start_test_backend.sh
 
       - name: Compile and run angular 9 app
         working-directory: web/apps/angular9

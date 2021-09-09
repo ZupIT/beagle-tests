@@ -18,6 +18,7 @@ buildscript {
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
         google()
+        mavenCentral()
     }
 
     dependencies {
@@ -30,6 +31,23 @@ plugins {
 }
 
 allprojects {
+
+    apply plugin: "kotlin"
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11
+            javaParameters = true
+        }
+    }
+
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_11
+            javaParameters = true
+        }
+    }
+
     repositories {
         mavenLocal()
         google()
