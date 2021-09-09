@@ -25,7 +25,6 @@ class DeepLinkViewController: UIViewController {
         super.viewDidLoad()
         
         // calls the bff screen using the bffUrl
-        //let viewController = Beagle.screen(.remote(.init(url: bffUrl)), controllerId: "CustomBeagleNavigation")
         let viewController = BeagleScreenViewController(ScreenType.Remote(url: bffUrl), controllerId: "CustomBeagleNavigation")
         navigationController?.pushViewController(viewController, animated: false)
     }
