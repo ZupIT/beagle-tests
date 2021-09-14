@@ -90,7 +90,7 @@ jobs:
     name: APK compilation and upload in BrowserStack
     needs: bff_config_job
     runs-on: macos-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v2
         with:
