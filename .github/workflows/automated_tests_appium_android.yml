@@ -15,7 +15,6 @@
 #
 
 name: Beagle Appium Android tests
-
   #on:
   #  workflow_dispatch:
   #  workflow_run:
@@ -132,7 +131,7 @@ jobs:
         run: bash fastlane/automatedTests/appium/android/browserstack/setup_apk_in_browserstack_and_export_id_in_file.sh
 
       - name: Upload BrowserStack id file
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: browserstack-app-id
           path: browserstack_app_id.txt
@@ -170,11 +169,14 @@ jobs:
             beagle/core/*
           parse-json: true
 
-      - name: Sets var BROWSERSTACK_UPLOAD_ID with BrowserStack id file
-        uses: actions/download-artifact@v1
+      - name: Download BrowserStack id file
+        uses: actions/download-artifact@v2
         with:
           name: browserstack-app-id
-        run: echo "BROWSERSTACK_UPLOAD_ID=$(<browserstack_app_id.txt)" >> $GITHUB_ENV
+
+      - name: Gets BrowserStack id file content
+        id: gets-browserstack-id-file
+        run: return $(<browserstack_app_id.txt)
 
         # BrowseStack Android devices: https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
       - name: Returns Android device to be used based on Android version
@@ -199,6 +201,7 @@ jobs:
           DEVICE_NAME: ${{steps.sets-android-device.outputs.result}}
           ANDROID_VERSION: ${{ matrix.android-version }}
           BFF_URL: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BFF_URL }}
+          BROWSERSTACK_UPLOAD_ID: ${{steps.gets-browserstack-id-file.outputs.result}}
           BROWSERSTACK_USER: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_USER }}
           BROWSERSTACK_KEY: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_KEY }}
         with:
