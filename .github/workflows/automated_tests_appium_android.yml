@@ -145,7 +145,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        android-version: [ 4.4, 6, 8, 11 ]
+        android-version: [ 11 ] #[ 4.4, 6, 8, 11 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -177,7 +177,12 @@ jobs:
 
       - name: Gets BrowserStack id file content
         id: gets-browserstack-id-file
-        run: return $(<browserstack_app_id.txt)
+        uses: actions/github-script@v4
+        with:
+          script: |
+            bs_id = $(<browserstack_app_id.txt)
+            echo "BrowserStack upload id: $bs_id"
+            return $bs_id
 
         # BrowseStack Android devices: https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
       - name: Returns Android device to be used based on Android version
@@ -207,7 +212,7 @@ jobs:
           BROWSERSTACK_KEY: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_KEY }}
         with:
           script: |
-            echo "Running Appium tests..."
+            echo "Running Appium tests on device $DEVICE_NAME with Android $ANDROID_VERSION..."
             if ./appium/project/gradlew --build-cache -p appium/project cucumber \
             -Dplatform="android" \
             -Dplatform_version="$ANDROID_VERSION" \
