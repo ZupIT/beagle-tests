@@ -18,36 +18,7 @@
 
 set -e
 
-function checkVarEmpty(){
-  temp_var=$1
-	if [ -z "$temp_var" ]; then
-		echo "Error: environment var $2 is empty!"
-		exit 1
-	fi
-}
-
-APP_FILE=$GITHUB_WORKSPACE/appium/app-android/app/build/outputs/apk/debug/app-debug.apk
-
-echo "Uploading .apk file in BrowserStack..."
-APP_UPLOAD_RESPONSE=$(curl -u "$BROWSERSTACK_USER:$BROWSERSTACK_KEY" \
--X POST https://api-cloud.browserstack.com/app-automate/upload \
--F "file=@$APP_FILE")
-
-APP_ID=$(echo $APP_UPLOAD_RESPONSE | jq -r ".app_url")
-
-if [ $APP_ID != null ]; then
-  echo "Apk uploaded to BrowserStack!"
-else
-  UPLOAD_ERROR_MESSAGE=$(echo $APP_UPLOAD_RESPONSE | jq -r ".error")
-  echo "App upload failed, reason : ",$UPLOAD_ERROR_MESSAGE
-  exit 1;
-fi
-
-echo "Checking environment vars..."
-checkVarEmpty "$BROWSERSTACK_USER" '$BROWSERSTACK_USER'
-checkVarEmpty "$BROWSERSTACK_KEY" '$BROWSERSTACK_KEY'
-checkVarEmpty "$APP_ID" '$APP_ID'
-checkVarEmpty "$BFF_URL" '$BFF_URL'
+# setar platform e device, de acordo com a versao... verificar se faz isso aqui ou no actions
 
 echo "Running Appium tests..."
 if ./appium/project/gradlew --build-cache -p appium/project cucumber \
@@ -56,7 +27,7 @@ if ./appium/project/gradlew --build-cache -p appium/project cucumber \
 -Ddevice_name="Google Pixel 4" \
 -Dbrowserstack_user="$BROWSERSTACK_USER" \
 -Dbrowserstack_key="$BROWSERSTACK_KEY" \
--Dapp_file="$APP_ID" \
+-Dapp_file="$BROWSERSTACK_UPLOAD_ID" \
 -Dbff_base_url="$BFF_URL"; then
   echo "Gradle task succeeded" >&2
 else

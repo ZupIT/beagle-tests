@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import br.com.zup.beagle.Dependencies
+import br.com.zup.beagle.appiumapp.Dependencies
 import org.apache.tools.ant.taskdefs.condition.Os
 
 apply plugin: 'com.android.application'
@@ -35,10 +35,11 @@ android {
 
     defaultConfig {
         applicationId "br.com.zup.beagle.appiumapp"
-        minSdkVersion Dependencies.Versions.targetSdk
+        minSdkVersion Dependencies.Versions.minSdk
         targetSdkVersion Dependencies.Versions.compileSdk
         versionCode Dependencies.Releases.versionCode
         versionName "${Dependencies.Releases.beagleVersionName}"
+        multiDexEnabled = true
     }
 
     sourceSets {
@@ -65,6 +66,9 @@ dependencies {
     implementation Dependencies.AndroidxLibraries.appcompat
     implementation Dependencies.GeneralLibraries.kotlinCoroutines
     implementation Dependencies.GoogleLibraries.materialDesign
+
+    // https://developer.android.com/studio/build/multidex#mdex-gradle
+    implementation("androidx.multidex:multidex:2.0.1")
 }
 
 
