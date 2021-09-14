@@ -24,7 +24,7 @@ name: Beagle Appium Android tests
   #      - completed
 
   # Bellow configuration is for testing this workflow without merging to main
-  on:
+on:
     push:
       branches:
         - main
