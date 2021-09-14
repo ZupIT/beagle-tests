@@ -32,7 +32,7 @@ gradlePlugin {
     plugins {
         register("dependencies") {
             id = "br.com.zup.beagle.dependencies"
-            implementationClass = "br.com.zup.beagle.Dependencies"
+            implementationClass = "br.com.zup.beagle.appiumapp.Dependencies"
         }
     }
 }
