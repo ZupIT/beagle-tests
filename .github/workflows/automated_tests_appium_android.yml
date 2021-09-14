@@ -88,6 +88,7 @@ jobs:
 
   apk_config_in_browserstack_job:
     name: APK compilation and upload in BrowserStack
+    needs: bff_config_job
     runs-on: macos-latest
     timeout-minutes: 10
     steps:
@@ -137,8 +138,8 @@ jobs:
           path: browserstack_app_id.txt
 
   appium_tests:
-    needs: bff_config_job
     name: Tests
+    needs: apk_config_in_browserstack_job
     runs-on: macos-latest
     timeout-minutes: 90
     strategy:
