@@ -180,9 +180,10 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            bs_id = $(<browserstack_app_id.txt)
+            bs_id=$(<browserstack_app_id.txt)
             echo "BrowserStack upload id: $bs_id"
             return $bs_id
+          result-encoding: string
 
         # BrowseStack Android devices: https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
       - name: Returns Android device to be used based on Android version
