@@ -54,14 +54,14 @@ jobs:
       - name: Print branch info
         run: git branch
 
-      - name: script testing
-        run: |
-          case 4.4 in
-          4.4) echo"Google Nexus 5" ;;
-          6) echo "Google Nexus 6" ;;
-          8) echo "Google Pixel 2" ;;
-          11) echo "Google Pixel 4" ;;
-          *) echo "Invalid option!" && exit 1
+#      - name: script testing
+#        run: |
+#          case 4.4 in
+#          4.4) echo"Google Nexus 5" ;;
+#          6) echo "Google Nexus 6" ;;
+#          8) echo "Google Pixel 2" ;;
+#          11) echo "Google Pixel 4" ;;
+#          *) echo "Invalid option!" && exit 1 ;;
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -249,7 +249,7 @@ jobs:
           8) echo ::set-output name=result::"Google Pixel 2" ;;
           11) echo ::set-output name=result::"Google Pixel 4" ;;
           *) echo "Invalid option!" && exit 1 ;;
-
+          esac
 
       - name: Run the Appium test suite
         uses: actions/github-script@v4
