@@ -235,7 +235,8 @@ jobs:
       - name: Gets BrowserStack id file content
         id: gets-browserstack-id-file
         run: |
-          echo ::set-output name=result::"echo $(<browserstack_app_id.txt)"
+          echo "ID recovered from file: $(<browserstack_app_id.txt)"
+          echo ::set-output name=result::"$(<browserstack_app_id.txt)"
 
         # BrowseStack Android devices: https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
       - name: Returns Android device to be used based on Android version
