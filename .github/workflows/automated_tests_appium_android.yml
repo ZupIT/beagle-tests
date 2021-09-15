@@ -17,7 +17,7 @@
 name: Beagle Appium Android tests
   #on:
   #  workflow_dispatch:
-  #  workflow_run:
+#  workflow_run:
 #    workflows: [ "Beagle Appium tests trigger" ]
 #    types:
 #      - completed
@@ -53,15 +53,6 @@ jobs:
 
       - name: Print branch info
         run: git branch
-
-      #      - name: script testing
-      #        run: |
-      #          case 4.4 in
-      #          4.4) echo"Google Nexus 5" ;;
-      #          6) echo "Google Nexus 6" ;;
-      #          8) echo "Google Pixel 2" ;;
-      #          11) echo "Google Pixel 4" ;;
-      #          *) echo "Invalid option!" && exit 1 ;;
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -185,7 +176,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        android-version: [ 11 ] #[ 4.4, 6, 8, 11 ]
+        android-version: [4.4, 6, 8, 11]
     steps:
       - uses: actions/checkout@v2
         with:
