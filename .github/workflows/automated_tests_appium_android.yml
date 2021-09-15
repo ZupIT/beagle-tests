@@ -18,9 +18,9 @@ name: Beagle Appium Android tests
   #on:
   #  workflow_dispatch:
   #  workflow_run:
-  #    workflows: [ "Beagle Appium tests trigger" ]
-  #    types:
-  #      - completed
+#    workflows: [ "Beagle Appium tests trigger" ]
+#    types:
+#      - completed
 
 # Bellow configuration is for testing this workflow without merging to main
 on:
@@ -54,14 +54,14 @@ jobs:
       - name: Print branch info
         run: git branch
 
-#      - name: script testing
-#        run: |
-#          case 4.4 in
-#          4.4) echo"Google Nexus 5" ;;
-#          6) echo "Google Nexus 6" ;;
-#          8) echo "Google Pixel 2" ;;
-#          11) echo "Google Pixel 4" ;;
-#          *) echo "Invalid option!" && exit 1 ;;
+      #      - name: script testing
+      #        run: |
+      #          case 4.4 in
+      #          4.4) echo"Google Nexus 5" ;;
+      #          6) echo "Google Nexus 6" ;;
+      #          8) echo "Google Pixel 2" ;;
+      #          11) echo "Google Pixel 4" ;;
+      #          *) echo "Invalid option!" && exit 1 ;;
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
@@ -252,7 +252,6 @@ jobs:
           esac
 
       - name: Run the Appium test suite
-        uses: actions/github-script@v4
         env:
           DEVICE_NAME: ${{steps.sets-android-device.outputs.result}}
           ANDROID_VERSION: ${{ matrix.android-version }}
@@ -260,22 +259,21 @@ jobs:
           BROWSERSTACK_UPLOAD_ID: ${{steps.gets-browserstack-id-file.outputs.result}}
           BROWSERSTACK_USER: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_USER }}
           BROWSERSTACK_KEY: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_KEY }}
-        with:
-          script: |
-            echo "Running Appium tests on device $DEVICE_NAME with Android $ANDROID_VERSION..."
-            if ./appium/project/gradlew --build-cache -p appium/project cucumber \
-            -Dplatform="android" \
-            -Dplatform_version="$ANDROID_VERSION" \
-            -Ddevice_name="$DEVICE_NAME" \
-            -Dbrowserstack_user="$BROWSERSTACK_USER" \
-            -Dbrowserstack_key="$BROWSERSTACK_KEY" \
-            -Dapp_file="$BROWSERSTACK_UPLOAD_ID" \
-            -Dbff_base_url="$BFF_URL"; then
+        run: |
+          echo "Running Appium tests on device $DEVICE_NAME with Android $ANDROID_VERSION..."
+          if ./appium/project/gradlew --build-cache -p appium/project cucumber \
+          -Dplatform="android" \
+          -Dplatform_version="$ANDROID_VERSION" \
+          -Ddevice_name="$DEVICE_NAME" \
+          -Dbrowserstack_user="$BROWSERSTACK_USER" \
+          -Dbrowserstack_key="$BROWSERSTACK_KEY" \
+          -Dapp_file="$BROWSERSTACK_UPLOAD_ID" \
+          -Dbff_base_url="$BFF_URL"; then
             echo "Gradle task succeeded" >&2
-            else
+          else
             echo "Gradle task failed" >&2
             exit 1
-            fi
+          fi
 
       - name: Expose failed test screenshot files
         if: failure()
