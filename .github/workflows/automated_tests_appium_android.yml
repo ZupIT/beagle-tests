@@ -61,7 +61,7 @@ jobs:
           6) echo "Google Nexus 6" ;;
           8) echo "Google Pixel 2" ;;
           11) echo "Google Pixel 4" ;;
-          *) echo "Invalid option!" && exit 1 ;;
+          *) echo "Invalid option!" && exit 1
 
       # Cache Gradle dependencies
       - name: Setup Gradle Dependencies Cache
