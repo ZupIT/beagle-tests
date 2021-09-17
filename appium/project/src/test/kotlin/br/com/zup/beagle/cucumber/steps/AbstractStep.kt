@@ -70,7 +70,11 @@ abstract class AbstractStep {
 
     protected fun loadBffScreen() {
         if (SuiteSetup.isAndroid()) {
-            loadBffScreenFromDeepLink()
+            if (SuiteSetup.getPlatformVersion() == "4.4") {
+                loadBffScreenFromMainScreen()
+            } else {
+                loadBffScreenFromDeepLink()
+            }
         } else {
             /**
              * Deep link test strategy on iOS (URL Scheme) doesn't boost test speed when tests run on non-gpu simulators (ex. GitHub Actions)
