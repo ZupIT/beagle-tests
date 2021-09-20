@@ -62,10 +62,10 @@ object PullToRefreshScreenBuilder {
                         title = "Alert title",
                         message = "Alert message",
                         onPressOk =
-                        SetContext(
+                        listOf(SetContext(
                             contextId = "refreshContext",
                             value = false
-                        ),
+                        )),
                         labelOk = "Alert OK button"
                     )
                 ),
