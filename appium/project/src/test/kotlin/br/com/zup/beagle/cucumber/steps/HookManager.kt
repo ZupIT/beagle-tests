@@ -58,11 +58,15 @@ class HookManager {
         }
 
         /**
-         * Android tests by default won't restart app anymore because they now use deep links to load bff screens.
+         * Android tests by default won't restart app anymore because they use deep
+         * links to load BFF screens.
          * Refer to method loadBffScreen() in AbstractStep class for more details
          */
-        if (SuiteSetup.isIos())
+        if (SuiteSetup.isIos()) {
             SuiteSetup.restartApp()
+        } else if (SuiteSetup.getPlatformVersion() == "4.4") { // deep links on Android is only supported in v 5.0+
+            SuiteSetup.restartApp()
+        }
 
     }
 }

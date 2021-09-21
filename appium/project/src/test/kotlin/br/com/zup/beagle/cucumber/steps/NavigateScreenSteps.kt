@@ -144,14 +144,22 @@ class NavigateScreenSteps : AbstractStep() {
                         goBack() // closes the app in this case
 
                         // opens the app
-                        loadBffScreenFromDeepLink()
+                        if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            loadBffScreenFromMainScreen()
+                        } else {
+                            loadBffScreenFromDeepLink()
+                        }
                     }
                     "closes the app" -> {
                         // confirms the app is closed
                         checkAppIsClosed()
 
                         // opens the app
-                        loadBffScreenFromDeepLink()
+                        if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            loadBffScreenFromMainScreen()
+                        } else {
+                            loadBffScreenFromDeepLink()
+                        }
                     }
                     else -> {
                         throw Exception("Wrong action: $androidAction")
@@ -194,7 +202,11 @@ class NavigateScreenSteps : AbstractStep() {
                      * going backing in these cases closes the app
                      */
                     checkAppIsClosed()
-                    loadBffScreenFromDeepLink()
+                    if (SuiteSetup.getPlatformVersion() == "4.4") {
+                        loadBffScreenFromMainScreen()
+                    } else {
+                        loadBffScreenFromDeepLink()
+                    }
                 }
 
             }

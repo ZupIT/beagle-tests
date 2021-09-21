@@ -46,7 +46,7 @@ object NewAnalyticsScreenBuilder {
             Alert(
                 title = "Alert Title",
                 message = "AlertMessage",
-                onPressOk = navigateToNativeScreen()
+                onPressOk = listOf(navigateToNativeScreen())
             )
         )
     )
@@ -60,7 +60,7 @@ object NewAnalyticsScreenBuilder {
                 message = "Confirm Message",
                 labelOk = "Accept",
                 labelCancel = "cancel",
-                onPressOk = navigateToNativeScreen()
+                onPressOk = listOf(navigateToNativeScreen())
             )
         )
     ).apply {
@@ -76,7 +76,7 @@ object NewAnalyticsScreenBuilder {
                 ),
                 title = "Alert Title",
                 message = "AlertMessage",
-                onPressOk = navigateToNativeScreen()
+                onPressOk = listOf(navigateToNativeScreen())
             )
         )
     ).apply {
@@ -92,7 +92,7 @@ object NewAnalyticsScreenBuilder {
                 message = "Confirm Message",
                 labelOk = "Accept",
                 labelCancel = "cancel",
-                onPressOk = navigateToNativeScreen()
+                onPressOk = listOf(navigateToNativeScreen())
             )
         )
     )
@@ -106,7 +106,7 @@ object NewAnalyticsScreenBuilder {
     )
 
     private fun onlyScreen() = Screen(
-        identifier = "/analytics2-navigate",
+        id = "/analytics2-navigate",
         child = Button(
             text = "navigate to local screen",
             onPress = listOf(

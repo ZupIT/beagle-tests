@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package br.com.zup.beagle
+package br.com.zup.beagle.appiumapp
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -30,8 +30,8 @@ class Dependencies : Plugin<Project> {
 
     object Versions {
         const val compileSdk = 30
-        const val minSdk = 19
-        const val targetSdk = 30
+        const val minSdk = 19 // Android 4.4
+        const val targetSdk = 30 // Android 11.0
         const val buildTools = "30.0.0"
         const val kotlin = "1.4.10"
         const val kotlinCoroutines = "1.3.9"

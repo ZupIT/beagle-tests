@@ -178,8 +178,8 @@ object ActionScreenBuilder {
                     message = "Action",
                     labelOk = "OK",
                     labelCancel = "Cancel",
-                    onPressCancel = createAlert("Cancel"),
-                    onPressOk = createAlert("Finish")
+                    onPressCancel = listOf(createAlert("Cancel")),
+                    onPressOk = listOf(createAlert("Finish"))
                 )),
                 text = "Click me!"
             )

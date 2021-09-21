@@ -16,9 +16,9 @@
 
 package br.com.zup.beagle.appiumapp
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 
-class AppApplication : Application() {
+class AppApplication : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
@@ -27,7 +27,7 @@ class AppApplication : Application() {
     }
 
     companion object {
-        var APPLICATION: Application? = null
+        var APPLICATION: MultiDexApplication? = null
     }
 
 }

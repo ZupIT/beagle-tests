@@ -28,7 +28,7 @@ import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.context.Bind
 import br.com.zup.beagle.widget.context.ContextData
 import br.com.zup.beagle.widget.context.expressionOf
-import br.com.zup.beagle.widget.context.valueOf
+import br.com.zup.beagle.widget.context.constant
 import br.com.zup.beagle.widget.core.AlignSelf
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.FlexDirection
@@ -67,9 +67,9 @@ object ListViewScreenBuilder {
                 Container(
                     context = ContextData(id = "firstResponse",
                         value = PageResponse(
-                            currentPage = valueOf(0),
-                            totalPages = valueOf(2),
-                            valueOf(listOf())
+                            currentPage = constant(0),
+                            totalPages = constant(2),
+                            constant(listOf())
                         )
                     ),
                     children = listOf(
@@ -78,9 +78,9 @@ object ListViewScreenBuilder {
                             context = ContextData(
                                 id = "thirdResponse",
                                 value = PageResponse(
-                                    currentPage = valueOf(0),
-                                    totalPages = valueOf(3),
-                                    result = valueOf(listOf()),
+                                    currentPage = constant(0),
+                                    totalPages = constant(3),
+                                    result = constant(listOf()),
                                 ),
                             ),
                             children = listOf(
@@ -227,7 +227,7 @@ object ListViewScreenBuilder {
             isScrollIndicatorVisible = true,
             key = "id",
             direction = ListDirection.VERTICAL,
-            dataSource = valueOf(Genre.createMock()),
+            dataSource = constant(Genre.createMock()),
             templates = listOf((Template(view = Container(
                 context = ContextData(id = "categoryResponse", value = CategoryResponse()),
                 children = listOf(

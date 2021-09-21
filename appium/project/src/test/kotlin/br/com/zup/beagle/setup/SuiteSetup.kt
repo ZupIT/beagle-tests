@@ -67,7 +67,7 @@ object SuiteSetup {
         return platformVersion!!
     }
 
-    fun getPlatformDetails(): String{
+    fun getPlatformDetails(): String {
         return "[$platform-$platformVersion]"
     }
 
@@ -144,7 +144,8 @@ object SuiteSetup {
                     deviceName = "Pixel_4_API_30"
 
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2")
+                var automationName = if (platformVersion == "4.4") "UiAutomator1" else "UiAutomator2"
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, automationName)
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, platformVersion)
                 capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName)
                 capabilities.setCapability("appPackage", appPackage)
