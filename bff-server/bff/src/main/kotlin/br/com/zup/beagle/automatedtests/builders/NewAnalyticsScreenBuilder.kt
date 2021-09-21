@@ -106,7 +106,7 @@ object NewAnalyticsScreenBuilder {
     )
 
     private fun onlyScreen() = Screen(
-        identifier = "/analytics2-navigate",
+        id = "/analytics2-navigate",
         child = Button(
             text = "navigate to local screen",
             onPress = listOf(
