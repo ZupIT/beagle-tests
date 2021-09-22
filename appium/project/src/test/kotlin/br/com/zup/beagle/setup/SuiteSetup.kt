@@ -88,6 +88,9 @@ object SuiteSetup {
         if (platformVersion.isNullOrBlank())
             throw Exception("Missing param: platformVersion")
 
+        if (platformVersion!!.endsWith(".0"))
+            platformVersion = platformVersion!!.removeSuffix(".0")
+
         println("#### Initializing test suite setup on platform $platform $platformVersion ...")
 
         bffBaseUrl = System.getProperty("bff_base_url")

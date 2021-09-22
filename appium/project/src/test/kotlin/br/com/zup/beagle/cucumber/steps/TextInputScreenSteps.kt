@@ -22,6 +22,7 @@ import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import org.junit.Assert
+import org.openqa.selenium.By
 
 class TextInputScreenSteps : AbstractStep() {
     override var bffRelativeUrlPath = "/textinput"
@@ -44,6 +45,8 @@ class TextInputScreenSteps : AbstractStep() {
             if (lineCount == 0) // skip header
                 continue
 
+            hideKeyboard()
+
             val placeHolder = columns[0]!!
             val customTextValue = "$placeHolder-2"
             val enabled = columns[1]!!.toString().toBoolean()
@@ -59,12 +62,9 @@ class TextInputScreenSteps : AbstractStep() {
                 Assert.assertTrue(element.isEnabled)
             } else { // enabled and readOnly
                 element.clear()
-                try {
-                    element.sendKeys(customTextValue)
-                } catch (e: Exception) {
-                }
-                Assert.assertNotEquals(element.text, customTextValue)
-                Assert.assertFalse(element.isEnabled)
+                Assert.assertFalse(isKeyboardShowing())
+                element.click()
+                Assert.assertFalse(isKeyboardShowing())
             }
         }
     }
@@ -72,6 +72,7 @@ class TextInputScreenSteps : AbstractStep() {
     @Then("^validate clicks and input types:$")
     fun validateClicksAndInputTypes(dataTable: DataTable) {
         val rows = dataTable.asLists()
+        var passwordFieldsValidated = false
         for ((lineCount, columns) in rows.withIndex()) {
 
             if (lineCount == 0) // skip header
@@ -83,7 +84,7 @@ class TextInputScreenSteps : AbstractStep() {
                 "place holder keeps showing after click" -> {
 
                     val element = waitForElementWithValueToBeClickable(placeHolder, nativeLocator = false)
-                    element.sendKeys("randomValue")
+                    element.sendKeys("random value")
                     Assert.assertFalse(placeHolder == element.text)
                     element.clear()
                     Assert.assertTrue(placeHolder == element.text)
@@ -107,12 +108,34 @@ class TextInputScreenSteps : AbstractStep() {
                         }
                         placeHolder.contains("writing password") -> {
 
-                            val element = scrollDownToElementWithValue(placeHolder)
-                            element.sendKeys("1234")
-                            Assert.assertTrue("1234" != element.text) // validates text is in password format
-                            Assert.assertTrue(element.text.length == 4)
-                            Assert.assertTrue(placeHolder != element.text)
+                            /**
+                             * The text property of a password element is always empty on Android 6.x,
+                             * so we can't look up for this element by its text.
+                             * The approach then is to retrieve all textfied elements and filter the ones
+                             * that are password, counting if they exist. No text validation can be done for now.
+                             */
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "6") {
 
+                                if (passwordFieldsValidated)
+                                    continue
+
+                                // scrolls to an element that is below writing password, so writing password appears
+                                scrollDownToElementWithValue("writing text")
+                                val allPasswordElements =
+                                    getDriver().findElements(By.xpath("//android.widget.EditText"))
+                                        .filter { s -> s.getAttribute("password") == "true" }
+
+                                Assert.assertEquals(allPasswordElements.size, 2)
+                                passwordFieldsValidated = true
+
+                            } else {
+
+                                val element = scrollDownToElementWithValue(placeHolder)
+                                element.sendKeys("1234")
+                                Assert.assertTrue("1234" != element.text) // validates text is in password format
+                                Assert.assertTrue(element.text.length == 4)
+                                Assert.assertTrue(placeHolder != element.text)
+                            }
                         }
                         placeHolder.contains("writing number") -> {
 
@@ -165,6 +188,8 @@ class TextInputScreenSteps : AbstractStep() {
             if (lineCount == 0) // skip header
                 continue
 
+            println("EVENT = ${columns[0]!!}")
+
             when (val event = columns[0]!!) {
                 "DidOnFocus" -> {
                     safeClickOnElement(actionValidationTextInputElement)
@@ -173,7 +198,7 @@ class TextInputScreenSteps : AbstractStep() {
                 }
                 "DidOnChange" -> {
                     safeClickOnElement(actionValidationTextInputElement)
-                    actionValidationTextInputElement.sendKeys("anyText")
+                    actionValidationTextInputElement.sendKeys("any text")
                     Assert.assertEquals(event, unorderedActionsTextInputElement.text)
                     hideKeyboard()
                 }
@@ -186,8 +211,6 @@ class TextInputScreenSteps : AbstractStep() {
                     } else {
                         hideKeyboard()
                     }
-
-
                 }
                 "DidOnFocusDidOnChangeDidOnBlur" -> {
 
@@ -197,7 +220,7 @@ class TextInputScreenSteps : AbstractStep() {
                     val actionOrderElement =
                         waitForElementWithValueToBeClickable("action order")
                     safeClickOnElement(actionOrderElement)
-                    actionOrderElement.sendKeys("anyText")
+                    actionOrderElement.sendKeys("any text")
                     safeClickOnElement(waitForElementWithValueToBeClickable("is textInput type number"))
                     Assert.assertEquals(event, orderedActionsElement.text)
                 }
@@ -208,3 +231,5 @@ class TextInputScreenSteps : AbstractStep() {
         }
     }
 }
+
+

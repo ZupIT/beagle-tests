@@ -25,8 +25,9 @@ import br.com.zup.beagle.utils.SwipeDirection
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileBy
 import io.appium.java_client.MobileElement
-import io.appium.java_client.TouchAction
+import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.AndroidTouchAction
+import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.ios.IOSTouchAction
 import io.appium.java_client.touch.offset.PointOption
 import org.apache.commons.io.FileUtils
@@ -244,7 +245,7 @@ abstract class AbstractStep {
         return scrollToElement(locator, SwipeDirection.DOWN) // swiping down scrolls up...
     }
 
-    private fun scrollToElement(
+    protected fun scrollToElement(
         elementLocator: By,
         direction: SwipeDirection
     ): MobileElement {
@@ -282,6 +283,15 @@ abstract class AbstractStep {
                     DEFAULT_ELEMENT_WAIT_TIME_IN_MILL
                 ).click()
             }
+        }
+    }
+
+    protected fun isKeyboardShowing(): Boolean {
+
+        if (SuiteSetup.isAndroid()) {
+            return (getDriver() as AndroidDriver).isKeyboardShown
+        } else {
+            return (getDriver() as IOSDriver).isKeyboardShown
         }
     }
 

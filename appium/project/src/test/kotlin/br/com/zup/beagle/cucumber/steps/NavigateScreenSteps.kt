@@ -190,7 +190,7 @@ class NavigateScreenSteps : AbstractStep() {
                 safeClickOnElement(waitForElementWithTextToBeClickable("Close"))
             } else {
 
-                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle)
+                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle, ignoreCase = true)
                 goBack()
 
                 if (mainButtonTitle == "ResetStackOtherSDAFailsToShowButton" ||
