@@ -187,9 +187,7 @@ class TextInputScreenSteps : AbstractStep() {
 
             if (lineCount == 0) // skip header
                 continue
-
-            println("EVENT = ${columns[0]!!}")
-
+            
             when (val event = columns[0]!!) {
                 "DidOnFocus" -> {
                     safeClickOnElement(actionValidationTextInputElement)
