@@ -581,7 +581,7 @@ abstract class AbstractStep {
         SuiteSetup.restartApp()
     }
 
-    private fun elementExists(locator: By): Boolean {
+    protected fun elementExists(locator: By): Boolean {
         return AppiumUtil.elementExists(getDriver(), locator, 2000)
     }
 

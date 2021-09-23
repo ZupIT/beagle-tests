@@ -145,6 +145,7 @@ class NavigateScreenSteps : AbstractStep() {
 
                         // opens the app
                         if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            SuiteSetup.restartApp()
                             loadBffScreenFromMainScreen()
                         } else {
                             loadBffScreenFromDeepLink()
@@ -156,6 +157,7 @@ class NavigateScreenSteps : AbstractStep() {
 
                         // opens the app
                         if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            SuiteSetup.restartApp()
                             loadBffScreenFromMainScreen()
                         } else {
                             loadBffScreenFromDeepLink()
@@ -203,6 +205,7 @@ class NavigateScreenSteps : AbstractStep() {
                      */
                     checkAppIsClosed()
                     if (SuiteSetup.getPlatformVersion() == "4.4") {
+                        SuiteSetup.restartApp()
                         loadBffScreenFromMainScreen()
                     } else {
                         loadBffScreenFromDeepLink()
