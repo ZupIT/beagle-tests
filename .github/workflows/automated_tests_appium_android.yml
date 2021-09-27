@@ -15,25 +15,25 @@
 #
 
 name: Beagle Appium Android tests
-#on:
-#  workflow_dispatch:
-#  workflow_run:
-#    workflows: [ "Beagle Appium tests trigger" ]
-#    types:
-#      - completed
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [ "Beagle Appium tests trigger" ]
+    types:
+      - completed
 
 # Bellow configuration is for testing this workflow without merging to main
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - '.github/**'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '.github/**'
+#on:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - '.github/**'
+#  pull_request:
+#    branches:
+#      - main
+#    paths:
+#      - '.github/**'
 
 jobs:
   bff_config_job:
