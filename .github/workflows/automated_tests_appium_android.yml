@@ -54,19 +54,19 @@ jobs:
       - name: Print branch info
         run: git branch
 
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+#      # Cache Gradle dependencies
+#      - name: Setup Gradle Dependencies Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+#
+#      # Cache Gradle Wrapper
+#      - name: Setup Gradle Wrapper Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
@@ -81,7 +81,6 @@ jobs:
       - name: Build test BFF image
         working-directory: bff-server
         run: |
-          ./gradlew bff:build --refresh-dependencies
           ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
       - name: Configure AWS
