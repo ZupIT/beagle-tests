@@ -342,21 +342,6 @@ class ScrollViewScreenSteps : AbstractStep() {
         return childElementExists(scrollViewElement, locator)
     }
 
-//    private fun isButtonShowingInsideOfScrollView(scrollViewElement: MobileElement, buttonText: String): Boolean {
-//
-//        val locator: By = if (SuiteSetup.isIos()) {
-//            MobileBy.iOSClassChain("**/XCUIElementTypeButton[`name == \"$buttonText\"`]")
-//        } else {
-//            By.xpath(".//android.widget.Button[@text='$buttonText']")
-//        }
-//
-//        if (childElementExists(scrollViewElement, locator)) {
-//            return waitForChildElementToBePresent(scrollViewElement, locator).isDisplayed
-//        }
-//
-//        return false
-//    }
-
     private fun isButtonShowing(buttonText: String): Boolean {
 
         val locator: By = if (SuiteSetup.isIos()) {
