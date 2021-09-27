@@ -15,25 +15,25 @@
 #
 
 name: Beagle Appium Android tests
-on:
-  workflow_dispatch:
-  workflow_run:
-    workflows: [ "Beagle Appium tests trigger" ]
-    types:
-      - completed
+#on:
+#  workflow_dispatch:
+#  workflow_run:
+#    workflows: [ "Beagle Appium tests trigger" ]
+#    types:
+#      - completed
 
 # Bellow configuration is for testing this workflow without merging to main
-#on:
-#  push:
-#    branches:
-#      - main
-#    paths:
-#      - '.github/**'
-#  pull_request:
-#    branches:
-#      - main
-#    paths:
-#      - '.github/**'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/**'
 
 jobs:
   bff_config_job:
@@ -54,19 +54,19 @@ jobs:
       - name: Print branch info
         run: git branch
 
-#      # Cache Gradle dependencies
-#      - name: Setup Gradle Dependencies Cache
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.gradle/caches
-#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-#
-#      # Cache Gradle Wrapper
-#      - name: Setup Gradle Wrapper Cache
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+      # Cache Gradle dependencies
+      - name: Setup Gradle Dependencies Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
+
+      # Cache Gradle Wrapper
+      - name: Setup Gradle Wrapper Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
       - name: Read secrets from AWS Secrets Manager into environment variables
         uses: abhilash1in/aws-secrets-manager-action@v1.0.1
@@ -80,8 +80,7 @@ jobs:
 
       - name: Build test BFF image
         working-directory: bff-server
-        run: |
-          ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
+        run: ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v1
