@@ -81,7 +81,7 @@ jobs:
       - name: Build test BFF image
         working-directory: bff-server
         run: |
-          ./gradlew bff:build
+          ./gradlew bff:build --refresh-dependencies
           ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
       - name: Configure AWS
