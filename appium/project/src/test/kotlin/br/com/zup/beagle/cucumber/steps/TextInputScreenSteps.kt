@@ -252,7 +252,7 @@ class TextInputScreenSteps : AbstractStep() {
                          *  Step 1: grab its preceding sibling
                          *  Step 2: find the element by calling the following sibling of the element found in step 1
                          */
-                        var targetElement = scrollDownToElementWithValue(placeHolder)
+                        scrollDownToElementWithValue(placeHolder)
                         val targetElementPrecedingSiblingText = waitForElementToBePresent(
                             By.xpath(
                                 "//android.widget.EditText[@text='$placeHolder']" +
@@ -267,8 +267,12 @@ class TextInputScreenSteps : AbstractStep() {
                         }
 
                         // It's necessary to find the element again
-                        targetElement =
-                            waitForElementToBePresent(By.xpath("//android.widget.EditText[@text='${targetElementPrecedingSiblingText}']/following::android.widget.EditText[1]"))
+                        val targetElement =
+                            waitForElementToBePresent(
+                                By.xpath(
+                                    "//android.widget.EditText[@text='${targetElementPrecedingSiblingText}']/following::android.widget.EditText[1]"
+                                )
+                            )
 
                         Assert.assertTrue(targetElement.text.all { Character.isDigit(it) })
                         targetElement.clear()

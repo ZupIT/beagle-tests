@@ -167,8 +167,8 @@ object SuiteSetup {
             }
 
             // checks if the app has started correctly
-            if (!appPackage.equals((driver as AndroidDriver<MobileElement>).currentPackage) ||
-                !appActivity.equals((driver as AndroidDriver<MobileElement>).currentActivity())
+            if (!appPackage.equals((driver as AndroidDriver<*>).currentPackage) ||
+                !appActivity.equals((driver as AndroidDriver<*>).currentActivity())
             ) {
                 throw Exception("Error loading the app and activity!")
             }
