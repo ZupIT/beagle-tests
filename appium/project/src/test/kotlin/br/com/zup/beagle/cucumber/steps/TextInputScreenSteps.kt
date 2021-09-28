@@ -172,7 +172,7 @@ class TextInputScreenSteps : AbstractStep() {
                                 AppiumUtil.androidScrollToElementByText(
                                     getDriver(),
                                     0,
-                                    "writing e-mail with expression"
+                                    "writing number"
                                 )
 
                                 val passwordElement = if (placeHolder == "writing password") {
