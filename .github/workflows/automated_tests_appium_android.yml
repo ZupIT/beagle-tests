@@ -81,7 +81,6 @@ jobs:
       - name: Build test BFF image
         working-directory: bff-server
         run: |
-          ./gradlew bff:build --refresh-dependencies
           ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
       - name: Configure AWS
@@ -98,7 +97,7 @@ jobs:
         run: bash ./fastlane/automatedTests/deploy_test_backend.sh
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          VERSION: ${{ github.event.workflow_run.head_branch }}
+          VERSION: ${{ github.sha }}
           CLUSTER: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAME }}
           NAMESPACE: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAMESPACE }}
 

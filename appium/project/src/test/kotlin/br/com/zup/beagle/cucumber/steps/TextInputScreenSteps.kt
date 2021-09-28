@@ -17,6 +17,7 @@
 package br.com.zup.beagle.cucumber.steps
 
 import br.com.zup.beagle.setup.SuiteSetup
+import br.com.zup.beagle.utils.AppiumUtil
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.nativekey.AndroidKey
 import io.appium.java_client.android.nativekey.KeyEvent
@@ -79,7 +80,6 @@ class TextInputScreenSteps : AbstractStep() {
     @Then("^validate clicks and input types:$")
     fun validateClicksAndInputTypes(dataTable: DataTable) {
         val rows = dataTable.asLists()
-        var passwordFieldsValidated = false
         for ((lineCount, columns) in rows.withIndex()) {
 
             if (lineCount == 0) // skip header
@@ -162,24 +162,42 @@ class TextInputScreenSteps : AbstractStep() {
                         placeHolder.contains("writing password") -> {
 
                             /**
-                             * The text property of a password element is always empty on Android 6.x,
-                             * so we can't look up for this element by its text.
-                             * The approach then is to retrieve all textfied elements and filter the ones
-                             * that are password, counting if they exist. No text validation can be done for now.
+                             * The text property of a password element is sometimes empty on Android 6.x,
+                             * so it's difficult to look up for this element by its text.
+                             * The approach then is to find the password element by its neighbor elements
                              */
                             if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion().toDouble() <= 6) {
 
-                                if (passwordFieldsValidated)
-                                    continue
-
                                 // scrolls to an element that is below writing password, so writing password appears
-                                scrollDownToElementWithValue("writing text")
-                                val allPasswordElements =
-                                    getDriver().findElements(By.xpath("//android.widget.EditText"))
-                                        .filter { s -> s.getAttribute("password") == "true" }
+                                AppiumUtil.androidScrollToElementByText(
+                                    getDriver(),
+                                    0,
+                                    "writing e-mail with expression"
+                                )
 
-                                Assert.assertEquals(allPasswordElements.size, 2)
-                                passwordFieldsValidated = true
+                                val passwordElement = if (placeHolder == "writing password") {
+                                    waitForElementToBePresent(
+                                        By.xpath(
+                                            "//android.widget.EditText[@text='writing e-mail with expression']" +
+                                                    "/following::android.widget.EditText[1]"
+                                        )
+                                    )
+                                } else {
+                                    waitForElementToBePresent(
+                                        By.xpath(
+                                            "//android.widget.EditText[@text='writing e-mail with expression']" +
+                                                    "/following::android.widget.EditText[2]"
+                                        )
+                                    )
+                                }
+
+                                passwordElement.click()
+                                val androidDriver = (getDriver() as AndroidDriver)
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_1))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_3))
+                                // validates that the value is encrypted in password style
+                                Assert.assertFalse(elementExistsByValue("123"))
 
                             } else {
 

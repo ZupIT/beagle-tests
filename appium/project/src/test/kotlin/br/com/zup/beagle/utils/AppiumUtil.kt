@@ -428,7 +428,7 @@ object AppiumUtil {
         driver: MobileDriver<*>,
         scrollElementIndex: Int,
         elementText: String,
-        isHorizontalScroll: Boolean
+        isHorizontalScroll: Boolean = false
     ) {
         if (isHorizontalScroll) {
             driver.findElement(
