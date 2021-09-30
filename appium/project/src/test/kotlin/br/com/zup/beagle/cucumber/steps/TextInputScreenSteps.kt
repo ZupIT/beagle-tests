@@ -17,11 +17,17 @@
 package br.com.zup.beagle.cucumber.steps
 
 import br.com.zup.beagle.setup.SuiteSetup
+import br.com.zup.beagle.utils.AppiumUtil
+import io.appium.java_client.android.AndroidDriver
+import io.appium.java_client.android.nativekey.AndroidKey
+import io.appium.java_client.android.nativekey.KeyEvent
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import org.junit.Assert
+import org.openqa.selenium.By
+
 
 class TextInputScreenSteps : AbstractStep() {
     override var bffRelativeUrlPath = "/textinput"
@@ -44,6 +50,11 @@ class TextInputScreenSteps : AbstractStep() {
             if (lineCount == 0) // skip header
                 continue
 
+            try {
+                hideKeyboard()
+            } catch (e: Exception) {
+            }
+
             val placeHolder = columns[0]!!
             val customTextValue = "$placeHolder-2"
             val enabled = columns[1]!!.toString().toBoolean()
@@ -59,12 +70,9 @@ class TextInputScreenSteps : AbstractStep() {
                 Assert.assertTrue(element.isEnabled)
             } else { // enabled and readOnly
                 element.clear()
-                try {
-                    element.sendKeys(customTextValue)
-                } catch (e: Exception) {
-                }
-                Assert.assertNotEquals(element.text, customTextValue)
-                Assert.assertFalse(element.isEnabled)
+                Assert.assertFalse(isKeyboardShowing())
+                element.click()
+                Assert.assertFalse(isKeyboardShowing())
             }
         }
     }
@@ -77,56 +85,157 @@ class TextInputScreenSteps : AbstractStep() {
             if (lineCount == 0) // skip header
                 continue
 
+            try {
+                hideKeyboard()
+            } catch (e: Exception) {
+            }
+
             val placeHolder = columns[0]!!
 
             when (val validationAction = columns[1]!!) {
-                "place holder keeps showing after click" -> {
+                "placeholder reappears after clearing value" -> {
 
                     val element = waitForElementWithValueToBeClickable(placeHolder, nativeLocator = false)
-                    element.sendKeys("randomValue")
-                    Assert.assertFalse(placeHolder == element.text)
-                    element.clear()
-                    Assert.assertTrue(placeHolder == element.text)
+
+                    if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                        element.click()
+                        val androidDriver = (getDriver() as AndroidDriver)
+                        androidDriver.pressKey(KeyEvent(AndroidKey.O))
+                        androidDriver.pressKey(KeyEvent(AndroidKey.K))
+                        waitForElementWithValueToBeClickable("ok").clear()
+                        waitForElementWithValueToBeClickable(placeHolder) // placeholder restored
+
+                    } else {
+                        element.sendKeys("ok")
+                        Assert.assertFalse(placeHolder == element.text)
+                        element.clear()
+                        Assert.assertTrue(placeHolder == element.text) // placeholder restored
+                    }
 
                 }
                 "validate typed text" -> {
                     when {
                         placeHolder.contains("writing date") -> {
 
-                            val mobileElement = waitForElementWithValueToBeClickable(placeHolder, nativeLocator = false)
-                            mobileElement.sendKeys("22/04/1500")
-                            waitForElementWithValueToBeClickable("22/04/1500")
+                            val element = waitForElementWithValueToBeClickable(placeHolder, nativeLocator = false)
+
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                                element.click()
+                                val androidDriver = (getDriver() as AndroidDriver)
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_0))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.SLASH))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_0))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_4))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.SLASH))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_0))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_0))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_0))
+                            } else {
+                                element.sendKeys("02/04/2000")
+                            }
+
+                            waitForElementWithValueToBeClickable("02/04/2000").clear()
 
                         }
                         placeHolder.contains("writing e-mail") -> {
 
                             val element = scrollUpToElementWithValue(placeHolder)
-                            element.sendKeys("test@abc.com")
-                            waitForElementWithValueToBeClickable("test@abc.com")
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                                element.click()
+                                val androidDriver = (getDriver() as AndroidDriver)
+                                androidDriver.pressKey(KeyEvent(AndroidKey.A))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.B))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.C))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.AT))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_1))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_3))
+                            } else {
+                                element.sendKeys("abc@123")
+                            }
+
+                            waitForElementWithValueToBeClickable("abc@123").clear()
 
                         }
                         placeHolder.contains("writing password") -> {
 
-                            val element = scrollDownToElementWithValue(placeHolder)
-                            element.sendKeys("1234")
-                            Assert.assertTrue("1234" != element.text) // validates text is in password format
-                            Assert.assertTrue(element.text.length == 4)
-                            Assert.assertTrue(placeHolder != element.text)
+                            /**
+                             * The text property of a password element is sometimes empty on Android 6.x,
+                             * so it's difficult to look up for this element by its text.
+                             * The approach then is to find the password element by its neighbor elements
+                             */
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion().toDouble() <= 6) {
 
+                                // scrolls to an element that is below writing password, so writing password appears
+                                AppiumUtil.androidScrollToElementByText(
+                                    getDriver(),
+                                    0,
+                                    "writing number"
+                                )
+
+                                val passwordElement = if (placeHolder == "writing password") {
+                                    waitForElementToBePresent(
+                                        By.xpath(
+                                            "//android.widget.EditText[@text='writing e-mail with expression']" +
+                                                    "/following::android.widget.EditText[1]"
+                                        )
+                                    )
+                                } else {
+                                    waitForElementToBePresent(
+                                        By.xpath(
+                                            "//android.widget.EditText[@text='writing e-mail with expression']" +
+                                                    "/following::android.widget.EditText[2]"
+                                        )
+                                    )
+                                }
+
+                                passwordElement.click()
+                                val androidDriver = (getDriver() as AndroidDriver)
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_1))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_3))
+                                // validates that the value is encrypted in password style
+                                Assert.assertFalse(elementExistsByValue("123"))
+
+                            } else {
+
+                                val element = scrollDownToElementWithValue(placeHolder)
+                                element.sendKeys("1234")
+                                Assert.assertTrue("1234" != element.text) // validates text is in password format
+                                Assert.assertTrue(element.text.length == 4)
+                                Assert.assertTrue(placeHolder != element.text)
+                                element.clear()
+                            }
                         }
                         placeHolder.contains("writing number") -> {
 
                             val element = scrollDownToElementWithValue(placeHolder)
-                            element.sendKeys("12345678")
-                            waitForElementWithValueToBeClickable("12345678")
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                                element.click()
+                                val androidDriver = (getDriver() as AndroidDriver)
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_1))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_2))
+                                androidDriver.pressKey(KeyEvent(AndroidKey.DIGIT_3))
+
+                            } else {
+                                element.sendKeys("123")
+                            }
+                            waitForElementWithValueToBeClickable("123").clear()
 
                         }
                         placeHolder.contains("writing text") -> {
 
                             val element = scrollDownToElementWithValue(placeHolder)
-                            element.sendKeys("This is a test!")
-                            waitForElementWithValueToBeClickable("This is a test!")
+                            if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                                element.click()
+                                typeText()
+                            } else {
+                                element.sendKeys("text")
+                            }
 
+                            waitForElementWithValueToBeClickable("text").clear()
                         }
                         else -> {
                             throw Exception("Wrong place holder: $placeHolder")
@@ -135,8 +244,43 @@ class TextInputScreenSteps : AbstractStep() {
                 }
                 "validate is number only textInput" -> {
 
-                    scrollDownToElementWithValue(placeHolder)
-                    Assert.assertTrue(isTextFieldNumeric(placeHolder))
+                    if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+
+                        /**
+                         *  On Android 4.4, an element sometimes lose its reference when its property (ex text) changes.
+                         *  We took the following approach to look up an element without knowing any of its properties:
+                         *  Step 1: grab its preceding sibling
+                         *  Step 2: find the element by calling the following sibling of the element found in step 1
+                         */
+                        scrollDownToElementWithValue(placeHolder)
+                        val targetElementPrecedingSiblingText = waitForElementToBePresent(
+                            By.xpath(
+                                "//android.widget.EditText[@text='$placeHolder']" +
+                                        "/preceding::android.widget.EditText[1]"
+                            )
+                        ).text
+
+                        // Changes the target element text by typing a digit.
+                        try {
+                            isTextFieldNumeric(placeHolder)
+                        } catch (e: Exception) {
+                        }
+
+                        // It's necessary to find the element again
+                        val targetElement =
+                            waitForElementToBePresent(
+                                By.xpath(
+                                    "//android.widget.EditText[@text='${targetElementPrecedingSiblingText}']/following::android.widget.EditText[1]"
+                                )
+                            )
+
+                        Assert.assertTrue(targetElement.text.all { Character.isDigit(it) })
+                        targetElement.clear()
+                    } else {
+                        val element = scrollDownToElementWithValue(placeHolder)
+                        Assert.assertTrue(isTextFieldNumeric(placeHolder))
+                        element.clear()
+                    }
 
                 }
                 else -> {
@@ -148,18 +292,11 @@ class TextInputScreenSteps : AbstractStep() {
 
     @Then("^validate textInput events:$")
     fun validateEvents(dataTable: DataTable) {
-
+        swipeUp()
         swipeUp()
 
-        val actionValidationTextInputElement = waitForElementWithValueToBeClickable(
-            "action validation", nativeLocator = false
-        )
-
-        val unorderedActionsTextInputElement = waitForElementWithValueToBePresent(
-            "Unordered actions", nativeLocator = false
-        )
-
         val rows = dataTable.asLists()
+
         for ((lineCount, columns) in rows.withIndex()) {
 
             if (lineCount == 0) // skip header
@@ -167,39 +304,67 @@ class TextInputScreenSteps : AbstractStep() {
 
             when (val event = columns[0]!!) {
                 "DidOnFocus" -> {
-                    safeClickOnElement(actionValidationTextInputElement)
-                    Assert.assertEquals(event, unorderedActionsTextInputElement.text)
+                    /**
+                     * Asserts the text 'Unordered actions' changes to 'DidOnFocus'
+                     * This verification is done by checking visibility and invisibility of elements by their text
+                     * The same logic applies for the other cases
+                     */
+                    Assert.assertTrue(elementExistsByValue("Unordered actions"))
+                    Assert.assertFalse(elementExistsByValue(event))
+                    safeClickOnElement(waitForElementWithValueToBeClickable("action validation"))
                     hideKeyboard()
+                    Assert.assertFalse(elementExistsByValue("Unordered actions"))
+                    Assert.assertTrue(elementExistsByValue(event))
                 }
                 "DidOnChange" -> {
-                    safeClickOnElement(actionValidationTextInputElement)
-                    actionValidationTextInputElement.sendKeys("anyText")
-                    Assert.assertEquals(event, unorderedActionsTextInputElement.text)
+                    Assert.assertTrue(elementExistsByValue("DidOnFocus"))
+                    Assert.assertFalse(elementExistsByValue(event))
+                    val element = waitForElementWithValueToBeClickable("action validation")
+                    safeClickOnElement(element)
+                    if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                        typeText()
+                    } else {
+                        element.sendKeys("text")
+                    }
                     hideKeyboard()
+                    Assert.assertFalse(elementExistsByValue("DidOnFocus"))
+                    Assert.assertTrue(elementExistsByValue(event))
+                    waitForElementWithValueToBeClickable("text").clear()
                 }
                 "DidOnBlur" -> {
-                    safeClickOnElement(actionValidationTextInputElement)
+                    Assert.assertTrue(elementExistsByValue("DidOnChange"))
+                    Assert.assertFalse(elementExistsByValue(event))
+                    safeClickOnElement(waitForElementWithValueToBeClickable("action validation"))
                     safeClickOnElement(waitForElementWithValueToBeClickable("is textInput type number"))
-                    Assert.assertEquals(event, unorderedActionsTextInputElement.text)
                     if (SuiteSetup.isIos()) {
                         safeClickOnElement(waitForElementWithTextToBeClickable("Done"))
                     } else {
                         hideKeyboard()
                     }
-
-
+                    Assert.assertFalse(elementExistsByValue("DidOnChange"))
+                    Assert.assertTrue(elementExistsByValue(event))
                 }
                 "DidOnFocusDidOnChangeDidOnBlur" -> {
 
-                    // validate the actions of the textInput when they're executed in sequence
-                    val orderedActionsElement =
-                        waitForElementWithValueToBePresent("Ordered actions", nativeLocator = false)
-                    val actionOrderElement =
-                        waitForElementWithValueToBeClickable("action order")
-                    safeClickOnElement(actionOrderElement)
-                    actionOrderElement.sendKeys("anyText")
+                    Assert.assertTrue(elementExistsByValue("Ordered actions"))
+                    Assert.assertFalse(elementExistsByValue(event))
+                    val element = waitForElementWithValueToBeClickable("action order")
+                    safeClickOnElement(element)
+                    if (SuiteSetup.isAndroid() && SuiteSetup.getPlatformVersion() == "4.4") {
+                        typeText()
+                    } else {
+                        element.sendKeys("text")
+                    }
+
                     safeClickOnElement(waitForElementWithValueToBeClickable("is textInput type number"))
-                    Assert.assertEquals(event, orderedActionsElement.text)
+
+                    if (SuiteSetup.isIos()) {
+                        safeClickOnElement(waitForElementWithTextToBeClickable("Done"))
+                    } else {
+                        hideKeyboard()
+                    }
+                    Assert.assertFalse(elementExistsByValue("Ordered actions"))
+                    Assert.assertTrue(elementExistsByValue(event))
                 }
                 else -> {
                     throw Exception("Wrong event: $event")
@@ -207,4 +372,14 @@ class TextInputScreenSteps : AbstractStep() {
             }
         }
     }
+
+    private fun typeText() {
+        val androidDriver = (getDriver() as AndroidDriver)
+        androidDriver.pressKey(KeyEvent(AndroidKey.T))
+        androidDriver.pressKey(KeyEvent(AndroidKey.E))
+        androidDriver.pressKey(KeyEvent(AndroidKey.X))
+        androidDriver.pressKey(KeyEvent(AndroidKey.T))
+    }
 }
+
+

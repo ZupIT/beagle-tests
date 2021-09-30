@@ -38,21 +38,21 @@ Feature: TextInput Validation
 
   Scenario: TextInput 02: validate textInput clicks and inputs
     Then validate clicks and input types:
-      | PLACE-HOLDER                                  | VALIDATION                             |
-      | is a textInput in second plan                 | place holder keeps showing after click |
-      | is a textInput in second plan with expression | place holder keeps showing after click |
-      | writing date                                  | validate typed text                    |
-      | writing date with expression                  | validate typed text                    |
-      | writing e-mail                                | validate typed text                    |
-      | writing e-mail with expression                | validate typed text                    |
-      | writing password                              | validate typed text                    |
-      | writing password with expression              | validate typed text                    |
-      | writing number                                | validate typed text                    |
-      | writing number with expression                | validate typed text                    |
-      | writing text                                  | validate typed text                    |
-      | writing text with expression                  | validate typed text                    |
-      | is textInput type number                      | validate is number only textInput      |
-      | is textInput type number with expression      | validate is number only textInput      |
+      | PLACE-HOLDER                                  | VALIDATION                                 |
+      | is a textInput in second plan                 | placeholder reappears after clearing value |
+      | is a textInput in second plan with expression | placeholder reappears after clearing value |
+      | writing date                                  | validate typed text                        |
+      | writing date with expression                  | validate typed text                        |
+      | writing e-mail                                | validate typed text                        |
+      | writing e-mail with expression                | validate typed text                        |
+      | writing password                              | validate typed text                        |
+      | writing password with expression              | validate typed text                        |
+      | writing number                                | validate typed text                        |
+      | writing number with expression                | validate typed text                        |
+      | writing text                                  | validate typed text                        |
+      | writing text with expression                  | validate typed text                        |
+      | is textInput type number                      | validate is number only textInput          |
+      | is textInput type number with expression      | validate is number only textInput          |
 
   Scenario: TextInput 03: validate textInput events
     Then validate textInput events:

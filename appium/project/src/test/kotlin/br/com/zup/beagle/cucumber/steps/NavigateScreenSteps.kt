@@ -145,6 +145,7 @@ class NavigateScreenSteps : AbstractStep() {
 
                         // opens the app
                         if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            SuiteSetup.restartApp()
                             loadBffScreenFromMainScreen()
                         } else {
                             loadBffScreenFromDeepLink()
@@ -156,6 +157,7 @@ class NavigateScreenSteps : AbstractStep() {
 
                         // opens the app
                         if (SuiteSetup.getPlatformVersion() == "4.4") {
+                            SuiteSetup.restartApp()
                             loadBffScreenFromMainScreen()
                         } else {
                             loadBffScreenFromDeepLink()
@@ -190,7 +192,7 @@ class NavigateScreenSteps : AbstractStep() {
                 safeClickOnElement(waitForElementWithTextToBeClickable("Close"))
             } else {
 
-                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle)
+                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle, ignoreCase = true)
                 goBack()
 
                 if (mainButtonTitle == "ResetStackOtherSDAFailsToShowButton" ||
@@ -203,6 +205,7 @@ class NavigateScreenSteps : AbstractStep() {
                      */
                     checkAppIsClosed()
                     if (SuiteSetup.getPlatformVersion() == "4.4") {
+                        SuiteSetup.restartApp()
                         loadBffScreenFromMainScreen()
                     } else {
                         loadBffScreenFromDeepLink()

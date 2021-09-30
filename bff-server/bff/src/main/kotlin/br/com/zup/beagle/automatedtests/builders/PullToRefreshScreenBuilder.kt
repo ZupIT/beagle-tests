@@ -40,11 +40,7 @@ object PullToRefreshScreenBuilder {
         child = Container(
             children = listOf(
                 Text(text = "Beagle PullToRefresh screen"),
-                ScrollView(
-                    scrollDirection = ScrollAxis.VERTICAL,
-                    children = listOf(
-                        touchableWithPullToRefresh()
-                    ))
+                touchableWithPullToRefresh()
             )
         )
     )
