@@ -186,7 +186,7 @@ object SuiteSetup {
              * ~/Library/Developer/Xcode/DerivedData/APP-RANDOM-CODE/Build/Products/Debug-iphonesimulator/AppiumApp.app
              */
             if (appFile.isNullOrBlank())
-                appFile = "COMPLETE-PATH-TO/AppiumApp.app"
+               throw Exception("param app_file is empty or null")
 
             capabilities.setCapability("noReset", true)
             capabilities.setCapability("waitForQuiescence", false)
