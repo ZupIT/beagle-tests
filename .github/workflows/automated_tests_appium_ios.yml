@@ -182,8 +182,6 @@ jobs:
       #        run: bash fastlane/automatedTests/appium/ios/run_appium_ios_tests.sh
 
       - name: Run the Appium test suite
-        with:
-          path: bff-server
         env:
           DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
           IOS_VERSION: ${{ matrix.ios-version }}
@@ -191,7 +189,6 @@ jobs:
           APP_FILE=$(find ~/Library/Developer/Xcode/DerivedData -name AppiumApp.app | grep Build/Products/Debug-iphonesimulator/AppiumApp.app)
           echo ".app file found at: $APP_FILE"
           echo "Running Appium tests on device $DEVICE_NAME with iOS $IOS_VERSION..."
-          chmod +x $APPIUM_PROJECT_DIR/gradlew
           if ./appium/project/gradlew --build-cache -p appium/project cucumber \
           -Dplatform="ios" \
           -Dplatform_version="$IOS_VERSION" \
