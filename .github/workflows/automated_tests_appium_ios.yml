@@ -62,7 +62,8 @@ jobs:
 
       - name: Generate the BFF jar file
         run: |
-          if ./bff-server/gradlew bootJar; then
+          cd bff-server
+          if ./gradlew bootJar; then
             echo "Gradle task succeeded" >&2
           else
             echo "Gradle task failed" >&2
