@@ -127,8 +127,9 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           set -e
+          echo "vars = $DEVICE_NAME and $IOS_VERSION"
           xcodebuild -showsdks
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=$DEVICE_NAME' -quiet
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION' -quiet
 
       - name: Config the simulator according to the iOS version
         env:
