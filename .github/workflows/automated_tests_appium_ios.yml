@@ -114,7 +114,7 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10) echo ::set-output name=result::"iPhone 7" ;;
+          10.3.1) echo ::set-output name=result::"iPhone 7" ;;
           12.4) echo ::set-output name=result::"iPhone 11" ;;
           14.4) echo ::set-output name=result::"iPhone 11" ;;
           *) echo "Invalid option!" && exit 1 ;;
