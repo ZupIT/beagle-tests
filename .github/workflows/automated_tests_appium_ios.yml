@@ -129,7 +129,7 @@ jobs:
           set -e
           echo "vars = $DEVICE_NAME and $IOS_VERSION"
           xcodebuild -showsdks
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION' -quiet
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 7,OS=10' -quiet
 
       - name: Config the simulator according to the iOS version
         env:
