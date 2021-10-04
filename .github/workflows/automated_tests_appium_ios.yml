@@ -120,17 +120,6 @@ jobs:
           *) echo "Invalid option!" && exit 1 ;;
           esac
 
-      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
-      - name: Build the app-ios project to generate the app file
-        env:
-          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
-          IOS_VERSION: ${{ matrix.ios-version }}
-        run: |
-          set -e
-          echo "vars = $DEVICE_NAME and $IOS_VERSION"
-          xcodebuild -showsdks
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 7,OS=10' -quiet
-
       - name: Config the simulator according to the iOS version
         env:
           IOS_VERSION: ${{ matrix.ios-version }}
@@ -154,6 +143,17 @@ jobs:
             echo "Invalid option!" && exit 1
             ;;
           esac
+
+      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
+      - name: Build the app-ios project to generate the app file
+        env:
+          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
+          IOS_VERSION: ${{ matrix.ios-version }}
+        run: |
+          set -e
+          echo "vars = $DEVICE_NAME and $IOS_VERSION"
+          xcodebuild -showsdks
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 7,OS=10' -quiet
 
 
       ##################################################################################################
