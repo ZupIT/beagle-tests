@@ -159,6 +159,7 @@ jobs:
           set -e
           xcodebuild -version
           xcodebuild -showsdks
+          curl -s "http://localhost:8080/button"
           xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
 
