@@ -84,7 +84,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ios-version: [ 10, 12.4, 14.4 ]
+        ios-version: [ 10.3.1, 12.4, 14.4 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -125,7 +125,7 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10)
+          10.3.1)
             xcversion simulators --install='iOS 10.3.1'
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
@@ -151,8 +151,13 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           set -e
+          xcodebuild -version
+          xcversion selected
+          sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+          xcodebuild -version
+          xcversion selected
           xcodebuild -showsdks
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=iPhone 7,OS=10.3.1' -quiet
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION' -quiet
 
 
       ##################################################################################################
