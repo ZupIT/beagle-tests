@@ -129,7 +129,7 @@ jobs:
             xcversion simulators --install='iOS 10.3.1'
             ls -la /Users/runner/Library/Caches/XcodeInstall/
             ls -la /Applications/
-            xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+            sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
