@@ -126,7 +126,7 @@ jobs:
         run: |
           case $IOS_VERSION in
           10.3.1)
-            xcversion simulators --install='iOS 10.3.1'
+            xcversion simulators --install="iOS 10.3.1"
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
@@ -152,12 +152,8 @@ jobs:
         run: |
           set -e
           xcodebuild -version
-          xcversion selected
-          sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
-          xcodebuild -version
-          xcversion selected
           xcodebuild -showsdks
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination 'platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION' -quiet
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
 
       ##################################################################################################
