@@ -113,7 +113,7 @@ jobs:
         env:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
-          case IOS_VERSION in
+          case $IOS_VERSION in
           10) echo ::set-output name=result::"iPhone 7" ;;
           12.4) echo ::set-output name=result::"iPhone 11" ;;
           14.4) echo ::set-output name=result::"iPhone 11" ;;
@@ -134,7 +134,7 @@ jobs:
         env:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
-          case IOS_VERSION in
+          case $IOS_VERSION in
           10)
             xcversion simulators --install='iOS 10.3.1'
             xcode-select --switch/Applications/Xcode_10.3.app/Contents/Developer
