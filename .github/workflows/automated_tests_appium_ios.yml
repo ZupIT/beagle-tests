@@ -134,7 +134,10 @@ jobs:
             sleep 30
             ;;
           12.4)
-            echo "TODO" && exit 1
+            xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
+            DEVICEUUID=`cat ~/deviceIdTemp.txt`
+            xcrun simctl boot $DEVICEUUID
+            sleep 30
             ;;
           14.4)
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
