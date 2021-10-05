@@ -97,6 +97,12 @@ jobs:
       - name: Print branch info
         run: git branch
 
+      - name: Setup JDK (11)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
       - name: Download the BFF jar file
         uses: actions/download-artifact@v2
         with:
