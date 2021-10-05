@@ -103,7 +103,15 @@ jobs:
           name: bff-jar-file
 
       - name: Start the BFF server
-        run: nohup java -jar bff.jar 2>&1 &
+        run: |
+          nohup java -jar bff.jar 2>&1 &
+          sleep 20
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8080/button)
+          if [ $response -eq 200 ]; then
+              echo "BFF is up!"
+          else
+              echo "BFF is not up!" && && exit 1
+          fi
 
       - name: Config and run the Appium server
         run: bash fastlane/automatedTests/appium/config_and_run_appium_server.sh
@@ -134,12 +142,15 @@ jobs:
             sleep 30
             ;;
           12.4)
+            xcversion simulators --install="iOS 12.4"
+            sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
             sleep 30
             ;;
           14.4)
+            sudo xcode-select --switch /Applications/Xcode_14.4.app/Contents/Developer
             xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
@@ -159,7 +170,6 @@ jobs:
           set -e
           xcodebuild -version
           xcodebuild -showsdks
-          curl -s "http://localhost:8080/button"
           xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
 
