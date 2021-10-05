@@ -110,7 +110,7 @@ jobs:
           if [ $response -eq 200 ]; then
               echo "BFF is up!"
           else
-              echo "BFF is not up!" && && exit 1
+              echo "BFF is not up!" && exit 1
           fi
 
       - name: Config and run the Appium server
