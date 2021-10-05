@@ -111,7 +111,7 @@ jobs:
       - name: Start the BFF server
         run: |
           nohup java -jar bff.jar 2>&1 &
-          sleep 20
+          sleep 40
           response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8080/button)
           if [ $response -eq 200 ]; then
               echo "BFF is up!"
