@@ -129,7 +129,7 @@ jobs:
         run: |
           case $IOS_VERSION in
           10.3.1) echo ::set-output name=result::"iPhone 7" ;;
-          12.4) echo ::set-output name=result::"iPhone 11" ;;
+          12.4) echo ::set-output name=result::"iPhone 7" ;;
           14.4) echo ::set-output name=result::"iPhone 11" ;;
           *) echo "Invalid option!" && exit 1 ;;
           esac
@@ -140,26 +140,28 @@ jobs:
         env:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
-          xcrun simctl list
           case $IOS_VERSION in
           10.3.1)
             xcversion simulators --install="iOS 10.3.1"
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
-            xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
+            xcrun simctl list
+            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
             sleep 30
             ;;
           12.4)
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
-            xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
+            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
+            xcrun simctl list
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
             sleep 30
             ;;
           14.4)
             sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
-            xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
+            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
+            xcrun simctl list
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
             sleep 30
@@ -176,8 +178,6 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           set -e
-          xcodebuild -version
-          xcodebuild -showsdks
           xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
 
