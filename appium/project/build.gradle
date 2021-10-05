@@ -67,7 +67,7 @@ task cucumber() {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = [/*'--plugin','pretty', */
                     '--glue', 'br.com.zup.beagle.cucumber.steps', 'src/test/resources/features',
-                    '--tags', '@button and not @inProgress',
+                    '--tags', '@' + System.getProperty("platform") + ' and not @inProgress',
                     '--plugin', 'br.com.zup.beagle.setup.SuiteSetupPlugin']
 
             println 'Cucumber args: ' + args
