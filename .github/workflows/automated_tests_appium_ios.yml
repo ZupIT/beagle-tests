@@ -144,27 +144,27 @@ jobs:
           10.3.1)
             xcversion simulators --install="iOS 10.3.1"
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
-            xcrun simctl list
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
-            sleep 30
+            sleep 60
+            xcrun simctl list
             ;;
           12.4)
             sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
-            xcrun simctl list
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             xcrun simctl boot $DEVICEUUID
-            sleep 30
+            sleep 60
+            xcrun simctl list
             ;;
           14.4)
             sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
-            xcrun simctl list
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
-            xcrun simctl boot $DEVICEUUID
-            sleep 30
+            open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
+            sleep 60
+            xcrun simctl list
             ;;
           *)
             echo "Invalid option!" && exit 1
