@@ -134,16 +134,6 @@ jobs:
           *) echo "Invalid option!" && exit 1 ;;
           esac
 
-      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
-      - name: Build the app-ios project to generate the app file
-        env:
-          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
-          IOS_VERSION: ${{ matrix.ios-version }}
-        run: |
-          set -e
-          xcodebuild -version
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
-
       # Useful docs and tools to understand iOS Simulator (emulator) configuration:
       # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#installed-simulators
       # https://github.com/xcpretty/xcode-install
@@ -159,7 +149,7 @@ jobs:
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
             sleep 60
-            xcrun simctl list
+            sudo xcversion select 12.4 --symlink
             ;;
           12.4)
             sudo xcversion select 10.3 --symlink
@@ -167,19 +157,28 @@ jobs:
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
             sleep 60
-            xcrun simctl list
+            sudo xcversion select 12.4 --symlink
             ;;
           14.4)
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
             sleep 60
-            xcrun simctl list
             ;;
           *)
             echo "Invalid option!" && exit 1
             ;;
           esac
+
+      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
+      - name: Build the app-ios project to generate the app file
+        env:
+          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
+          IOS_VERSION: ${{ matrix.ios-version }}
+        run: |
+          set -e
+          xcodebuild -version
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
       - name: Run the Appium test suite
         env:
