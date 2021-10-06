@@ -84,7 +84,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ios-version: [ 10.3, 12.4, 14.4 ]
+        ios-version: [ 10.3.1, 12.4, 14.4 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -128,7 +128,7 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10.3) echo ::set-output name=result::"iPhone 7" ;;
+          10.3.1) echo ::set-output name=result::"iPhone 7" ;;
           12.4) echo ::set-output name=result::"iPhone 7" ;;
           14.4) echo ::set-output name=result::"iPhone 11" ;;
           *) echo "Invalid option!" && exit 1 ;;
@@ -143,7 +143,7 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10.3)
+          10.3.1)
             sudo xcversion select 10.3 --symlink
             xcversion simulators --install="iOS 10.3.1"
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
@@ -154,6 +154,7 @@ jobs:
             ;;
           12.4)
             sudo xcversion select 10.3 --symlink
+            xcversion simulators --install="iOS 12.4"
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
@@ -161,6 +162,7 @@ jobs:
             sudo xcversion select 12.4 --symlink
             ;;
           14.4)
+            echo "Temporary exiting version 14.4" && exit 1
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
@@ -186,12 +188,17 @@ jobs:
           DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
+          if [ $IOS_VERSION -eq 1.3.1 ]; then
+              IOS_VERSION_FIXED=1.3
+          else
+              IOS_VERSION_FIXED=$IOS_VERSION
+          fi
           APP_FILE=$(find ~/Library/Developer/Xcode/DerivedData -name AppiumApp.app | grep Build/Products/Debug-iphonesimulator/AppiumApp.app)
           echo ".app file found at: $APP_FILE"
           echo "Running Appium tests on device $DEVICE_NAME with iOS $IOS_VERSION..."
           if ./appium/project/gradlew --build-cache -p appium/project cucumber \
           -Dplatform="ios" \
-          -Dplatform_version="$IOS_VERSION" \
+          -Dplatform_version="$IOS_VERSION_FIXED" \
           -Ddevice_name="$DEVICE_NAME" \
           -Dapp_file="$APP_FILE"; then
             echo "Gradle task succeeded" >&2
