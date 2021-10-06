@@ -151,7 +151,7 @@ jobs:
             xcrun simctl list
             ;;
           12.4)
-            sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+            sudo xcversion select 10.3 --symlink
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
@@ -178,6 +178,9 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           set -e
+          xcversion installed
+          xcversion selected
+          xcodebuild -version
           xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
 
 
