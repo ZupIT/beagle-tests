@@ -134,8 +134,19 @@ jobs:
           *) echo "Invalid option!" && exit 1 ;;
           esac
 
-      # Simulators and Xcode required:
+      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
+      - name: Build the app-ios project to generate the app file
+        env:
+          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
+          IOS_VERSION: ${{ matrix.ios-version }}
+        run: |
+          set -e
+          xcodebuild -version
+          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
+
+      # Useful docs and tools to understand iOS Simulator (emulator) configuration:
       # https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#installed-simulators
+      # https://github.com/xcpretty/xcode-install
       - name: Config the simulator according to the iOS version
         env:
           IOS_VERSION: ${{ matrix.ios-version }}
@@ -151,6 +162,7 @@ jobs:
             xcrun simctl list
             ;;
           12.4)
+            sudo xcversion select 10.3 --symlink
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
@@ -158,7 +170,6 @@ jobs:
             xcrun simctl list
             ;;
           14.4)
-            sudo xcode-select --switch /Applications/Xcode_12.4.app/Contents/Developer
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
             DEVICEUUID=`cat ~/deviceIdTemp.txt`
             open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
@@ -169,41 +180,6 @@ jobs:
             echo "Invalid option!" && exit 1
             ;;
           esac
-
-      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
-      - name: Build the app-ios project to generate the app file
-        env:
-          DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
-          IOS_VERSION: ${{ matrix.ios-version }}
-        run: |
-          set -e
-          sudo xcversion select 12.4 --symlink
-          xcodebuild -version
-          xcodebuild -project appium/app-ios/AppiumApp/AppiumApp.xcodeproj -scheme AppiumApp -destination "platform=iOS Simulator,name=$DEVICE_NAME,OS=$IOS_VERSION" -quiet
-
-
-      ##################################################################################################
-      # Emulator config - start
-      ##################################################################################################
-
-      #      - name: Prepare iOS 13.5 simulator
-      #        run: |
-      #          sudo mkdir -p /Library/Developer/CoreSimulator/Profiles/Runtimes
-      #          # We use simulator 13.5 for the tests. It uses Xcode 11.5, according to https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md.
-      #          # Since GitHub Actions uses another Xcode version, we need to make a symlink inside Xcode, pointing to the iOS version we want.
-      #          # More details: https://github.com/actions/virtual-environments/issues/551#issuecomment-637344435
-      #          sudo ln -s /Applications/Xcode_11.5.app/Contents/Developer/Platforms/iPhoneOS.platform/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS.simruntime /Library/Developer/CoreSimulator/Profiles/Runtimes/iOS\ 13.5.simruntime
-      #          xcrun simctl create TestiPhoneX com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-13-5 > ~/deviceIdTemp.txt
-      #          DEVICEUUID=`cat ~/deviceIdTemp.txt`
-      #          xcrun simctl boot $DEVICEUUID
-      #          sleep 30
-
-      ##################################################################################################
-      # Emulator config - end
-      ##################################################################################################
-
-      #      - name: Run the tests
-      #        run: bash fastlane/automatedTests/appium/ios/run_appium_ios_tests.sh
 
       - name: Run the Appium test suite
         env:
