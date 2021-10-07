@@ -147,34 +147,24 @@ jobs:
             sudo xcversion select 10.3 --symlink
             xcversion simulators --install="iOS 10.3.1"
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
-            DEVICEUUID=`cat ~/deviceIdTemp.txt`
-            open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
-            sleep 60
-            sudo xcversion select 12.4 --symlink
             ;;
           12.4)
-            echo "Temporary exiting version 12.4" && exit 1
             sudo xcversion select 10.3 --symlink
             xcversion simulators --install="iOS 12.4"
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
-            DEVICEUUID=`cat ~/deviceIdTemp.txt`
-            open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
-            sleep 60
-            sudo xcversion select 12.4 --symlink
             ;;
           14.4)
-            echo "Temporary exiting version 14.4" && exit 1
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
-            DEVICEUUID=`cat ~/deviceIdTemp.txt`
-            open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
-            sleep 60
             ;;
           *)
             echo "Invalid option!" && exit 1
             ;;
           esac
+          DEVICEUUID=`cat ~/deviceIdTemp.txt`
+          sudo xcversion select 12.4 --symlink
+          open -a Simulator --args -CurrentDeviceUDID $DEVICEUUID 2>&1 &
+          sleep 60
 
-      # TODO: TRY TO MAKE THIS STEP IN ONE JOB (multiple dests or generic): https://mokacoding.com/blog/xcodebuild-destination-options/
       - name: Build the app-ios project to generate the app file
         env:
           DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
