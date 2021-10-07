@@ -38,7 +38,7 @@ on:
 jobs:
   bff_config_job:
     name: BFF server configuration
-    runs-on: ubuntu-20.04
+    runs-on: macos-latest
     timeout-minutes: 10
     env:
       BFF_NAME: automated-test-bff
@@ -67,6 +67,12 @@ jobs:
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Setup JDK (11)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
 
       - name: Using Heroku to start the BFF server
         uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
