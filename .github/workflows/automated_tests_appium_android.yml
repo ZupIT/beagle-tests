@@ -68,13 +68,16 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
+      - name: Install Heroku
+        run: brew tap heroku/brew && brew install heroku
+
       - name: Using Heroku to start the BFF server
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: ${{secrets.HEROKU_API_NAME}}
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-
+          appdir: bff-server
 
   #      - name: Read secrets from AWS Secrets Manager into environment variables
   #        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
