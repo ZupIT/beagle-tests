@@ -1,1 +1,1 @@
-web: ./gradlew bff:bootRun
+web: java -jar detectIsJava || ./gradlew bff:bootRun
