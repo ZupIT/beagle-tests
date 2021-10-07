@@ -68,38 +68,46 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-      - name: Read secrets from AWS Secrets Manager into environment variables
-        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
+      - name: Using Heroku to start the BFF server
+        uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          secrets: |
-            beagle/core/*
-          parse-json: true
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_API_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
 
-      - name: Build test BFF image
-        working-directory: bff-server
-        run: |
-          ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
 
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: sa-east-1
-
-      - name: Login to ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Deploy to AWS
-        run: bash ./fastlane/automatedTests/deploy_test_backend.sh
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          VERSION: ${{ github.sha }}
-          CLUSTER: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAME }}
-          NAMESPACE: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAMESPACE }}
+  #      - name: Read secrets from AWS Secrets Manager into environment variables
+  #        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
+  #        with:
+  #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #          aws-region: us-east-1
+  #          secrets: |
+  #            beagle/core/*
+  #          parse-json: true
+  #
+  #      - name: Build test BFF image
+  #        working-directory: bff-server
+  #        run: |
+  #          ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
+  #
+  #      - name: Configure AWS
+  #        uses: aws-actions/configure-aws-credentials@v1
+  #        with:
+  #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #          aws-region: sa-east-1
+  #
+  #      - name: Login to ECR
+  #        id: login-ecr
+  #        uses: aws-actions/amazon-ecr-login@v1
+  #      - name: Deploy to AWS
+  #        run: bash ./fastlane/automatedTests/deploy_test_backend.sh
+  #        env:
+  #          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #          VERSION: ${{ github.sha }}
+  #          CLUSTER: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAME }}
+  #          NAMESPACE: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAMESPACE }}
 
   apk_config_in_browserstack_job:
     name: APK compilation and upload in BrowserStack
@@ -107,6 +115,10 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 20
     steps:
+
+      - name: Halts the workflow
+        run: exit 0
+
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
