@@ -68,46 +68,51 @@ jobs:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
 
-      - name: Using Heroku to start the BFF server
-        uses: akhileshns/heroku-deploy@v3.12.12
+      - name: Setup JDK (11)
+        uses: actions/setup-java@v2
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_API_NAME}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          appdir: bff-server
+          distribution: 'adopt'
+          java-version: '11'
 
-  #      - name: Read secrets from AWS Secrets Manager into environment variables
-  #        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
-  #        with:
-  #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #          aws-region: us-east-1
-  #          secrets: |
-  #            beagle/core/*
-  #          parse-json: true
-  #
-  #      - name: Build test BFF image
-  #        working-directory: bff-server
-  #        run: |
-  #          ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
-  #
-  #      - name: Configure AWS
-  #        uses: aws-actions/configure-aws-credentials@v1
-  #        with:
-  #          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #          aws-region: sa-east-1
-  #
-  #      - name: Login to ECR
-  #        id: login-ecr
-  #        uses: aws-actions/amazon-ecr-login@v1
-  #      - name: Deploy to AWS
-  #        run: bash ./fastlane/automatedTests/deploy_test_backend.sh
-  #        env:
-  #          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-  #          VERSION: ${{ github.sha }}
-  #          CLUSTER: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAME }}
-  #          NAMESPACE: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAMESPACE }}
+      - name: Generate the BFF jar file
+        run: |
+          if ./bff-server/gradlew bootJar -p bff-server; then
+            echo "Gradle task succeeded" >&2
+          else
+            echo "Gradle task failed" >&2
+            exit 1
+          fi
+
+      # https://remarkablemark.org/blog/2021/03/12/github-actions-deploy-to-heroku/
+      - name: Heroku login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+            machine git.heroku.com
+              login $HEROKU_EMAIL
+              password $HEROKU_API_KEY
+          EOF
+
+      - name: Upload BFF JAR to Heroku
+        env:
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: |
+          heroku plugins:install java
+          heroku deploy:jar bff-server/bff/build/libs/bff.jar --app $HEROKU_API_NAME
+          sleep 40
+          response=$(curl --write-out '%{http_code}' --silent --output /dev/null https://radiant-crag-94685.herokuapp.com/button)
+          if [ $response -eq 200 ]; then
+              echo "BFF is up!"
+          else
+              echo "BFF is not up!" && exit 1
+          fi
+
+
 
   apk_config_in_browserstack_job:
     name: APK compilation and upload in BrowserStack
