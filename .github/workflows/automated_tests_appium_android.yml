@@ -120,10 +120,6 @@ jobs:
     runs-on: macos-latest
     timeout-minutes: 20
     steps:
-
-      - name: Halts the workflow
-        run: exit 0
-
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
