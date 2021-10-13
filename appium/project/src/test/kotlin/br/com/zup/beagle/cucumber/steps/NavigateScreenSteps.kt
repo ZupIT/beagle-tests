@@ -144,24 +144,14 @@ class NavigateScreenSteps : AbstractStep() {
                         goBack() // closes the app in this case
 
                         // opens the app
-                        if (SuiteSetup.getPlatformVersion() == "4.4") {
-                            SuiteSetup.restartApp()
-                            loadBffScreenFromMainScreen()
-                        } else {
-                            loadBffScreenFromDeepLink()
-                        }
+                        loadBffScreenFromDeepLink()
                     }
                     "closes the app" -> {
                         // confirms the app is closed
                         checkAppIsClosed()
 
                         // opens the app
-                        if (SuiteSetup.getPlatformVersion() == "4.4") {
-                            SuiteSetup.restartApp()
-                            loadBffScreenFromMainScreen()
-                        } else {
-                            loadBffScreenFromDeepLink()
-                        }
+                        loadBffScreenFromDeepLink()
                     }
                     else -> {
                         throw Exception("Wrong action: $androidAction")
@@ -192,7 +182,7 @@ class NavigateScreenSteps : AbstractStep() {
                 safeClickOnElement(waitForElementWithTextToBeClickable("Close"))
             } else {
 
-                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle, ignoreCase = true)
+                waitForElementWithTextToBeClickable(newScreenAndroidButtonTitle)
                 goBack()
 
                 if (mainButtonTitle == "ResetStackOtherSDAFailsToShowButton" ||
@@ -204,12 +194,7 @@ class NavigateScreenSteps : AbstractStep() {
                      * going backing in these cases closes the app
                      */
                     checkAppIsClosed()
-                    if (SuiteSetup.getPlatformVersion() == "4.4") {
-                        SuiteSetup.restartApp()
-                        loadBffScreenFromMainScreen()
-                    } else {
-                        loadBffScreenFromDeepLink()
-                    }
+                    loadBffScreenFromDeepLink()
                 }
 
             }

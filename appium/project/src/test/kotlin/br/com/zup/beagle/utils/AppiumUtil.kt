@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-@file:Suppress("REDUNDANT_ELSE_IN_WHEN")
-
 package br.com.zup.beagle.utils
 
 import io.appium.java_client.AppiumDriver
@@ -430,7 +428,7 @@ object AppiumUtil {
         driver: MobileDriver<*>,
         scrollElementIndex: Int,
         elementText: String,
-        isHorizontalScroll: Boolean = false
+        isHorizontalScroll: Boolean
     ) {
         if (isHorizontalScroll) {
             driver.findElement(

@@ -20,9 +20,11 @@ import br.com.zup.beagle.automatedtests.builders.ContainerTestsScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.ListViewScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.PageViewScreenBuilder
 import br.com.zup.beagle.automatedtests.builders.ScrollViewScreenBuilder
+import br.com.zup.beagle.automatedtests.builders.TabViewScreenBuilder
 import br.com.zup.beagle.automatedtests.constants.CONTAINER_TEST_ENDPOINT
 import br.com.zup.beagle.automatedtests.constants.LISTVIEW_TABVIEW_ENDPOINT
 import br.com.zup.beagle.automatedtests.constants.PAGEVIEW_ENDPOINT
+import br.com.zup.beagle.automatedtests.constants.SCREEN_TABVIEW_ENDPOINT
 import br.com.zup.beagle.automatedtests.constants.SCROLLVIEW_TABVIEW_ENDPOINT
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -30,6 +32,9 @@ import org.springframework.web.bind.annotation.RestController
 @Suppress("unused")
 @RestController
 class ContainersController {
+
+    @GetMapping(SCREEN_TABVIEW_ENDPOINT)
+    fun getTabViewScreen() = TabViewScreenBuilder.build()
 
     @GetMapping(PAGEVIEW_ENDPOINT)
     fun getPageViewScreen() = PageViewScreenBuilder.build()

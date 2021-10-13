@@ -61,7 +61,7 @@ class MainViewController: UIViewController {
 
     @objc func goButtonClicked() {
         let url = textField.text ?? ""
-        let viewController = BeagleScreenViewController(ScreenType.Remote(url: url), controllerId: "CustomBeagleNavigation")
+        let viewController = Beagle.screen(.remote(.init(url: url)), controllerId: "CustomBeagleNavigation")
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

@@ -18,6 +18,14 @@
 
 set -e
 
+function checkVarEmpty(){
+  temp_var=$1
+	if [ -z "$temp_var" ]; then
+		echo "Error: environment var $2 is empty!"
+		exit 1
+	fi
+}
+
 APP_FILE=$GITHUB_WORKSPACE/appium/app-android/app/build/outputs/apk/debug/app-debug.apk
 
 echo "Uploading .apk file in BrowserStack..."
@@ -35,5 +43,23 @@ else
   exit 1;
 fi
 
-echo "$APP_ID" > browserstack_app_id.txt
+echo "Checking environment vars..."
+checkVarEmpty "$BROWSERSTACK_USER" '$BROWSERSTACK_USER'
+checkVarEmpty "$BROWSERSTACK_KEY" '$BROWSERSTACK_KEY'
+checkVarEmpty "$APP_ID" '$APP_ID'
+checkVarEmpty "$BFF_URL" '$BFF_URL'
 
+echo "Running Appium tests..."
+if ./appium/project/gradlew --build-cache -p appium/project cucumber \
+-Dplatform="android" \
+-Dplatform_version="11.0" \
+-Ddevice_name="Google Pixel 4" \
+-Dbrowserstack_user="$BROWSERSTACK_USER" \
+-Dbrowserstack_key="$BROWSERSTACK_KEY" \
+-Dapp_file="$APP_ID" \
+-Dbff_base_url="$BFF_URL"; then
+  echo "Gradle task succeeded" >&2
+else
+  echo "Gradle task failed" >&2
+  exit 1
+fi

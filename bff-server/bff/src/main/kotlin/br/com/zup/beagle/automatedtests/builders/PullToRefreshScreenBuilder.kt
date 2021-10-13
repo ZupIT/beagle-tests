@@ -40,7 +40,11 @@ object PullToRefreshScreenBuilder {
         child = Container(
             children = listOf(
                 Text(text = "Beagle PullToRefresh screen"),
-                touchableWithPullToRefresh()
+                ScrollView(
+                    scrollDirection = ScrollAxis.VERTICAL,
+                    children = listOf(
+                        touchableWithPullToRefresh()
+                    ))
             )
         )
     )
@@ -58,10 +62,10 @@ object PullToRefreshScreenBuilder {
                         title = "Alert title",
                         message = "Alert message",
                         onPressOk =
-                        listOf(SetContext(
+                        SetContext(
                             contextId = "refreshContext",
                             value = false
-                        )),
+                        ),
                         labelOk = "Alert OK button"
                     )
                 ),

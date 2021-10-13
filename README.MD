@@ -10,13 +10,13 @@
 
 ### What is Beagle?
 
-Beagle is a server-driven set of libraries that enable building screens for mobile and web using the same JSON.
+Beagle is a server-driven library that enables building screens for mobile and web using the same JSON.
 
 Please visit Beagle's website https://usebeagle.io/ for more information
 
 ### About beagle-tests
 
-This project contains tests that validate user interface of apps that use Beagle. The main folders are:
+This project contains tests that validate user interface of apps that use Beagle. The main project test folders are:
 
 - [appium](./appium): Android and iOS tests. Refer to [Beagle's wiki](https://github.com/ZupIT/beagle/wiki/Mobile-tests-with-Appium)
   to get detailed info about Beagle's Appium tests implementation
@@ -35,15 +35,13 @@ This project contains tests that validate user interface of apps that use Beagle
 
 ### Cloning the main project and its submodules
 
-Use the following command to automatically initialize and update each submodule in the repository, including nested 
-submodules if any of the submodules in the repository have submodules themselves 
-(src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
+Use the flag ```--recurse-submodules``` since it will automatically initialize and update each submodule in the repository, including nested submodules if any of the submodules in the repository have submodules themselves (src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
-```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git && git submodule update --remote```
+```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git```
 
-If you already cloned the project and want only to update the submodules, execute the following command:
+Execute the following commands if you already cloned the project and want to update the submodules:
 
-```git submodule update --remote```
+```git submodule init && git submodule update```
 
 ### Contributing Guide
 

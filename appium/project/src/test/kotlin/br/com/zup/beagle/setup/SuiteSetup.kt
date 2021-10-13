@@ -29,10 +29,9 @@ import java.net.URL
 
 object SuiteSetup {
 
-    const val ERROR_SCREENSHOTS_ROOT_DIR = "./build/screenshots"
-    const val SCREENSHOTS_DATABASE_ROOT_DIR = "./src/test/resources/screenshots_database"
+    const val ERROR_SCREENSHOTS_FOLDER = "./build/screenshots"
+    const val SCREENSHOTS_DATABASE_FOLDER = "./src/test/resources/screenshots_database"
     private var platform: String? = null
-    private var platformVersion: String? = null
     private var deviceName: String? = null
     private var driver: AppiumDriver<*>? = null
     private var bffBaseUrl: String? = null
@@ -63,20 +62,12 @@ object SuiteSetup {
         return deviceName!!
     }
 
-    fun getPlatformVersion(): String {
-        return platformVersion!!
-    }
-
-    fun getPlatformDetails(): String {
-        return "[$platform-$platformVersion]"
-    }
-
     fun initSuit() {
 
         if (driver != null)
             throw Exception("Test suite already running")
 
-        platform = System.getProperty("platform")
+        platform = System.getProperty("platform") // mandatory param
         if (platform.isNullOrBlank())
             throw Exception("Missing param: platform")
 
@@ -84,14 +75,7 @@ object SuiteSetup {
             throw Exception("Invalid platform param: $platform. Platform must be android or ios")
 
 
-        platformVersion = System.getProperty("platform_version")
-        if (platformVersion.isNullOrBlank())
-            throw Exception("Missing param: platformVersion")
-
-        if (platformVersion!!.endsWith(".0"))
-            platformVersion = platformVersion!!.removeSuffix(".0")
-
-        println("#### Initializing test suite setup on platform $platform $platformVersion ...")
+        println("#### Initializing test suite setup with platform $platform...")
 
         bffBaseUrl = System.getProperty("bff_base_url")
         if (bffBaseUrl.isNullOrBlank()) {
@@ -101,6 +85,10 @@ object SuiteSetup {
                 bffBaseUrl = "http://localhost:8080"
         }
 
+        /**
+         * List of capabilities: http://appium.io/docs/en/writing-running-appium/caps/
+         */
+        var platformVersion = System.getProperty("platform_version")
         deviceName = System.getProperty("device_name")
         var appFile = System.getProperty("app_file")
         var browserstackUser = System.getProperty("browserstack_user")
@@ -108,7 +96,7 @@ object SuiteSetup {
         val capabilities = DesiredCapabilities()
 
         // enable this capability when debugging
-        capabilities.setCapability("newCommandTimeout", 100000);
+        //capabilities.setCapability("newCommandTimeout", 100000);
 
         if (isAndroid()) {
 
@@ -147,8 +135,7 @@ object SuiteSetup {
                     deviceName = "Pixel_4_API_30"
 
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
-                var automationName = if (platformVersion == "4.4") "UiAutomator1" else "UiAutomator2"
-                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, automationName)
+                capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2")
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, platformVersion)
                 capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName)
                 capabilities.setCapability("appPackage", appPackage)
@@ -167,8 +154,8 @@ object SuiteSetup {
             }
 
             // checks if the app has started correctly
-            if (!appPackage.equals((driver as AndroidDriver<*>).currentPackage) ||
-                !appActivity.equals((driver as AndroidDriver<*>).currentActivity())
+            if (!appPackage.equals((driver as AndroidDriver<MobileElement>).currentPackage) ||
+                !appActivity.equals((driver as AndroidDriver<MobileElement>).currentActivity())
             ) {
                 throw Exception("Error loading the app and activity!")
             }

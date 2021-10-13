@@ -41,15 +41,15 @@ class SuiteSetupPlugin : EventListener {
         // works as a @BeforeAll method, running once at the beginning of the test suite
         publisher.registerHandlerFor(
             TestRunStarted::class.java,
-            EventHandler<TestRunStarted> {
+            EventHandler<TestRunStarted> { event: TestRunStarted? ->
 
                 SuiteSetup.initSuit()
 
                 // cleans screenshot temp dir
                 try {
-                    val screenShotsFolder: File = File("${SuiteSetup.ERROR_SCREENSHOTS_ROOT_DIR}")
+                    val screenShotsFolder: File = File("${SuiteSetup.ERROR_SCREENSHOTS_FOLDER}")
                     if (screenShotsFolder.exists())
-                        FileUtils.cleanDirectory(screenShotsFolder)
+                        FileUtils.cleanDirectory(screenShotsFolder!!)
                 } catch (exception: Exception) {
                     println("ERROR cleaning screenshots folder: ${exception.message}")
                 }

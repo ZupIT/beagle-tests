@@ -16,6 +16,8 @@
 
 package br.com.zup.beagle.appiumapp.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -23,7 +25,9 @@ import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import br.com.zup.beagle.android.annotation.RegisterController
+import br.com.zup.beagle.android.utils.newServerDrivenIntent
 import br.com.zup.beagle.android.view.BeagleActivity
+import br.com.zup.beagle.android.view.ScreenRequest
 import br.com.zup.beagle.android.view.ServerDrivenState
 import br.com.zup.beagle.appiumapp.R
 
@@ -74,4 +78,9 @@ class AppBeagleActivity : BeagleActivity() {
             super.onBackPressed()
     }
 
+    companion object {
+        fun newAppIntent(context: Context, screenRequest: ScreenRequest): Intent {
+            return context.newServerDrivenIntent<AppBeagleActivity>(screenRequest)
+        }
+    }
 }

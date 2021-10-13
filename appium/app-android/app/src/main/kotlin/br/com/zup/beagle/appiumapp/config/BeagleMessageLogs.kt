@@ -16,27 +16,11 @@
 
 package br.com.zup.beagle.appiumapp.config
 
-import java.lang.Exception
-import java.net.HttpURLConnection
+internal object BeagleMessageLogs {
 
-internal fun HttpURLConnection.getSafeResponseCode(): Int? {
-    return getMessageFormatted { this.responseCode }
-}
-
-internal fun HttpURLConnection.getSafeResponseMessage(): String? {
-    return getMessageFormatted { this.responseMessage }
-}
-
-internal fun HttpURLConnection.getSafeError(): ByteArray? {
-    return getMessageFormatted { this.errorStream.readBytes() }
-}
-
-internal typealias GetData<T> = () -> T
-
-internal fun <T> getMessageFormatted(getData: GetData<T>): T? {
-    return try {
-        getData.invoke()
-    } catch (exception: Exception) {
-        null
+    fun logDataNotInsertedOnDatabase(key: String, value: String) {
+        BeagleLoggerDefault().warning(
+            "Error when trying to insert key=$key with value=$value on Beagle default database."
+        )
     }
 }

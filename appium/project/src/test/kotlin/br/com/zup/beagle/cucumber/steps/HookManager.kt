@@ -18,6 +18,7 @@ package br.com.zup.beagle.cucumber.steps
 
 import br.com.zup.beagle.setup.SuiteSetup
 import io.cucumber.java.After
+import io.cucumber.java.Before
 import io.cucumber.java.Scenario
 import org.apache.commons.io.FileUtils
 import org.openqa.selenium.OutputType
@@ -41,7 +42,7 @@ class HookManager {
                 val scrFile: File = (SuiteSetup.getDriver() as TakesScreenshot).getScreenshotAs(OutputType.FILE)
                 val scenarioName = scenario.name.replace("[^A-Za-z0-9]".toRegex(), " ")
                 val destFile =
-                    File("${SuiteSetup.ERROR_SCREENSHOTS_ROOT_DIR}/${SuiteSetup.getPlatformDetails()}ERROR-${scenarioName}-${System.currentTimeMillis()}.png")
+                    File("${SuiteSetup.ERROR_SCREENSHOTS_FOLDER}/ERROR-${scenarioName}-${System.currentTimeMillis()}.png")
 
                 if (destFile.exists())
                     destFile.delete()
@@ -58,15 +59,11 @@ class HookManager {
         }
 
         /**
-         * Android tests by default won't restart app anymore because they use deep
-         * links to load BFF screens.
+         * Android tests by default won't restart app anymore because they now use deep links to load bff screens.
          * Refer to method loadBffScreen() in AbstractStep class for more details
          */
-        if (SuiteSetup.isIos()) {
+        if (SuiteSetup.isIos())
             SuiteSetup.restartApp()
-        } else if (SuiteSetup.getPlatformVersion() == "4.4") { // deep links on Android is only supported in v 5.0+
-            SuiteSetup.restartApp()
-        }
 
     }
 }

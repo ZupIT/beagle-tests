@@ -72,13 +72,13 @@ class ScrollViewScreenSteps : AbstractStep() {
     fun confirmScrollView1IsNotShowingButton(scrollViewElementNumber: Int, buttonText: String) {
         when (scrollViewElementNumber) {
             1 -> {
-                Assert.assertFalse(isButtonShowing(buttonText))
+                Assert.assertFalse(isButtonShowingInsideOfScrollView(scrollViewElement1, buttonText))
             }
             2 -> {
-                Assert.assertFalse(isButtonShowing(buttonText))
+                Assert.assertFalse(isButtonShowingInsideOfScrollView(scrollViewElement2, buttonText))
             }
             else -> {
-                Assert.assertFalse(isButtonShowing(buttonText))
+                Assert.assertFalse(isButtonShowingInsideOfScrollView(scrollViewElement3, buttonText))
             }
         }
     }
@@ -87,20 +87,13 @@ class ScrollViewScreenSteps : AbstractStep() {
     fun confirmScrollView2IsShowingButton(scrollViewElementNumber: Int, buttonText: String) {
         when (scrollViewElementNumber) {
             1 -> {
-                Assert.assertTrue(isButtonShowing(buttonText))
+                Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement1, buttonText))
             }
             2 -> {
-                Assert.assertTrue(isButtonShowing(buttonText))
+                Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement2, buttonText))
             }
             else -> {
-
-                // ScrollView 3 is hidden in small screens
-                if (SuiteSetup.isIos()) {
-                    AppiumUtil.iosScrollInsideElement(getDriver(), scrollViewElement3, SwipeDirection.DOWN)
-                } else {
-                    AppiumUtil.androidScrollToElementByText(getDriver(), 0, buttonText, isHorizontalScroll = false)
-                }
-                Assert.assertTrue(isButtonShowing(buttonText))
+                Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement3, buttonText))
             }
         }
     }
@@ -117,9 +110,9 @@ class ScrollViewScreenSteps : AbstractStep() {
     @Then("^I should view a button with text \"(.*)\" by scrolling ScrollView (.*) to the end$")
     fun checkButtonVisible(buttonText: String, scrollViewElementNumber: Int) {
         when (scrollViewElementNumber) {
-            1 -> Assert.assertTrue(isButtonShowing(buttonText))
-            2 -> Assert.assertTrue(isButtonShowing(buttonText))
-            else -> Assert.assertTrue(isButtonShowing(buttonText))
+            1 -> Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement1, buttonText))
+            2 -> Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement2, buttonText))
+            else -> Assert.assertTrue(isButtonShowingInsideOfScrollView(scrollViewElement3, buttonText))
         }
     }
 
@@ -149,11 +142,9 @@ class ScrollViewScreenSteps : AbstractStep() {
         if (SuiteSetup.isIos()) {
             AppiumUtil.iosScrollInsideElement(getDriver(), scrollViewElement1, SwipeDirection.RIGHT)
         } else {
-            AppiumUtil.androidScrollToElementByText(getDriver(), 1, text3, isHorizontalScroll = true)
+            AppiumUtil.androidScrollToElementByText(getDriver(), 1, text2, isHorizontalScroll = true)
         }
 
-        // reloads element
-        textElement3 = getScrollViewChildTextElement(scrollViewElement1, text3)
         textElement3.click()
         Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement1, text3))
         textElement3 = getScrollViewChildrenTextElementByText(scrollViewElement1, newTextPrefix).last()
@@ -176,9 +167,9 @@ class ScrollViewScreenSteps : AbstractStep() {
         val text3 = "Click to see the text change, rotate and scroll vertically"
 
         // ScrollView 2 original state: three text elements showing
-        getScrollViewChildTextElement(scrollViewElement2, text1)
+        val textElement1 = getScrollViewChildTextElement(scrollViewElement2, text1)
         var textElement2 = getScrollViewChildTextElement(scrollViewElement2, text2)
-        getScrollViewChildTextElement(scrollViewElement2, text3)
+        var textElement3 = getScrollViewChildTextElement(scrollViewElement2, text3)
 
         // ScrollView 2 second state: new texts showing instead of text 2 and 3
         textElement2.click()
@@ -191,13 +182,15 @@ class ScrollViewScreenSteps : AbstractStep() {
         if (SuiteSetup.isIos()) {
             AppiumUtil.iosScrollInsideElement(getDriver(), scrollViewElement2, SwipeDirection.DOWN)
         } else {
-            AppiumUtil.androidScrollToElementByText(getDriver(), 0, text3, isHorizontalScroll = false)
+            AppiumUtil.androidScrollToElementByText(
+                getDriver(),
+                0,
+                text3,
+                isHorizontalScroll = false
+            )
         }
 
-        // reloads element
-        var textElement3 = getScrollViewChildTextElement(scrollViewElement2, text3)
         textElement3.click()
-
         Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement2, text3))
         textElement3 = getScrollViewChildrenTextElementByText(scrollViewElement2, newTextPrefix).last()
         Assert.assertTrue(textElement3.text.startsWith(newTextPrefix))
@@ -219,9 +212,9 @@ class ScrollViewScreenSteps : AbstractStep() {
         val text3 = "Horizontal scroll within scroll"
 
         // ScrollView 3 original state: three elements showing
-        getScrollViewChildTextElement(scrollViewElement3, text1)
+        val textElement1 = getScrollViewChildTextElement(scrollViewElement3, text1)
         var textElement2 = getScrollViewChildTextElement(scrollViewElement3, text2)
-        getScrollViewChildTextElement(scrollViewElement3, text3)
+        var textElement3 = getScrollViewChildTextElement(scrollViewElement3, text3)
 
         // ScrollView 3 second state: only the new text showing
         textElement2.click()
@@ -236,7 +229,12 @@ class ScrollViewScreenSteps : AbstractStep() {
             AppiumUtil.iosScrollInsideElement(getDriver(), scrollViewElement3, SwipeDirection.DOWN)
             AppiumUtil.iosScrollInsideElement(getDriver(), scrollViewElement3, SwipeDirection.DOWN)
         } else {
-            AppiumUtil.androidScrollToElementByText(getDriver(), 0, "vertical direction", isHorizontalScroll = false)
+            AppiumUtil.androidScrollToElementByText(
+                getDriver(),
+                0,
+                "vertical direction",
+                isHorizontalScroll = false
+            )
         }
 
         // Scrolls to button "horizontal direction"
@@ -249,7 +247,12 @@ class ScrollViewScreenSteps : AbstractStep() {
             AppiumUtil.iosScrollInsideElement(getDriver(), childScrollViewElement, SwipeDirection.RIGHT)
             AppiumUtil.iosScrollInsideElement(getDriver(), childScrollViewElement, SwipeDirection.RIGHT)
         } else {
-            AppiumUtil.androidScrollToElementByText(getDriver(), 0, "horizontal direction", isHorizontalScroll = true)
+            AppiumUtil.androidScrollToElementByText(
+                getDriver(),
+                0,
+                "horizontal direction",
+                isHorizontalScroll = true
+            )
         }
     }
 
@@ -342,16 +345,16 @@ class ScrollViewScreenSteps : AbstractStep() {
         return childElementExists(scrollViewElement, locator)
     }
 
-    private fun isButtonShowing(buttonText: String): Boolean {
+    private fun isButtonShowingInsideOfScrollView(scrollViewElement: MobileElement, buttonText: String): Boolean {
 
         val locator: By = if (SuiteSetup.isIos()) {
             MobileBy.iOSClassChain("**/XCUIElementTypeButton[`name == \"$buttonText\"`]")
         } else {
-            By.xpath("//android.widget.Button[@text='$buttonText']")
+            By.xpath(".//android.widget.Button[@text='$buttonText']")
         }
 
-        if (elementExists(locator)) {
-            return waitForElementToBePresent(locator).isDisplayed
+        if (childElementExists(scrollViewElement, locator)) {
+            return waitForChildElementToBePresent(scrollViewElement, locator).isDisplayed
         }
 
         return false

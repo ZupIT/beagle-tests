@@ -16,27 +16,25 @@
 
 package br.com.zup.beagle.appiumapp.config
 
-import java.lang.Exception
-import java.net.HttpURLConnection
+import br.com.zup.beagle.android.store.LocalStore
 
-internal fun HttpURLConnection.getSafeResponseCode(): Int? {
-    return getMessageFormatted { this.responseCode }
-}
+internal object MemoryLocalStore : LocalStore {
 
-internal fun HttpURLConnection.getSafeResponseMessage(): String? {
-    return getMessageFormatted { this.responseMessage }
-}
+    private val cache = mutableMapOf<String, String>()
 
-internal fun HttpURLConnection.getSafeError(): ByteArray? {
-    return getMessageFormatted { this.errorStream.readBytes() }
-}
+    override fun save(key: String, value: String) {
+        cache[key] = value
+    }
 
-internal typealias GetData<T> = () -> T
+    override fun restore(key: String): String? {
+        return cache[key]
+    }
 
-internal fun <T> getMessageFormatted(getData: GetData<T>): T? {
-    return try {
-        getData.invoke()
-    } catch (exception: Exception) {
-        null
+    override fun delete(key: String) {
+        cache.remove(key)
+    }
+
+    override fun getAll(): Map<String, String> {
+        return cache.toMap()
     }
 }

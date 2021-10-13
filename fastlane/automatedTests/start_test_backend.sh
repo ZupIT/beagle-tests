@@ -17,13 +17,5 @@
 #
 
 BACKEND_DIR=bff-server
-
-if $BACKEND_DIR/gradlew build -p $BACKEND_DIR/bff; then
-  echo "BFF server build complete!" >&2
-else
-  echo "BFF server build failed!" >&2
-  exit 1
-fi
-
-nohup $BACKEND_DIR/gradlew bootRun -p $BACKEND_DIR/bff 2>&1 &
-sleep 10
+$BACKEND_DIR/gradlew -p $BACKEND_DIR bff:bootJar
+nohup java -jar $BACKEND_DIR/bff/build/libs/bff.jar 2>&1 &

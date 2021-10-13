@@ -16,9 +16,8 @@
 
 package br.com.zup.beagle.appiumapp.config.newanalytics
 
-
-import br.com.zup.beagle.android.analytics.AnalyticsRecord
-import java.util.*
+import br.com.zup.beagle.newanalytics.AnalyticsRecord
+import java.util.ArrayList
 
 object RecordService {
 
@@ -27,7 +26,7 @@ object RecordService {
 
     fun setListener(reportListener: ReportListener) {
         this.reportListener = reportListener
-        if (report.size > 1) {
+        if(report.size > 1){
             val reportToShow = report.get(report.size - 1)
             reportListener.onReport(reportToShow)
         }
@@ -36,7 +35,7 @@ object RecordService {
 
     fun saveReport(report: AnalyticsRecord) {
         this.report.add(report)
-        if (this::reportListener.isInitialized) {
+        if(this::reportListener.isInitialized){
             reportListener.onReport(report)
         }
     }
