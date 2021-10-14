@@ -33,6 +33,7 @@ import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.layout.ScrollView
 import br.com.zup.beagle.widget.navigation.Touchable
 import br.com.zup.beagle.widget.ui.Button
+import br.com.zup.beagle.widget.ui.ImagePath
 import br.com.zup.beagle.widget.ui.Text
 
 object ActionScreenBuilder {
@@ -44,7 +45,7 @@ object ActionScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = "informationImage",
+                    image = ImagePath.Local.justMobile("informationImage"),
                     action = Alert(
                         title = "Action",
                         message = "This class handles transition actions between screens in the application. ",
@@ -178,8 +179,8 @@ object ActionScreenBuilder {
                     message = "Action",
                     labelOk = "OK",
                     labelCancel = "Cancel",
-                    onPressCancel = listOf(createAlert("Cancel")),
-                    onPressOk = listOf(createAlert("Finish"))
+                    onPressCancel = createAlert("Cancel"),
+                    onPressOk = createAlert("Finish")
                 )),
                 text = "Click me!"
             )

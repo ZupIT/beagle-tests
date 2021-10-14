@@ -18,7 +18,7 @@ package br.com.zup.beagle.automatedtests.builders
 
 import br.com.zup.beagle.ext.setFlex
 import br.com.zup.beagle.widget.context.ContextData
-import br.com.zup.beagle.widget.context.constant
+import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.AlignSelf
 import br.com.zup.beagle.widget.core.JustifyContent
 import br.com.zup.beagle.widget.layout.Container
@@ -36,7 +36,7 @@ object BuilderKotlinDslScreenBuilder {
             child = Container(
                 children = listOf(
                     Text(
-                        text = constant("@{kotlinDSL}")
+                        text = valueOf("@{kotlinDSL}")
                     ),
                     Text("@{kotlinDSL}").setFlex {
                         this.alignSelf = AlignSelf.FLEX_START

@@ -30,6 +30,7 @@ import br.com.zup.beagle.widget.layout.NavigationBar
 import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.layout.ScrollView
+import br.com.zup.beagle.widget.ui.ImagePath
 import br.com.zup.beagle.widget.ui.TextInput
 
 data class TextInputReadOnly(val value: String, val isReadOnly: Boolean)
@@ -45,7 +46,7 @@ object TextInputScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = "informationImage",
+                    image = ImagePath.Local.justMobile("informationImage"),
                     action = Alert(
                         title = "Text Input",
                         message = "This widget will define a Text Input view natively using the server driven " +

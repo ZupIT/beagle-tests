@@ -62,7 +62,7 @@ object AlertScreenBuilder {
                     onPress = listOf(
                         Alert(
                             message = "AlertMessage",
-                            onPressOk = listOf(Alert(message = "SecondAlert"))
+                            onPressOk = Alert(message = "SecondAlert")
                         )
                     ),
                 ),
