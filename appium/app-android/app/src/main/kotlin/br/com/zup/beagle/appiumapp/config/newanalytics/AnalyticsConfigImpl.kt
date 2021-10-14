@@ -16,7 +16,7 @@
 
 package br.com.zup.beagle.appiumapp.config.newanalytics
 
-import br.com.zup.beagle.android.analytics.AnalyticsConfig
+import br.com.zup.beagle.newanalytics.AnalyticsConfig
 
 
 class AnalyticsConfigImpl(

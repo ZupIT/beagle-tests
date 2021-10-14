@@ -18,10 +18,10 @@ package br.com.zup.beagle.appiumapp.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import br.com.zup.beagle.android.analytics.AnalyticsRecord
 import br.com.zup.beagle.appiumapp.R
 import br.com.zup.beagle.appiumapp.config.newanalytics.RecordService
 import br.com.zup.beagle.appiumapp.config.newanalytics.ReportListener
+import br.com.zup.beagle.newanalytics.AnalyticsRecord
 
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_analytics.*
