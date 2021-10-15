@@ -54,7 +54,7 @@ class HookManager {
                 println("ERROR taking a screenshot on error: ${exception.message}")
             }
 
-            SuiteSetup.restartApp()
+            SuiteSetup.resetApp()
         }
 
         /**
@@ -63,12 +63,7 @@ class HookManager {
          * Refer to method loadBffScreen() in AbstractStep class for more details
          */
         if (SuiteSetup.isIos()) {
-            // waits before trying to close / open the app
-            try {
-                Thread.sleep(2000)
-            } catch (e: Exception) {
-            }
-            SuiteSetup.restartApp()
+            SuiteSetup.resetApp() // app restart sometimes doesn't work correctly on iOS Simulators, so we use reset
         } else if (SuiteSetup.getPlatformVersion() == "4.4") { // deep links on Android is only supported in v 5.0+
             SuiteSetup.restartApp()
         }
