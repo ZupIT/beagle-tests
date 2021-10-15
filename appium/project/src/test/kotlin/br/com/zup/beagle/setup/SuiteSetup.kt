@@ -159,8 +159,8 @@ object SuiteSetup {
                 capabilities.setCapability("ignoreHiddenApiPolicyError", true)
                 // capabilities.setCapability("disableWindowAnimation", true)
                 // capabilities.setCapability("uiautomator2ServerInstallTimeout", 90000);
-                capabilities.setCapability("noReset", true)
-                capabilities.setCapability("fullReset", false)
+                //capabilities.setCapability("noReset", true)
+                //capabilities.setCapability("fullReset", false)
                 capabilities.setCapability("allowTestPackages", true)
 
                 driver = AndroidDriver<MobileElement>(URL(APPIUM_URL), capabilities)
