@@ -215,10 +215,12 @@ object SuiteSetup {
     fun restartApp() {
         try {
             driver?.closeApp()
+            println("App closed!")
         } catch (e: Exception) {
             println("ERROR closing app: ${e.message}")
         } finally {
             driver?.launchApp()
+            println("App launched!")
         }
     }
 
