@@ -214,9 +214,8 @@ object SuiteSetup {
 
     fun restartApp() {
         try {
-
             if (isIos()) {
-                driver?.terminateApp("com.br.zup.beagle.AppiumApp") // TODO: recuperar bundleId via param
+                driver?.terminateApp("com.br.zup.beagle.AppiumApp") // method close() on iOS doesn't work properly
             } else {
                 driver?.closeApp()
             }
