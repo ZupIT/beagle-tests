@@ -21,7 +21,7 @@ import br.com.zup.beagle.widget.action.Condition
 import br.com.zup.beagle.widget.context.Bind
 import br.com.zup.beagle.widget.context.ContextData
 import br.com.zup.beagle.widget.context.expressionOf
-import br.com.zup.beagle.widget.context.constant
+import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.layout.Container
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.ui.Button
@@ -38,8 +38,8 @@ object ConditionalScreenBuilder {
             context = ContextData(id = "conditionalContext", value = ConditionValues()),
             children = listOf(
                 Text("Conditional Screen"),
-                conditionButton(text = "Condition true", condition = constant(true)),
-                conditionButton(text = "Condition false", condition = constant(false)),
+                conditionButton(text = "Condition true", condition = valueOf(true)),
+                conditionButton(text = "Condition false", condition = valueOf(false)),
                 conditionButton(text = "Condition via expression true",
                     condition = expressionOf("@{conditionalContext.confirmTrue}")),
                 conditionButton(

@@ -22,19 +22,6 @@ on:
     types:
       - completed
 
-# Bellow configuration is for testing this workflow without merging to main
-#on:
-#  push:
-#    branches:
-#      - main
-#    paths:
-#      - '.github/**'
-#  pull_request:
-#    branches:
-#      - main
-#    paths:
-#      - '.github/**'
-
 jobs:
   bff_config_job:
     name: BFF server configuration
@@ -177,7 +164,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        android-version: [ 4.4, 6, 8, 11 ]
+        android-version: [ 11 ] # support for versions 4.4, 6 and 8 is not completed
     steps:
       - uses: actions/checkout@v2
         with:

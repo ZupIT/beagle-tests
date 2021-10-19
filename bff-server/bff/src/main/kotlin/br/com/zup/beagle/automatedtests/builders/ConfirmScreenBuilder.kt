@@ -79,7 +79,7 @@ object ConfirmScreenBuilder {
                 Confirm(
                     title = null,
                     message = "ConfirmMessage",
-                    onPressOk = listOf(Alert(message = "Confirm ok clicked"))
+                    onPressOk = Alert(message = "Confirm ok clicked")
                 )
             )
         ),
@@ -89,7 +89,7 @@ object ConfirmScreenBuilder {
                 Confirm(
                     title = null,
                     message = "CancelMessage",
-                    onPressCancel = listOf(Alert(message = "Confirm cancel clicked"))
+                    onPressCancel = Alert(message = "Confirm cancel clicked")
                 )
             )
         )

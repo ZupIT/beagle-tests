@@ -17,7 +17,7 @@
 package br.com.zup.beagle.appiumapp.config.newanalytics
 
 
-import br.com.zup.beagle.android.analytics.AnalyticsRecord
+import br.com.zup.beagle.newanalytics.AnalyticsRecord
 import java.util.*
 
 object RecordService {

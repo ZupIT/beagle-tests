@@ -108,7 +108,7 @@ object SuiteSetup {
         val capabilities = DesiredCapabilities()
 
         // enable this capability when debugging
-        capabilities.setCapability("newCommandTimeout", 100000);
+        // capabilities.setCapability("newCommandTimeout", 100000);
 
         if (isAndroid()) {
 
@@ -159,8 +159,8 @@ object SuiteSetup {
                 capabilities.setCapability("ignoreHiddenApiPolicyError", true)
                 // capabilities.setCapability("disableWindowAnimation", true)
                 // capabilities.setCapability("uiautomator2ServerInstallTimeout", 90000);
-                capabilities.setCapability("noReset", true)
-                capabilities.setCapability("fullReset", false)
+                //capabilities.setCapability("noReset", true)
+                //capabilities.setCapability("fullReset", false)
                 capabilities.setCapability("allowTestPackages", true)
 
                 driver = AndroidDriver<MobileElement>(URL(APPIUM_URL), capabilities)
@@ -214,7 +214,11 @@ object SuiteSetup {
 
     fun restartApp() {
         try {
-            driver?.closeApp()
+            if (isIos()) {
+                driver?.terminateApp("com.br.zup.beagle.AppiumApp") // method close() on iOS doesn't work properly
+            } else {
+                driver?.closeApp()
+            }
         } catch (e: Exception) {
             println("ERROR closing app: ${e.message}")
         } finally {

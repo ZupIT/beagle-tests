@@ -16,8 +16,9 @@
 
 package br.com.zup.beagle.automatedtests.builders
 
-import br.com.zup.beagle.analytics.ActionAnalyticsConfig
-import br.com.zup.beagle.analytics.ActionAnalyticsProperties
+
+import br.com.zup.beagle.newanalytics.ActionAnalyticsConfig
+import br.com.zup.beagle.newanalytics.ActionAnalyticsProperties
 import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.Confirm
 import br.com.zup.beagle.widget.action.Navigate
@@ -46,7 +47,7 @@ object NewAnalyticsScreenBuilder {
             Alert(
                 title = "Alert Title",
                 message = "AlertMessage",
-                onPressOk = listOf(navigateToNativeScreen())
+                onPressOk = navigateToNativeScreen()
             )
         )
     )
@@ -60,7 +61,7 @@ object NewAnalyticsScreenBuilder {
                 message = "Confirm Message",
                 labelOk = "Accept",
                 labelCancel = "cancel",
-                onPressOk = listOf(navigateToNativeScreen())
+                onPressOk = navigateToNativeScreen()
             )
         )
     ).apply {
@@ -76,7 +77,7 @@ object NewAnalyticsScreenBuilder {
                 ),
                 title = "Alert Title",
                 message = "AlertMessage",
-                onPressOk = listOf(navigateToNativeScreen())
+                onPressOk = navigateToNativeScreen()
             )
         )
     ).apply {
@@ -92,7 +93,7 @@ object NewAnalyticsScreenBuilder {
                 message = "Confirm Message",
                 labelOk = "Accept",
                 labelCancel = "cancel",
-                onPressOk = listOf(navigateToNativeScreen())
+                onPressOk = navigateToNativeScreen()
             )
         )
     )
@@ -106,7 +107,7 @@ object NewAnalyticsScreenBuilder {
     )
 
     private fun onlyScreen() = Screen(
-        id = "/analytics2-navigate",
+        identifier = "/analytics2-navigate",
         child = Button(
             text = "navigate to local screen",
             onPress = listOf(

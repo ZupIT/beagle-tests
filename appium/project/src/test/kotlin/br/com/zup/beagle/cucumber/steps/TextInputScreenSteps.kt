@@ -69,7 +69,8 @@ class TextInputScreenSteps : AbstractStep() {
                 Assert.assertEquals(element.text, customTextValue)
                 Assert.assertTrue(element.isEnabled)
             } else { // enabled and readOnly
-                element.clear()
+                if (SuiteSetup.isAndroid())
+                    element.clear()
                 Assert.assertFalse(isKeyboardShowing())
                 element.click()
                 Assert.assertFalse(isKeyboardShowing())
@@ -136,7 +137,7 @@ class TextInputScreenSteps : AbstractStep() {
                                 element.sendKeys("02/04/2000")
                             }
 
-                            waitForElementWithValueToBeClickable("02/04/2000").clear()
+                            waitForElementWithValueToBeClickable("02/04/2000", nativeLocator = false).clear()
 
                         }
                         placeHolder.contains("writing e-mail") -> {
@@ -156,7 +157,7 @@ class TextInputScreenSteps : AbstractStep() {
                                 element.sendKeys("abc@123")
                             }
 
-                            waitForElementWithValueToBeClickable("abc@123").clear()
+                            waitForElementWithValueToBeClickable("abc@123", nativeLocator = false).clear()
 
                         }
                         placeHolder.contains("writing password") -> {
@@ -222,7 +223,7 @@ class TextInputScreenSteps : AbstractStep() {
                             } else {
                                 element.sendKeys("123")
                             }
-                            waitForElementWithValueToBeClickable("123").clear()
+                            waitForElementWithValueToBeClickable("123", nativeLocator = false).clear()
 
                         }
                         placeHolder.contains("writing text") -> {
@@ -235,7 +236,7 @@ class TextInputScreenSteps : AbstractStep() {
                                 element.sendKeys("text")
                             }
 
-                            waitForElementWithValueToBeClickable("text").clear()
+                            waitForElementWithValueToBeClickable("text", nativeLocator = false).clear()
                         }
                         else -> {
                             throw Exception("Wrong place holder: $placeHolder")
@@ -312,7 +313,8 @@ class TextInputScreenSteps : AbstractStep() {
                     Assert.assertTrue(elementExistsByValue("Unordered actions"))
                     Assert.assertFalse(elementExistsByValue(event))
                     safeClickOnElement(waitForElementWithValueToBeClickable("action validation"))
-                    hideKeyboard()
+                    if (SuiteSetup.isAndroid())
+                        hideKeyboard()
                     Assert.assertFalse(elementExistsByValue("Unordered actions"))
                     Assert.assertTrue(elementExistsByValue(event))
                 }
@@ -326,10 +328,11 @@ class TextInputScreenSteps : AbstractStep() {
                     } else {
                         element.sendKeys("text")
                     }
-                    hideKeyboard()
+                    if (SuiteSetup.isAndroid())
+                        hideKeyboard()
                     Assert.assertFalse(elementExistsByValue("DidOnFocus"))
                     Assert.assertTrue(elementExistsByValue(event))
-                    waitForElementWithValueToBeClickable("text").clear()
+                    waitForElementWithValueToBeClickable("text", nativeLocator = false).clear()
                 }
                 "DidOnBlur" -> {
                     Assert.assertTrue(elementExistsByValue("DidOnChange"))

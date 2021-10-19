@@ -44,7 +44,7 @@ object ImageRemoteScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = "informationImage",
+                    image = ImagePath.Local.justMobile("informationImage"),
                     action = Alert(
                         title = "Image Remote",
                         message = "It is a widget that implements an image with a URL.",

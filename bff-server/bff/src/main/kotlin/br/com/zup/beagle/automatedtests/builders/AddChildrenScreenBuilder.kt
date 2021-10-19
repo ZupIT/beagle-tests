@@ -48,9 +48,9 @@ object AddChildrenScreenBuilder : ScreenBuilder {
         )
     )
 
-    private fun createButton(text : String, actions : List<Action>) = Button(text = text, onPress = actions)
+    private fun createButton(text: String, actions: List<Action>) = Button(text = text, onPress = actions)
 
-    private fun createActions(componentId : String, mode : Mode? = null) = listOf<Action>(AddChildren(
+    private fun createActions(componentId: String, mode: Mode? = null) = listOf<Action>(AddChildren(
         componentId = componentId,
         mode = mode,
         value = listOf(Text(text = "New text added"))
