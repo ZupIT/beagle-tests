@@ -26,6 +26,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator:2.3.5.RELEASE'
     implementation "br.com.zup.beagle:beagle-spring-starter:1.0.0-local"
     implementation "br.com.zup.beagle:beagle-micronaut-starter:1.0.0-local"
+    implementation "org.apache.logging.log4j:log4j-api:2.15.0"
+    implementation "org.apache.logging.log4j:log4j-core:2.15.0"
 }
 
 task buildAndPublishBeagleBackendLocally {
