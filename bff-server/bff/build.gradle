@@ -19,15 +19,16 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 plugins {
     id 'org.springframework.boot' version '2.3.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
+
+ext['log4j2.version'] = '2.16.0'
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.5.21'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.3.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation "br.com.zup.beagle:beagle-spring-starter:1.0.0-local"
     implementation "br.com.zup.beagle:beagle-micronaut-starter:1.0.0-local"
-    implementation "org.apache.logging.log4j:log4j-api:2.15.0"
-    implementation "org.apache.logging.log4j:log4j-core:2.15.0"
 }
 
 task buildAndPublishBeagleBackendLocally {
