@@ -12,7 +12,11 @@
     "**/flutter/tests.sh",
     "**/Gemfile.lock"
   ],
-  "horusecCliFalsePositiveHashes": [],
+  "horusecCliFalsePositiveHashes": [
+    "633460ca6830dddea60a703a0326e29db97e487b8b09c4d2b57364f31a4e6875",
+    "5088001fd0a157f2278c8cd651ad00f0f6feb308d8b7d3e7588728eeddcba85e",
+    "eec5c1241a337986893a78a996860e0423ab95c4e901aaa03017295f8b44cb89"
+  ],
   "horusecCliRiskAcceptHashes": [
     "bb117d24e18c70defbf3cac736dc81dcecea02cdad4458414849dbc8eeb55655",
     "06d3de5ef7ed33a9fa552872a4b6a1ef6b33bf9115efb315223240e609720eb2",
