@@ -22,7 +22,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-ext['log4j2.version'] = '2.16.0'
+ext['log4j2.version'] = '2.17.0'
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.5.21'
