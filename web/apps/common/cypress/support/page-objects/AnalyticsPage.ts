@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
+import { waitForDebugger } from 'inspector'
 import analyticsElements from '../elements/analytics-elements'
 import BeaglePage from './BeaglePage'
+import SimpleFormPage from './SimpleFormPage'
 
 class AnalyticsPage extends BeaglePage {
   lastAlertMessage = ''
@@ -33,33 +35,34 @@ class AnalyticsPage extends BeaglePage {
     })
   }
 
-  verifyLocalStorage(key: string){
-    analyticsElements.cleanUpLocalStorage(key)
-    expect(localStorage.getItem(key)).to.be.null
+  verifyLocalStorage(key: string) {
+    cy.clearLocalStorage(key).should((ls) => {
+      expect(ls.getItem(key)).to.be.null
+    })
   }
 
   clickButtonByText(text: string) {
     analyticsElements.buttonWithText(text).click()
   }
- 
-  checkAlertAction(){
+
+  checkAlertAction() {
     expect(this.lastAlertMessage).to.equal('AlertMessage')
   }
 
-  checkConfirmAction(){
+  checkConfirmAction() {
     expect(this.lastConfirmMessage).to.equal('Confirm Message')
   }
 
-  verifyIfAnalyticsNotCreated(){
+  verifyIfAnalyticsNotCreated() {
     analyticsElements.getAnalytics().should('have.length', 1)
   }
 
-  verifyIfAnalyticsIsCreated(analyticsRecord: string){
-    analyticsElements.getAnalytics().then(($div) => { 
+  verifyIfAnalyticsIsCreated(analyticsRecord: string) {
+    analyticsElements.getAnalytics().then(($div) => {
       expect($div.text()).to.have.string(analyticsRecord)
-     })
+    })
   }
- 
+
 }
 
 export default AnalyticsPage

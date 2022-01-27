@@ -54,19 +54,21 @@ class HookManager {
                 println("ERROR taking a screenshot on error: ${exception.message}")
             }
 
-            SuiteSetup.restartApp()
+            SuiteSetup.resetApp()
+        } else {
+
+            /**
+             * Android tests by default won't restart app anymore because they use deep
+             * links to load BFF screens.
+             * Refer to method loadBffScreen() in AbstractStep class for more details
+             */
+            if (SuiteSetup.isIos()) {
+                SuiteSetup.resetApp()
+            } else if (SuiteSetup.getPlatformVersion() == "4.4") { // deep links on Android is only supported in v 5.0+
+                SuiteSetup.restartApp()
+            }
         }
 
-        /**
-         * Android tests by default won't restart app anymore because they use deep
-         * links to load BFF screens.
-         * Refer to method loadBffScreen() in AbstractStep class for more details
-         */
-        if (SuiteSetup.isIos()) {
-            SuiteSetup.restartApp()
-        } else if (SuiteSetup.getPlatformVersion() == "4.4") { // deep links on Android is only supported in v 5.0+
-            SuiteSetup.restartApp()
-        }
 
     }
 }

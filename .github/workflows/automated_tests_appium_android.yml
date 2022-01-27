@@ -22,16 +22,28 @@ on:
     types:
       - completed
 
+# Bellow configuration is for testing this workflow without merging to main
+#on:
+#  push:
+#    branches:
+#      - main
+#    paths:
+#      - '.github/**'
+#  pull_request:
+#    branches:
+#      - main
+#    paths:
+#      - '.github/**'
+
 jobs:
-  bff_config_job:
-    name: BFF server configuration
-    runs-on: ubuntu-20.04
-    timeout-minutes: 10
-    env:
-      BFF_NAME: automated-test-bff
+  artifact_generation_job:
+    name: Artifact Generation
+    runs-on: macos-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
         with:
+          token: ${{ secrets.BEAGLE_TEMP_PAT }}
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
 
@@ -41,82 +53,13 @@ jobs:
       - name: Print branch info
         run: git branch
 
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
+      - name: Gradle cache
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Read secrets from AWS Secrets Manager into environment variables
-        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          secrets: |
-            beagle/core/*
-          parse-json: true
-
-      - name: Build test BFF image
-        working-directory: bff-server
-        run: |
-          ./gradlew bff:bootBuildImage --imageName="$BFF_NAME"
-
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: sa-east-1
-
-      - name: Login to ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Deploy to AWS
-        run: bash ./fastlane/automatedTests/deploy_test_backend.sh
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          VERSION: ${{ github.sha }}
-          CLUSTER: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAME }}
-          NAMESPACE: ${{ env.BEAGLE_CORE_AWS_AWS_CLUSTER_NAMESPACE }}
-
-  apk_config_in_browserstack_job:
-    name: APK compilation and upload in BrowserStack
-    needs: bff_config_job
-    runs-on: macos-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - run: git branch
-
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
 
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
@@ -124,136 +67,125 @@ jobs:
           distribution: 'adopt'
           java-version: '11'
 
-      - name: Read secrets from AWS Secrets Manager into environment variables
-        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          secrets: |
-            beagle/core/*
-          parse-json: true
-
-      - name: Build project app-android to generate the .apk file
-        env:
-          BEAGLE_CONFIG_FILE: appium/app-android/app/src/main/kotlin/br/com/zup/beagle/appiumapp/AppBeagleConfig.kt
-          BFF_URL: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BFF_URL }}
-        run: | # builds the app replacing localhost for the $BFF_URL
-          sed -i --expression "s@http://10.0.2.2:8080@$BFF_URL@g" $BEAGLE_CONFIG_FILE
-          bash ./appium/app-android/gradlew assembleDebug -p appium/app-android
-          # sed -i --expression "s@$BFF_URL@http://10.0.2.2:8080@g" $BEAGLE_CONFIG_FILE
-
-      - name: Upload the .apk file in BrowserStack and save the returned id into a file
-        env:
-          BFF_URL: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BFF_URL }}
-          BROWSERSTACK_USER: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_USER }}
-          BROWSERSTACK_KEY: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_KEY }}
-        run: bash fastlane/automatedTests/appium/android/browserstack/setup_apk_in_browserstack_and_export_id_in_file.sh
-
-      - name: Upload BrowserStack id file
-        uses: actions/upload-artifact@v2
-        with:
-          name: browserstack-app-id
-          path: browserstack_app_id.txt
-
-  appium_tests:
-    name: Tests
-    needs: apk_config_in_browserstack_job
-    runs-on: macos-latest
-    timeout-minutes: 90
-    strategy:
-      fail-fast: false
-      matrix:
-        android-version: [ 11 ] # support for versions 4.4, 6 and 8 is not completed
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - run: git branch
-
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Setup JDK (11)
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'adopt'
-          java-version: '11'
-
-      - name: Read secrets from AWS Secrets Manager into environment variables
-        uses: abhilash1in/aws-secrets-manager-action@v1.0.1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-          secrets: |
-            beagle/core/*
-          parse-json: true
-
-      - name: Download BrowserStack id file
-        uses: actions/download-artifact@v2
-        with:
-          name: browserstack-app-id
-
-      - name: Gets BrowserStack id file content
-        id: gets-browserstack-id-file
+      - name: Generate the BFF jar file
         run: |
-          echo "ID recovered from file: $(<browserstack_app_id.txt)"
-          echo ::set-output name=result::"$(<browserstack_app_id.txt)"
-
-        # BrowseStack Android devices: https://www.browserstack.com/list-of-browsers-and-platforms/app_automate
-      - name: Returns Android device to be used based on Android version
-        id: sets-android-device
-        env:
-          ANDROID_VERSION: ${{ matrix.android-version }}
-        run: |
-          case $ANDROID_VERSION in
-          4.4) echo ::set-output name=result::"Google Nexus 5" ;;
-          6) echo ::set-output name=result::"Google Nexus 6" ;;
-          8) echo ::set-output name=result::"Google Pixel 2" ;;
-          11) echo ::set-output name=result::"Google Pixel 4" ;;
-          *) echo "Invalid option!" && exit 1 ;;
-          esac
-
-      - name: Run the Appium test suite
-        env:
-          DEVICE_NAME: ${{steps.sets-android-device.outputs.result}}
-          ANDROID_VERSION: ${{ matrix.android-version }}
-          BFF_URL: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BFF_URL }}
-          BROWSERSTACK_UPLOAD_ID: ${{steps.gets-browserstack-id-file.outputs.result}}
-          BROWSERSTACK_USER: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_USER }}
-          BROWSERSTACK_KEY: ${{ env.BEAGLE_CORE_TEST_BEAGLE_TESTS_BROWSERSTACK_KEY }}
-        run: |
-          echo "Running Appium tests on device $DEVICE_NAME with Android $ANDROID_VERSION..."
-          if ./appium/project/gradlew --build-cache -p appium/project cucumber \
-          -Dplatform="android" \
-          -Dplatform_version="$ANDROID_VERSION" \
-          -Ddevice_name="$DEVICE_NAME" \
-          -Dbrowserstack_user="$BROWSERSTACK_USER" \
-          -Dbrowserstack_key="$BROWSERSTACK_KEY" \
-          -Dapp_file="$BROWSERSTACK_UPLOAD_ID" \
-          -Dbff_base_url="$BFF_URL"; then
+          if ./bff-server/gradlew bootJar -p bff-server; then
             echo "Gradle task succeeded" >&2
           else
             echo "Gradle task failed" >&2
             exit 1
           fi
+
+      - name: Upload the BFF jar file
+        uses: actions/upload-artifact@v2
+        with:
+          name: bff-jar-file
+          path: bff-server/bff/build/libs/bff.jar
+          if-no-files-found: error
+
+      - name: Build project app-android to generate the .apk file
+        run: bash ./appium/app-android/gradlew assembleDebug -p appium/app-android
+
+      - name: Upload .apk file
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-file
+          path: ${{ github.workspace }}/appium/app-android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  appium_tests:
+    name: Tests Matrix
+    needs: artifact_generation_job
+    runs-on: macos-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        android-version: [ 5, 6, 8, 11 ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BEAGLE_TEMP_PAT }}
+          ref: ${{ github.event.workflow_run.head_branch }}
+          submodules: 'true'
+
+      - name: Update submodules
+        run: git submodule update --init --recursive --remote
+
+      - run: git branch
+
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+
+      - name: AVD cache
+        uses: actions/cache@v2
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.android-version }}
+
+      - name: Download the BFF jar file
+        uses: actions/download-artifact@v2
+        with:
+          name: bff-jar-file
+
+      - name: Setup JDK (11)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Start the BFF server
+        run: |
+          java -jar bff.jar 2>&1 &
+          sleep 30
+
+      # Download file app-debug.apk
+      - name: Download .apk file
+        uses: actions/download-artifact@v2
+        with:
+          name: apk-file
+
+      - name: Returns Android API level
+        id: sets-android-api-level
+        env:
+          ANDROID_VERSION: ${{ matrix.android-version }}
+        run: |
+          case $ANDROID_VERSION in
+          5) echo ::set-output name=result::"21" ;;
+          6) echo ::set-output name=result::"23" ;;
+          8) echo ::set-output name=result::"26" ;;
+          11) echo ::set-output name=result::"30" ;;
+          *) echo "Invalid option!" && exit 1 ;;
+          esac
+
+      - name: Config and run the Appium server
+        run: |
+          bash ./.github/scripts/automatedTests/appium/config_and_run_appium_server.sh
+
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          DEVICE_NAME: ci_pixel_api_${{steps.sets-android-api-level.outputs.result}}
+          ANDROID_VERSION: ${{ matrix.android-version }}
+          BFF_URL: http://10.0.2.2:8080
+          APK_FILE: ${{ github.workspace }}/app-debug.apk
+        with:
+          avd-name: ${{env.DEVICE_NAME}} #ci_pixel_api_${{steps.sets-android-api-level.outputs.result}}
+          api-level: ${{steps.sets-android-api-level.outputs.result}}
+          target: google_apis
+          profile: pixel
+          script: |
+            sleep 40
+            bash ./.github/scripts/automatedTests/appium/android/install_apk_in_emulator.sh
+            bash ./.github/scripts/automatedTests/appium/android/run_appium_project_android.sh
 
       - name: Expose failed test screenshot files
         if: failure()

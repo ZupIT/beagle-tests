@@ -30,7 +30,6 @@ import br.com.zup.beagle.widget.layout.NavigationBar
 import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.ui.Button
-import br.com.zup.beagle.widget.ui.ImagePath
 import br.com.zup.beagle.widget.ui.Text
 
 object AccessibilityScreenBuilder {
@@ -41,7 +40,7 @@ object AccessibilityScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = ImagePath.Local.justMobile("informationImage"),
+                    image = "informationImage",
                     action = Alert(
                         title = "Accessibility Screen",
                         message = "This method applies accessibility in a widget",

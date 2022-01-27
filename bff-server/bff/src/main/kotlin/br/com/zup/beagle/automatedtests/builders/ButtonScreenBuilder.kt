@@ -28,8 +28,8 @@ import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.Navigate
 import br.com.zup.beagle.widget.action.Route
 import br.com.zup.beagle.widget.context.ContextData
+import br.com.zup.beagle.widget.context.constant
 import br.com.zup.beagle.widget.context.expressionOf
-import br.com.zup.beagle.widget.context.valueOf
 import br.com.zup.beagle.widget.core.AlignContent
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Flex
@@ -39,7 +39,6 @@ import br.com.zup.beagle.widget.layout.NavigationBar
 import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.ui.Button
-import br.com.zup.beagle.widget.ui.ImagePath
 
 object ButtonScreenBuilder {
 
@@ -52,7 +51,7 @@ object ButtonScreenBuilder {
                 navigationBarItems = listOf(
                     NavigationBarItem(
                         text = "",
-                        image = ImagePath.Local.justMobile("informationImage"),
+                        image = "informationImage",
                         action = Alert(
                             title = "Button",
                             message = "This is a widget that will define a button natively using the server " +
@@ -109,7 +108,7 @@ object ButtonScreenBuilder {
                 enabled = false
             ),
             Button(
-                text = valueOf("Disabled Button by context"),
+                text = constant("Disabled Button by context"),
                 styleId = "DesignSystem.Button.ScreenButton",
                 onPress = listOf(Alert(message = "This button must be disabled")),
                 enabled = expressionOf("@{enabled}")
@@ -136,8 +135,8 @@ object ButtonScreenBuilder {
             )
         )
     ).setStyle {
-        this.backgroundColor = CYAN_BLUE
-        this.cornerRadius = CornerRadius(radius = 16.0)
+        this.backgroundColor = constant(CYAN_BLUE)
+        this.cornerRadius = CornerRadius(radius = constant(16.0))
     }
 
 

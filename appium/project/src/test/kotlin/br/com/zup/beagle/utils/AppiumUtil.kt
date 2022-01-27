@@ -29,22 +29,12 @@ import io.appium.java_client.ios.IOSTouchAction
 import io.appium.java_client.touch.WaitOptions
 import io.appium.java_client.touch.offset.PointOption
 import org.openqa.selenium.*
-import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.FluentWait
 import java.awt.image.BufferedImage
 import java.io.File
 import java.time.Duration
-import java.util.*
 import javax.imageio.ImageIO
-import kotlin.Array
-import kotlin.Boolean
-import kotlin.Exception
-import kotlin.IllegalArgumentException
-import kotlin.Int
-import kotlin.Long
-import kotlin.String
-import java.util.HashMap
 
 
 object AppiumUtil {
@@ -107,23 +97,27 @@ object AppiumUtil {
 
     /**
      *
-     * Performs swipe from the center of screen
+     * Performs a swipe from a given point to the border of the screen.
      * Adapted from http://appium.io/docs/en/writing-running-appium/tutorial/swipe/simple-screen/
      */
     @Synchronized
-    fun androidSwipeScreenTo(driver: MobileDriver<*>, swipeDirection: SwipeDirection) {
+    fun androidSwipeScreenTo(
+        driver: MobileDriver<*>,
+        swipeDirection: SwipeDirection,
+        originPoint: PointOption<*>? = null,
+        animationTime: Int = 200,
+        pressTime: Int = 200,
+        edgeBorder: Int = 10
+    ) {
 
-        val animationTime = 200
-        val pressTime = 200
-        val edgeBorder = 10
-        val pointOptionStart: PointOption<*>
+        val pointOptionEndStart = originPoint ?: PointOption.point(
+            driver.manage().window().size.width / 2,
+            driver.manage().window().size.height / 2
+        )
+
         val pointOptionEnd: PointOption<*>
 
-        // init screen variables
         val dims: Dimension = driver.manage().window().getSize()
-
-        // init start point = center of screen
-        pointOptionStart = PointOption.point(dims.width / 2, dims.height / 2)
         pointOptionEnd = when (swipeDirection) {
             SwipeDirection.DOWN -> PointOption.point(dims.width / 2, dims.height - edgeBorder)
             SwipeDirection.UP -> PointOption.point(dims.width / 2, edgeBorder)
@@ -132,9 +126,8 @@ object AppiumUtil {
             else -> throw IllegalArgumentException("swipeScreen(): dir: '$swipeDirection' NOT supported")
         }
 
-        // execute swipe using TouchAction
         AndroidTouchAction(driver)
-            .press(pointOptionStart)
+            .press(pointOptionEndStart)
             .waitAction(WaitOptions.waitOptions(Duration.ofMillis(pressTime.toLong())))
             .moveTo(pointOptionEnd)
             .release().perform()
@@ -430,14 +423,16 @@ object AppiumUtil {
         driver: MobileDriver<*>,
         scrollElementIndex: Int,
         elementText: String,
-        isHorizontalScroll: Boolean = false
+        isHorizontalScroll: Boolean = false,
+        isLikeSearch: Boolean = false
     ) {
+        val textSearchMethod = if (isLikeSearch) "textContains" else "text"
         if (isHorizontalScroll) {
             driver.findElement(
                 MobileBy.AndroidUIAutomator(
                     "new UiScrollable(new UiSelector().scrollable(true)" +
                             ".instance($scrollElementIndex)).setAsHorizontalList()" +
-                            ".scrollIntoView(new UiSelector().text(\"$elementText\"))"
+                            ".scrollIntoView(new UiSelector().$textSearchMethod(\"$elementText\"))"
                 )
             )
         } else {
@@ -445,7 +440,7 @@ object AppiumUtil {
                 MobileBy.AndroidUIAutomator(
                     "new UiScrollable(new UiSelector().scrollable(true)" +
                             ".instance($scrollElementIndex))" +
-                            ".scrollIntoView(new UiSelector().text(\"$elementText\"))"
+                            ".scrollIntoView(new UiSelector().$textSearchMethod(\"$elementText\"))"
                 )
             )
         }
@@ -563,22 +558,50 @@ object AppiumUtil {
      * Waits for an element to be hidden or nonexistent
      */
     @Synchronized
-    fun waitForElementToBeInvisible(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long): Boolean {
+    fun waitForElementToBeInvisible(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long) {
         val wait = FluentWait(driver)
         wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
         wait.pollingEvery(Duration.ofMillis(200))
-        return wait.until(ExpectedConditions.invisibilityOfElementLocated(locator))
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator))
+    }
+
+    /**
+     * Waits for a child element to be hidden or nonexistent
+     */
+    @Synchronized
+    fun waitForChildElementToBeInvisible(driver: MobileDriver<*>, parentElement: MobileElement, childLocator: By, timeoutInMilliseconds: Long) {
+        val wait = FluentWait(driver)
+        wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
+        wait.pollingEvery(Duration.ofMillis(200))
+        wait.until {
+            !childElementExists(driver, parentElement, childLocator, 1000)
+        }
+    }
+
+    /**
+     * Waits for an element to be hidden or nonexistent
+     */
+    @Synchronized
+    fun waitForElementToBeInvisible(
+        driver: MobileDriver<*>,
+        element: MobileElement,
+        timeoutInMilliseconds: Long
+    ) {
+        val wait = FluentWait(driver)
+        wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
+        wait.pollingEvery(Duration.ofMillis(200))
+        wait.until(ExpectedConditions.invisibilityOf(element))
     }
 
     /**
      * Waits for elements to be hidden or nonexistent
      */
     @Synchronized
-    fun waitForElementsToBeInvisible(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long): Boolean {
+    fun waitForElementsToBeInvisible(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long) {
         val wait = FluentWait(driver)
         wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
         wait.pollingEvery(Duration.ofMillis(200))
-        return wait.until {
+        wait.until {
             driver.findElements(locator).size == 0
         }
     }
@@ -587,12 +610,12 @@ object AppiumUtil {
      * Waits for an element to be visible and disabled (not clickable)
      */
     @Synchronized
-    fun waitForElementToBeDisabled(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long): Boolean {
+    fun waitForElementToBeDisabled(driver: MobileDriver<*>, locator: By, timeoutInMilliseconds: Long) {
         val mobileElement = waitForElementToBePresent(driver, locator, timeoutInMilliseconds)
         val wait = FluentWait(driver)
         wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
         wait.pollingEvery(Duration.ofMillis(200))
-        return wait.until {
+        wait.until {
             mobileElement.isDisplayed && !mobileElement.isEnabled
         }
     }
@@ -603,11 +626,26 @@ object AppiumUtil {
         element: MobileElement,
         text: String,
         timeoutInMilliseconds: Long
-    ): Boolean {
+    ) {
         val wait = FluentWait(driver)
         wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
-        return wait.until {
+        wait.until {
             return@until element.text == text
+        }
+    }
+
+    @Synchronized
+    fun waitForElementTextToContain(
+        driver: MobileDriver<*>,
+        element: MobileElement,
+        text: String,
+        timeoutInMilliseconds: Long
+    ) {
+        val wait = FluentWait(driver)
+        wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
+        wait.pollingEvery(Duration.ofMillis(200))
+        wait.until {
+            return@until element.text.contains(text)
         }
     }
 
@@ -625,23 +663,6 @@ object AppiumUtil {
         return wait.until {
             element.getAttribute(attribute) != null && element.getAttribute(attribute) == value
         }
-    }
-
-    /**
-     *
-     * @param tableElement
-     * @param value
-     * @return line elements (tr) that contains the given value (@param value) in its children's text() attribute
-     */
-    @Synchronized
-    fun getTableLineElementsThatContainsText(
-        tableElement: MobileElement,
-        value: String
-    ): List<MobileElement> {
-        val results: List<MobileElement>
-        val xpath = ".//tr[.//*[contains(text(),'$value')]]"
-        results = tableElement.findElements(By.xpath(xpath))
-        return results
     }
 
     @Synchronized
@@ -667,32 +688,6 @@ object AppiumUtil {
         } catch (e: Exception) {
         }
         return false
-    }
-
-    /**
-     * Tries to set a value for timeoutInMilliseconds
-     */
-    @Synchronized
-    fun setElementValue(
-        driver: MobileDriver<*>,
-        element: MobileElement,
-        value: String,
-        timeoutInMilliseconds: Long
-    ): Boolean {
-        element.clear()
-        element.sendKeys(value)
-        val wait = FluentWait(driver)
-        wait.withTimeout(Duration.ofMillis(timeoutInMilliseconds))
-        wait.pollingEvery(Duration.ofMillis(200))
-        return wait.until(ExpectedCondition<Boolean> {
-            val currentElementValue = element.getAttribute("value")
-            if (currentElementValue != null && value.equals(currentElementValue))
-                return@ExpectedCondition true
-
-            element.clear()
-            element.sendKeys(value)
-            return@ExpectedCondition false
-        })
     }
 
     /**
@@ -814,5 +809,29 @@ object AppiumUtil {
         val x = element.center.x
         val y = element.center.y
         IOSTouchAction(driver).tap(PointOption.point(x, y)).perform()
+    }
+
+    @Synchronized
+    fun androidLongPressElement(
+        driver: AppiumDriver<*>,
+        elementToBeLogPressed: MobileElement,
+        milliseconds: Long = 200
+    ) {
+        val centerOfElement = PointOption.point(elementToBeLogPressed.center.x, elementToBeLogPressed.center.y)
+        val waitOption = WaitOptions.waitOptions(Duration.ofMillis(milliseconds))
+        AndroidTouchAction(driver)
+            .press(centerOfElement)
+            .waitAction(waitOption)
+            .release().perform()
+    }
+
+    @Synchronized
+    fun iosLongPressElement(driver: AppiumDriver<*>, elementToBeLogPressed: MobileElement, milliseconds: Long = 200) {
+        val centerOfElement = PointOption.point(elementToBeLogPressed.center.x, elementToBeLogPressed.center.y)
+        val waitOption = WaitOptions.waitOptions(Duration.ofMillis(milliseconds))
+        IOSTouchAction(driver)
+            .press(centerOfElement)
+            .waitAction(waitOption)
+            .release().perform()
     }
 }

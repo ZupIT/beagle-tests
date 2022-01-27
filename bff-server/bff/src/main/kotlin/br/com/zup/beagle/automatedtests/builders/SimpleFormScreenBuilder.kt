@@ -21,6 +21,7 @@ import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.action.SubmitForm
 import br.com.zup.beagle.widget.context.ContextData
+import br.com.zup.beagle.widget.context.constant
 import br.com.zup.beagle.widget.context.expressionOf
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Size
@@ -75,7 +76,7 @@ object SimpleFormScreenBuilder {
                         Button(text = "Click to Submit",
                             onPress = listOf(SubmitForm())
                         ).setStyle {
-                            this.backgroundColor = "#ffffff"
+                            this.backgroundColor = constant("#ffffff")
                             this.margin = EdgeValue(top = UnitValue.real(10))
 
                         }
@@ -89,7 +90,7 @@ object SimpleFormScreenBuilder {
                 )
             )
         ).setStyle {
-            this.backgroundColor = "#fa7f72"
+            this.backgroundColor = constant("#fa7f72")
             this.size = Size(height = UnitValue.percent(100.00))
         }
     )
