@@ -31,6 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          token: ${{ secrets.BEAGLE_TEMP_PAT }}
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
 
@@ -40,19 +41,13 @@ jobs:
       - name: Print branch info
         run: git branch
 
-      # Cache Gradle dependencies
-      - name: Setup Gradle Dependencies Cache
+      - name: Gradle cache
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('**/*.gradle', '**/*.gradle.kts') }}
-
-      # Cache Gradle Wrapper
-      - name: Setup Gradle Wrapper Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
 
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
@@ -84,10 +79,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ios-version: [ 14.4 ] # support for versions 10.3.1 and 12.4 are not completed yet
+        ios-version: [ 13.7, 14.4 ]
     steps:
       - uses: actions/checkout@v2
         with:
+          token: ${{ secrets.BEAGLE_TEMP_PAT }}
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
 
@@ -111,16 +107,10 @@ jobs:
       - name: Start the BFF server
         run: |
           java -jar bff.jar 2>&1 &
-          sleep 40
-          response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8080/button)
-          if [ $response -eq 200 ]; then
-              echo "BFF is up!"
-          else
-              echo "BFF is not up!" && exit 1
-          fi
+          sleep 30
 
       - name: Config and run the Appium server
-        run: bash fastlane/automatedTests/appium/config_and_run_appium_server.sh
+        run: bash ./.github/scripts/automatedTests/appium/config_and_run_appium_server.sh
 
       - name: Returns the iOS device to be used based on the iOS version
         id: sets-ios-device
@@ -128,8 +118,7 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10.3.1) echo ::set-output name=result::"iPhone 7" ;;
-          12.4) echo ::set-output name=result::"iPhone 7" ;;
+          13.7) echo ::set-output name=result::"iPhone 11" ;;
           14.4) echo ::set-output name=result::"iPhone 11" ;;
           *) echo "Invalid option!" && exit 1 ;;
           esac
@@ -143,15 +132,10 @@ jobs:
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
           case $IOS_VERSION in
-          10.3.1)
-            sudo xcversion select 10.3 --symlink
-            xcversion simulators --install="iOS 10.3.1"
-            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-10-3 > ~/deviceIdTemp.txt
-            ;;
-          12.4)
-            sudo xcversion select 10.3 --symlink
-            xcversion simulators --install="iOS 12.4"
-            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-7 com.apple.CoreSimulator.SimRuntime.iOS-12-4 > ~/deviceIdTemp.txt
+          13.7)
+            sudo xcversion select 11.7 --symlink
+            xcversion simulators --install="iOS 13.7"
+            xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-13-7 > ~/deviceIdTemp.txt
             ;;
           14.4)
             xcrun simctl create iPhoneCustom com.apple.CoreSimulator.SimDeviceType.iPhone-11 com.apple.CoreSimulator.SimRuntime.iOS-14-4 > ~/deviceIdTemp.txt
@@ -179,18 +163,12 @@ jobs:
           DEVICE_NAME: ${{steps.sets-ios-device.outputs.result}}
           IOS_VERSION: ${{ matrix.ios-version }}
         run: |
-          if [[ $IOS_VERSION == '10.3.1' ]]
-          then
-              IOS_VERSION_FIXED=10.3
-          else
-              IOS_VERSION_FIXED=$IOS_VERSION
-          fi
           APP_FILE=$(find ~/Library/Developer/Xcode/DerivedData -name AppiumApp.app | grep Build/Products/Debug-iphonesimulator/AppiumApp.app)
           echo ".app file found at: $APP_FILE"
           echo "Running Appium tests on device $DEVICE_NAME with iOS $IOS_VERSION_FIXED..."
           if ./appium/project/gradlew --build-cache -p appium/project cucumber \
           -Dplatform="ios" \
-          -Dplatform_version="$IOS_VERSION_FIXED" \
+          -Dplatform_version="$IOS_VERSION" \
           -Ddevice_name="$DEVICE_NAME" \
           -Dapp_file="$APP_FILE"; then
             echo "Gradle task succeeded" >&2

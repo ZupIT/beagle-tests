@@ -40,16 +40,16 @@ object WebViewScreenBuilder {
                     Text("WebViewHardcoded"),
                     WebView(url = "https://google.com")
                 )).setStyle {
-                    this.margin = EdgeValue(top = UnitValue(10.0, UnitType.REAL))
-                    this.size = Size(height = UnitValue(250.0, UnitType.REAL))
+                    this.margin = EdgeValue(top = UnitValue.real(10.0))
+                    this.size = Size(height = UnitValue.real(250.0))
                 },
 
                 Container(children = listOf(
                     Text("WebViewExpression"),
                     WebView(url = "@{WebViewContext}")
                 )).setStyle {
-                    this.margin = EdgeValue(top = UnitValue(10.0, UnitType.REAL))
-                    this.size = Size(height = UnitValue(250.0, UnitType.REAL))
+                    this.margin = EdgeValue(top = UnitValue.real(10.0))
+                    this.size = Size(height = UnitValue.real(250.0))
                 },
                 Button(
                     text = "ClickToChangePage",

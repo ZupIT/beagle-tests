@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'beagle',
   templateUrl: './beagle.component.html'
 })
-export class BeagleComponent {
- 
-  route: string;
-  private queryParams = new URLSearchParams(window.location.search);
+export class BeagleComponent implements OnInit {
+  public route: string;
 
-  constructor() {
-    this.route = this.queryParams.get('path') || '';
+  constructor(private activeRoute: ActivatedRoute) {
+  }
+
+  public ngOnInit(): void {
+    this.activeRoute.queryParams.subscribe(params => {
+      if (params['path']) {
+        this.route = '/' + params['path']
+      }
+    })
   }
 }

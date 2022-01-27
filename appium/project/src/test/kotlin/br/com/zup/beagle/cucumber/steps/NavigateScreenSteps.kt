@@ -17,6 +17,9 @@
 package br.com.zup.beagle.cucumber.steps
 
 import br.com.zup.beagle.setup.SuiteSetup
+import io.appium.java_client.android.AndroidTouchAction
+import io.appium.java_client.ios.IOSTouchAction
+import io.appium.java_client.touch.offset.PointOption
 import io.cucumber.datatable.DataTable
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
@@ -74,8 +77,23 @@ class NavigateScreenSteps : AbstractStep() {
             val iosAction = columns[2]!!
             val androidAction = columns[3]!!
 
-            safeClickOnElement(waitForElementWithTextToBeClickable(button1Title))
-            safeClickOnElement(waitForElementWithTextToBeClickable(button2Title))
+            println("button1Title = $button1Title")
+            println("button2Title = $button2Title")
+            println("iosAction = $iosAction")
+            println("androidAction = $androidAction")
+            println("------------------------------")
+
+            try{
+                safeClickOnElement(waitForElementWithTextToBeClickable(button1Title))
+                safeClickOnElement(waitForElementWithTextToBeClickable(button2Title))
+            }catch (e:Exception){
+                println("Fail to click an element (${e.localizedMessage}), resetting app and trying again")
+                SuiteSetup.resetApp()
+                loadBffScreen()
+                waitForElementWithTextToBeClickable("Navigation Screen")
+                safeClickOnElement(waitForElementWithTextToBeClickable(button1Title))
+                safeClickOnElement(waitForElementWithTextToBeClickable(button2Title))
+            }
 
             if (SuiteSetup.isIos()) {
                 // iOS screen transition animation
@@ -127,7 +145,6 @@ class NavigateScreenSteps : AbstractStep() {
                 when (androidAction) {
                     "no action" -> {
                         waitForElementWithTextToBeClickable(button2Title)
-
                         // goes back to the main screen
                         goBack()
                     }

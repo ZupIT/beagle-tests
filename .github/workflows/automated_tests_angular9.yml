@@ -54,6 +54,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          token: ${{ secrets.BEAGLE_TEMP_PAT }}
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
 
@@ -63,32 +64,22 @@ jobs:
       - name: Print branch info
         run: git branch
 
+      - name: Gradle cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '11'
 
-      ##################################################################################################
-      # Caching - Start
-      ##################################################################################################
-      - name: Cache fastlane dependences
-        uses: actions/cache@v2
-        env:
-          fastlane-cache-key: fastlane-cache-test
-          fastlane-path: ~/.gem
-        with:
-          path: ${{ env.fastlane-path }}
-          key: ${{ runner.os }}-build-${{ env.fastlane-cache-key }}-${{ hashFiles('Gemfile.lock') }}
-      ##################################################################################################
-      # Caching - end
-      ##################################################################################################
-
-      - name: Install Fastlane
-        run: bundle config set path '~/.gem' && bundle install
-
       - name: Build and start the BFF server
-        run: bash fastlane/automatedTests/start_test_backend.sh
+        run: bash ./.github/scripts/automatedTests/start_bff_server.sh
 
       - name: Compile and run angular 9 app
         working-directory: web/apps/angular9
@@ -101,7 +92,8 @@ jobs:
           brew install dos2unix
           yarn --prefer-offline
           dos2unix -F node_modules/.bin/beagle
-          nohup yarn start > angular9log.txt 2>&1 &
+          yarn beagle init
+          nohup yarn serve > angular9log.txt 2>&1 &
           sleep 60
 
       - name: Run angular 9 app tests
