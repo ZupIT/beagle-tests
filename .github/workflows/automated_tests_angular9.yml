@@ -54,7 +54,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.BEAGLE_TEMP_PAT }}
           ref: ${{ github.event.workflow_run.head_branch }}
           submodules: 'true'
 
