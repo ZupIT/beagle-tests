@@ -7,9 +7,9 @@
 [submodule "beagle-web-angular"]
 	path = beagle-web-angular
 	url = git@github.com:ZupIT/beagle-web-angular.git
-[submodule "beagle-web-core"]
-	path = beagle-web-core
-	url = git@github.com:ZupIT/beagle-web-core.git
 [submodule "beagle-ios"]
 	path = beagle-ios
 	url = git@github.com:ZupIT/beagle-ios.git
+[submodule "beagle-web-core"]
+	path = beagle-web-core
+	url = git@github.com:ZupIT/beagle-web-core.git
