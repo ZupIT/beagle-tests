@@ -13,3 +13,6 @@
 [submodule "beagle-ios"]
 	path = beagle-ios
 	url = git@github.com:ZupIT/beagle-ios.git
+[submodule "beagle-web-core"]
+	path = beagle-web-core
+	url = git@github.com:ZupIT/beagle-web-core.git
