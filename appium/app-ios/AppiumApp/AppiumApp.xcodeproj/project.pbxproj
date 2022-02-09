@@ -19,8 +19,8 @@
 		A0F9DF1D25A628B5004F8B55 /* DeepLinkScreenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF1C25A628B5004F8B55 /* DeepLinkScreenManager.swift */; };
 		A0F9DF2C25A62DEF004F8B55 /* AnalyticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF2B25A62DEF004F8B55 /* AnalyticsViewController.swift */; };
 		A0F9DF2F25A636E3004F8B55 /* LocalAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F9DF2E25A636E2004F8B55 /* LocalAnalyticsProvider.swift */; };
+		AD18F2E627288A2B00E599B8 /* Beagle in Frameworks */ = {isa = PBXBuildFile; productRef = AD18F2E527288A2B00E599B8 /* Beagle */; };
 		ADBC129526C2EBE600B2C024 /* ViewLayoutHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADBC129426C2EBE600B2C024 /* ViewLayoutHelper.swift */; };
-		ADBC129926C2EF1800B2C024 /* Beagle in Frameworks */ = {isa = PBXBuildFile; productRef = ADBC129826C2EF1800B2C024 /* Beagle */; };
 		ADE324BF262762BE0004A563 /* DeepLinkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE324BE262762BE0004A563 /* DeepLinkViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,8 +40,8 @@
 		A0F9DF1C25A628B5004F8B55 /* DeepLinkScreenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkScreenManager.swift; sourceTree = "<group>"; };
 		A0F9DF2B25A62DEF004F8B55 /* AnalyticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsViewController.swift; sourceTree = "<group>"; };
 		A0F9DF2E25A636E2004F8B55 /* LocalAnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAnalyticsProvider.swift; sourceTree = "<group>"; };
+		AD18F2E42728895200E599B8 /* beagle-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "beagle-ios"; path = "../../../beagle-ios"; sourceTree = "<group>"; };
 		ADBC129426C2EBE600B2C024 /* ViewLayoutHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewLayoutHelper.swift; sourceTree = "<group>"; };
-		ADBC129626C2EEB600B2C024 /* beagle-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "beagle-ios"; path = "../../../beagle-ios"; sourceTree = "<group>"; };
 		ADE324BE262762BE0004A563 /* DeepLinkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeepLinkViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ADBC129926C2EF1800B2C024 /* Beagle in Frameworks */,
+				AD18F2E627288A2B00E599B8 /* Beagle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,7 +60,7 @@
 		5C296386258BB014000194EE = {
 			isa = PBXGroup;
 			children = (
-				ADBC129626C2EEB600B2C024 /* beagle-ios */,
+				AD18F2E42728895200E599B8 /* beagle-ios */,
 				5C296391258BB014000194EE /* AppiumApp */,
 				5C296390258BB014000194EE /* Products */,
 				5C2963A7258BB0E7000194EE /* Frameworks */,
@@ -170,7 +170,7 @@
 			);
 			name = AppiumApp;
 			packageProductDependencies = (
-				ADBC129826C2EF1800B2C024 /* Beagle */,
+				AD18F2E527288A2B00E599B8 /* Beagle */,
 			);
 			productName = AppiumApp;
 			productReference = 5C29638F258BB014000194EE /* AppiumApp.app */;
@@ -375,14 +375,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = SZSQ274898;
 				INFOPLIST_FILE = AppiumApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.br.zup.beagle.AppiumApp;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.zup.beagle.appiumapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -393,14 +396,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = SZSQ274898;
 				INFOPLIST_FILE = AppiumApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.br.zup.beagle.AppiumApp;
+				PRODUCT_BUNDLE_IDENTIFIER = br.com.zup.beagle.appiumapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -430,7 +436,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		ADBC129826C2EF1800B2C024 /* Beagle */ = {
+		AD18F2E527288A2B00E599B8 /* Beagle */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Beagle;
 		};

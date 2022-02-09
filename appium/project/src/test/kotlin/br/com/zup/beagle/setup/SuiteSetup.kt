@@ -17,12 +17,14 @@
 package br.com.zup.beagle.setup
 
 
+import br.com.zup.beagle.utils.AppiumUtil
 import io.appium.java_client.AppiumDriver
 import io.appium.java_client.MobileElement
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.android.AndroidElement
 import io.appium.java_client.ios.IOSDriver
 import io.appium.java_client.remote.MobileCapabilityType
+import org.openqa.selenium.By
 import org.openqa.selenium.remote.DesiredCapabilities
 import java.net.URL
 
@@ -31,6 +33,7 @@ object SuiteSetup {
 
     const val ERROR_SCREENSHOTS_ROOT_DIR = "./build/screenshots"
     const val SCREENSHOTS_DATABASE_ROOT_DIR = "./src/test/resources/screenshots_database"
+    const val APP_BUNDLE_ID = "br.com.zup.beagle.appiumapp"
     private var platform: String? = null
     private var platformVersion: String? = null
     private var deviceName: String? = null
@@ -42,7 +45,7 @@ object SuiteSetup {
     fun getDriver(): AppiumDriver<*> {
 
         if (driver == null)
-            throw Exception("Test suite not initialized correctly!")
+            throw Exception("Test suite didn't initialize correctly!")
 
         return driver!!
     }
@@ -83,7 +86,6 @@ object SuiteSetup {
         if (!"android".equals(platform, true) && !"ios".equals(platform, true))
             throw Exception("Invalid platform param: $platform. Platform must be android or ios")
 
-
         platformVersion = System.getProperty("platform_version")
         if (platformVersion.isNullOrBlank())
             throw Exception("Missing param: platformVersion")
@@ -91,37 +93,34 @@ object SuiteSetup {
         if (platformVersion!!.endsWith(".0"))
             platformVersion = platformVersion!!.removeSuffix(".0")
 
-        println("#### Initializing test suite setup on platform $platform $platformVersion ...")
-
         bffBaseUrl = System.getProperty("bff_base_url")
         if (bffBaseUrl.isNullOrBlank()) {
-            if (isAndroid())
-                bffBaseUrl = "http://10.0.2.2:8080"
+            bffBaseUrl = if (isAndroid())
+                "http://10.0.2.2:8080"
             else
-                bffBaseUrl = "http://localhost:8080"
+                "http://127.0.0.1:8080"
         }
 
         deviceName = System.getProperty("device_name")
+        if (deviceName.isNullOrBlank())
+            throw Exception("Missing param: device_name")
+
         var appFile = System.getProperty("app_file")
         var browserstackUser = System.getProperty("browserstack_user")
         var browserstackKey = System.getProperty("browserstack_key")
         val capabilities = DesiredCapabilities()
+
+        println("#### Initializing Appium tests on device/emulator $deviceName using $platform $platformVersion...")
 
         // enable this capability when debugging
         // capabilities.setCapability("newCommandTimeout", 100000);
 
         if (isAndroid()) {
 
-            val appPackage = "br.com.zup.beagle.appiumapp"
             val appActivity = ".activity.MainActivity"
 
             // when device is running at BrowserStack
             if (!browserstackUser.isNullOrBlank() && !browserstackKey.isNullOrBlank()) {
-
-                capabilities.setCapability("ignoreHiddenApiPolicyError", true)
-                capabilities.setCapability("noReset", true)
-                capabilities.setCapability("fullReset", false)
-                capabilities.setCapability("allowTestPackages", true)
 
                 capabilities.setCapability("browserstack.user", browserstackUser)
                 capabilities.setCapability("browserstack.key", browserstackKey)
@@ -133,60 +132,41 @@ object SuiteSetup {
                 capabilities.setCapability("name", "Beagle Appium tests on Android")
                 capabilities.setCapability("browserstack.networkLogs", true)
 
-                println("#### Using BrowserStack ... ")
+                println("#### Running tests on BrowserStack ... ")
                 driver = AndroidDriver<AndroidElement>(URL("http://hub.browserstack.com/wd/hub"), capabilities)
 
 
             } else // device is running locally
             {
-
-                if (platformVersion.isNullOrBlank())
-                    platformVersion = "11"
-
-                if (deviceName.isNullOrBlank())
-                    deviceName = "Pixel_4_API_30"
-
+                capabilities.setCapability("uiautomator2ServerInstallTimeout", 90000);
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
                 var automationName = if (platformVersion == "4.4") "UiAutomator1" else "UiAutomator2"
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, automationName)
                 capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION, platformVersion)
                 capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName)
-                capabilities.setCapability("appPackage", appPackage)
+                capabilities.setCapability("appPackage", APP_BUNDLE_ID)
                 capabilities.setCapability("appActivity", appActivity)
                 if (!appFile.isNullOrBlank())  // The "app" capability is not required if the emulator already has the app installed
                     capabilities.setCapability(MobileCapabilityType.APP, appFile)
 
-                capabilities.setCapability("ignoreHiddenApiPolicyError", true)
-                // capabilities.setCapability("disableWindowAnimation", true)
-                // capabilities.setCapability("uiautomator2ServerInstallTimeout", 90000);
-                //capabilities.setCapability("noReset", true)
-                //capabilities.setCapability("fullReset", false)
-                capabilities.setCapability("allowTestPackages", true)
-
+                println("#### Running tests locally ... ")
                 driver = AndroidDriver<MobileElement>(URL(APPIUM_URL), capabilities)
             }
 
             // checks if the app has started correctly
-            if (!appPackage.equals((driver as AndroidDriver<*>).currentPackage) ||
-                !appActivity.equals((driver as AndroidDriver<*>).currentActivity())
+            if (APP_BUNDLE_ID != (driver as AndroidDriver<*>).currentPackage ||
+                appActivity != (driver as AndroidDriver<*>).currentActivity()
             ) {
                 throw Exception("Error loading the app and activity!")
             }
-
         } else /* iOS */ {
-
-            if (platformVersion.isNullOrBlank())
-                platformVersion = "13.5"
-
-            if (deviceName.isNullOrBlank())
-                deviceName = "iPhone 11"
 
             /**
              * The required .app file is usually at
              * ~/Library/Developer/Xcode/DerivedData/APP-RANDOM-CODE/Build/Products/Debug-iphonesimulator/AppiumApp.app
              */
             if (appFile.isNullOrBlank())
-                appFile = "COMPLETE-PATH-TO/AppiumApp.app"
+                throw Exception("param app_file is empty or null")
 
             capabilities.setCapability("noReset", true)
             capabilities.setCapability("waitForQuiescence", false)
@@ -196,8 +176,12 @@ object SuiteSetup {
             capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName)
             capabilities.setCapability(MobileCapabilityType.APP, appFile)
 
+            println("#### Running tests locally ... ")
             driver = IOSDriver<MobileElement>(URL(APPIUM_URL), capabilities)
         }
+
+        // Reinforces app is loaded
+        checkAppIsRunning()
     }
 
     /**
@@ -214,11 +198,7 @@ object SuiteSetup {
 
     fun restartApp() {
         try {
-            if (isIos()) {
-                driver?.terminateApp("com.br.zup.beagle.AppiumApp") // method close() on iOS doesn't work properly
-            } else {
-                driver?.closeApp()
-            }
+            driver?.terminateApp(APP_BUNDLE_ID)
         } catch (e: Exception) {
             println("ERROR closing app: ${e.message}")
         } finally {
@@ -228,12 +208,16 @@ object SuiteSetup {
 
     fun closeDriver() {
         try {
-            driver?.closeApp();
+            driver?.terminateApp(APP_BUNDLE_ID)
         } catch (e: Exception) {
             println("ERROR closing app: ${e.message}")
         } finally {
             driver?.quit()
         }
+    }
+
+    private fun checkAppIsRunning() {
+        AppiumUtil.waitForElementToBeClickable(getDriver(), By.id("TextBffUrl"), DEFAULT_SCREEN_WAIT_TIME_IN_MILL)
     }
 
 }

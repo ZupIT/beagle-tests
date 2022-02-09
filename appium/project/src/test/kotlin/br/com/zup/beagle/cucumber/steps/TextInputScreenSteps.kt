@@ -293,6 +293,11 @@ class TextInputScreenSteps : AbstractStep() {
 
     @Then("^validate textInput events:$")
     fun validateEvents(dataTable: DataTable) {
+
+        if (SuiteSetup.isAndroid()){
+            AppiumUtil.androidScrollToElementByText(getDriver(), 0, "action order")
+        }
+
         swipeUp()
         swipeUp()
 

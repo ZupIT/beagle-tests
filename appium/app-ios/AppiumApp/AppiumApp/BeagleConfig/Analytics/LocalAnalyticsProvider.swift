@@ -16,7 +16,7 @@
 
 import Beagle
 
-class LocalAnalyticsProvider: AnalyticsProvider {
+class LocalAnalyticsProvider: AnalyticsProviderProtocol {
     
     public static let shared = LocalAnalyticsProvider()
     

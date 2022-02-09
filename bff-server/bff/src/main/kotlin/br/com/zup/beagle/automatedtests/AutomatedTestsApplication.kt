@@ -15,12 +15,22 @@
  */
 package br.com.zup.beagle.automatedtests
 
+import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import java.util.*
+
 
 @SpringBootApplication
 open class AutomatedTestsApplication
 
 fun main(args: Array<String>) {
-	runApplication<AutomatedTestsApplication>(*args)
+
+    // Heroku support
+    val port = if (System.getenv("PORT") != null) System.getenv("PORT").toInt() else 8080
+    println("setting port to $port")
+
+    val app = SpringApplication(AutomatedTestsApplication::class.java)
+    app.setDefaultProperties(Collections
+        .singletonMap<String, Any>("server.port", port))
+    app.run(*args)
 }

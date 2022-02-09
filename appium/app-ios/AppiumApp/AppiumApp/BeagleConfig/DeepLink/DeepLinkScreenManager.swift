@@ -17,7 +17,7 @@
 import UIKit
 import Beagle
 
-class DeepLinkScreenManager: DeepLinkScreenManaging {
+class DeepLinkScreenManager: DeepLinkScreenManagerProtocol {
     func getNativeScreen(with path: String, data: [String : String]?) throws -> UIViewController {
         switch path {
         case "screen-analytics-link":

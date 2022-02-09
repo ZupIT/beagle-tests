@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-@image @android @ios
+@image @screenshotComparison @android @ios
 Feature: Image Component Validation
 
     As a Beagle developer/user

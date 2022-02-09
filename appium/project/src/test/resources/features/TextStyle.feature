@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-@textStyle @android @ios
+@textStyle @screenshotComparison @android @ios
 Feature: Text Component Style Validation
 
   As a Beagle developer/user

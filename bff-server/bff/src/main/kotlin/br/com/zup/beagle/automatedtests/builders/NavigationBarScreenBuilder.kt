@@ -44,7 +44,6 @@ import br.com.zup.beagle.widget.layout.NavigationBar
 import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.ui.Button
-import br.com.zup.beagle.widget.ui.ImagePath
 import br.com.zup.beagle.widget.ui.Text
 
 data class ExampleGlobalContext(
@@ -68,7 +67,7 @@ object NavigationBarScreenBuilder {
                 NavigationBarItem(
                     text = "Ajuda",
                     accessibility = Accessibility(accessibilityLabel = "Content Description"),
-                    image = ImagePath.Local.justMobile("informationImage"),
+                    image = "informationImage",
                     action = Alert(
                         title = "NavigationBar",
                         message = "This component that allows to place titles and button action.",
@@ -115,7 +114,7 @@ object NavigationBarScreenBuilder {
         navigationBarItems = listOf(
             NavigationBarItem(
                 text = "",
-                image = ImagePath.Local.justMobile(LOGO_BEAGLE),
+                image = LOGO_BEAGLE,
                 action = Navigate.PushView(Route.Remote(SCREEN_ACTION_CLICK_ENDPOINT))
             )
         )

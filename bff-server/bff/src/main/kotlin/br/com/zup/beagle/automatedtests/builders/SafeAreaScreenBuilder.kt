@@ -23,6 +23,7 @@ import br.com.zup.beagle.ext.setStyle
 import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.Navigate
 import br.com.zup.beagle.widget.action.Route
+import br.com.zup.beagle.widget.context.constant
 import br.com.zup.beagle.widget.core.AlignItems
 import br.com.zup.beagle.widget.core.AlignSelf
 import br.com.zup.beagle.widget.core.EdgeValue
@@ -81,7 +82,7 @@ object SafeAreaScreenBuilder {
                 }
             )
         ).setStyle {
-            this.backgroundColor = "#b7efcd"
+            this.backgroundColor = constant("#b7efcd")
             this.flex = Flex(
                 grow = 1.0,
                 alignItems = AlignItems.CENTER
