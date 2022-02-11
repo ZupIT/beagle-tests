@@ -14,6 +14,9 @@
   ],
   "horusecCliFalsePositiveHashes": [],
   "horusecCliRiskAcceptHashes": [
-    "3159d91696b6097e966cc00c728345c45490dbebeb660c12f904efa3c8e9e30c"
+    "3159d91696b6097e966cc00c728345c45490dbebeb660c12f904efa3c8e9e30c",
+    "5a020fe8a1e5fb0b4b6ade58747257d887a88ade26c16b52e8c9f1eb1ece3377",
+    "361d5a4e9ab7eadbb6ee23ce9bffb8955514e60e269243324f267c75713dd888",
+    "2bc74778bfb384e0bfae77383ca4f7ba140ae44101670e40f5dfe6f2c9de84b0"
   ]
 }
