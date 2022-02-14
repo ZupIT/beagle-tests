@@ -50,7 +50,7 @@ object TouchableScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = Local.justMobile("informationImage"),
+                    image = "informationImage",
                     action = Alert(
                         title = "Touchable",
                         message = "Applies click action on widgets that have no action.",

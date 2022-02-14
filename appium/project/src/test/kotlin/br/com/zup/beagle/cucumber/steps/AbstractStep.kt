@@ -183,6 +183,7 @@ abstract class AbstractStep {
         )
     }
 
+
     /**
      * Waits for an element to be hidden or nonexistent
      */
@@ -328,7 +329,7 @@ abstract class AbstractStep {
     @Suppress("SameParameterValue")
     protected fun scrollFromOnePointToCenterPoint(
         originPoint: Point,
-        horizontalScroll: Boolean
+        horizontalScroll: Boolean = false
     ) {
         if (SuiteSetup.isAndroid()) {
             AppiumUtil.androidScrollScreenFromOnePointToCenterPoint(
@@ -409,10 +410,17 @@ abstract class AbstractStep {
      * the element is inside another element (ex an alert) that is still loading when the click takes place.
      */
     protected fun safeClickOnElement(elementToBeClicked: MobileElement) {
-        if (SuiteSetup.isIos()) {
-            sleep(300)
-        }
+        sleep(500)
         elementToBeClicked.click()
+    }
+
+    protected fun safeLongPressElement(elementToBeLogPressed: MobileElement, milliseconds: Long = 200) {
+        sleep(500)
+        if (SuiteSetup.isAndroid()) {
+            AppiumUtil.androidLongPressElement(getDriver(), elementToBeLogPressed)
+        } else {
+            AppiumUtil.iosLongPressElement(getDriver(), elementToBeLogPressed)
+        }
     }
 
     private fun getImagesLocator(): By {
@@ -433,23 +441,26 @@ abstract class AbstractStep {
             textElement.clear()
         }
 
-        sleep(1000) // TouchActions sometimes get called before an element is ready to write
+        sleep(2000) // TouchActions sometimes get called before an element is ready to write
 
         if (SuiteSetup.isAndroid()) {
             val androidActions = AndroidTouchAction(getDriver())
-            androidActions.press(PointOption.point(500, 1700)).release().perform() // digit 5
+            androidActions.press(PointOption.point(500, 1400)).release().perform() // digit 5
         } else {
             val iosActions = IOSTouchAction(getDriver())
             iosActions.press(PointOption.point(160, 660)).release().perform()
         }
 
-        val typedChar =
-            if (textElement.text.length > 1) textElement.text.substring(textElement.text.length - 1)
-            else textElement.text
+        sleep(1000) // waits keyboard release
 
+        val typedChar = textElement.text
+
+        if (typedChar.isNullOrBlank())
+            throw Exception("Nothing was typed. Please, review the keyboard coordinates")
         try {
             typedChar.toInt()
-        } catch (nfe: NumberFormatException) {
+        } catch (e: NumberFormatException) {
+            print("fail to convert $typedChar to int: ${e.message}")
             return false
         }
 
@@ -576,6 +587,16 @@ abstract class AbstractStep {
         return elementExists(locator)
     }
 
+    protected fun elementExistsByText(
+        elementValue: String,
+        likeSearch: Boolean = false,
+        ignoreCase: Boolean = false,
+        nativeLocator: Boolean = true
+    ): Boolean {
+        val locator: By = getNamePropertyLocator(elementValue, likeSearch, ignoreCase, nativeLocator)
+        return elementExists(locator)
+    }
+
     protected fun childElementExists(parentElement: MobileElement, childLocator: By): Boolean {
         return AppiumUtil.childElementExists(getDriver(), parentElement, childLocator, 2000)
     }
@@ -599,5 +620,10 @@ abstract class AbstractStep {
             )
 
         }
+    }
+
+
+    protected fun waitForElementTextToContain(element: MobileElement, text: String) {
+        AppiumUtil.waitForElementTextToContain(getDriver(), element, text, DEFAULT_ELEMENT_WAIT_TIME_IN_MILL)
     }
 }

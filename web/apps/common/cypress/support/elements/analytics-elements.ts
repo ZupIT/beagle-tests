@@ -18,8 +18,7 @@ const analyticsElements = {
 
     buttonWithText: (text: string) => cy.contains('button', text),
     getAnalyticsInArray: (analytics: string) => cy.get('#analyticsCypress').contains(analytics),
-    getAnalytics: () => cy.get('#analyticsCypress'),
-    cleanUpLocalStorage: (key: string) => cy.clearLocalStorage(key)
+    getAnalytics: () => cy.get('#analyticsCypress')
 }
   
 export default analyticsElements

@@ -19,29 +19,24 @@ import Beagle
 
 class BeagleConfig {
     static func config() {
-        let dependencies = BeagleDependencies()
-        let innerDependencies = InnerDependencies()
+        var dependencies = BeagleDependencies()
         
-        dependencies.networkClient = NetworkClientDefault(dependencies: innerDependencies)
-        dependencies.urlBuilder = UrlBuilder(baseUrl: URL(string: "http://localhost:8080/"))
+        
+        dependencies.networkClient = NetworkClientDefault()
+        dependencies.urlBuilder = UrlBuilder(baseUrl: URL(string: "http://127.0.0.1:8080/"))
         
         dependencies.deepLinkHandler = DeepLinkScreenManager()
         dependencies.analyticsProvider = LocalAnalyticsProvider.shared
         
-        dependencies.navigation.registerNavigationController(
+        dependencies.navigator.registerNavigationController(
             builder: CustomBeagleNavigationController.init,
             forId: "CustomBeagleNavigation"
         )
-        dependencies.navigation.registerNavigationController(
+        dependencies.navigator.registerNavigationController(
             builder: OtherBeagleNavigationController.init,
             forId: "otherController"
         )
         
-        Beagle.dependencies = dependencies
+        BeagleConfigurator.setup(dependencies: dependencies)
     }
-}
-
-// MARK: - DependencyLogger
-class InnerDependencies: DependencyLogger {
-    var logger: BeagleLoggerType = BeagleLoggerDefault()
 }

@@ -17,6 +17,10 @@
 package br.com.zup.beagle.cucumber.steps
 
 
+import br.com.zup.beagle.setup.SuiteSetup
+import br.com.zup.beagle.utils.AppiumUtil
+import br.com.zup.beagle.utils.SwipeDirection
+import io.appium.java_client.touch.offset.PointOption
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
@@ -43,19 +47,26 @@ class PageViewScreenSteps : AbstractStep() {
     @Then("^my PageView components should render their respective pages attributes correctly when swiping left$")
     fun checkPageViewRendersTabs() {
 
+
         /**
          * Swipe screen sometimes fail due to the screen not being completely loaded, so there are some sleeps below
          */
-        sleep(400)
+        sleep(500)
 
         // state 1: shows only page1Text and Context0
         waitForElementWithTextToBeInvisible(page2Text)
         waitForElementWithTextToBeInvisible(page3Text)
-        waitForElementWithTextToBeClickable(page1Text)
         waitForElementWithTextToBeClickable("Context0")
 
-        sleep(300)
-        swipeLeft()
+        val anchorElementHeight = waitForElementWithTextToBeClickable(page1Text).location.y
+        val screenWidth = getDriver().manage().window().size.width
+
+        if (SuiteSetup.isAndroid()) {
+            customAndroidSwipeLeft(anchorElementHeight, screenWidth)
+        } else {
+            swipeLeft()
+        }
+        sleep(500)
 
         // state 2: shows only page2Text and Context1
         waitForElementWithTextToBeInvisible(page1Text)
@@ -63,14 +74,27 @@ class PageViewScreenSteps : AbstractStep() {
         waitForElementWithTextToBeClickable(page2Text)
         waitForElementWithTextToBeClickable("Context1")
 
-        sleep(300)
-        swipeLeft()
+        if (SuiteSetup.isAndroid()) {
+            customAndroidSwipeLeft(anchorElementHeight, screenWidth)
+        } else {
+            swipeLeft()
+        }
+        sleep(500)
 
         // state 3: shows only page3Text and Context2
         waitForElementWithTextToBeInvisible(page1Text)
         waitForElementWithTextToBeInvisible(page2Text)
         waitForElementWithTextToBeClickable(page3Text)
         waitForElementWithTextToBeClickable("Context2")
+    }
+
+    private fun customAndroidSwipeLeft(anchorHeight: Int, screenWidth: Int) {
+        AppiumUtil.androidSwipeScreenTo(
+            getDriver(),
+            SwipeDirection.LEFT,
+            originPoint = PointOption.point(screenWidth - 10, anchorHeight)
+        )
+
     }
 
 }

@@ -20,6 +20,7 @@ import br.com.zup.beagle.ext.setStyle
 import br.com.zup.beagle.widget.action.Alert
 import br.com.zup.beagle.widget.action.SetContext
 import br.com.zup.beagle.widget.context.ContextData
+import br.com.zup.beagle.widget.context.constant
 import br.com.zup.beagle.widget.context.expressionOf
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Size
@@ -30,7 +31,6 @@ import br.com.zup.beagle.widget.layout.NavigationBar
 import br.com.zup.beagle.widget.layout.NavigationBarItem
 import br.com.zup.beagle.widget.layout.Screen
 import br.com.zup.beagle.widget.layout.ScrollView
-import br.com.zup.beagle.widget.ui.ImagePath
 import br.com.zup.beagle.widget.ui.TextInput
 
 data class TextInputReadOnly(val value: String, val isReadOnly: Boolean)
@@ -46,7 +46,7 @@ object TextInputScreenBuilder {
             navigationBarItems = listOf(
                 NavigationBarItem(
                     text = "",
-                    image = ImagePath.Local.justMobile("informationImage"),
+                    image = "informationImage",
                     action = Alert(
                         title = "Text Input",
                         message = "This widget will define a Text Input view natively using the server driven " +
@@ -80,7 +80,7 @@ object TextInputScreenBuilder {
                     )
                 ).setStyle {
                     this.size = Size(height = UnitValue.percent(100.0))
-                    this.backgroundColor = "#82E0AA"
+                    this.backgroundColor = constant("#82E0AA")
                     this.padding = EdgeValue(left = UnitValue.real(5), bottom = UnitValue.real(5))
                 }
             )

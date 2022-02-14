@@ -16,6 +16,7 @@
 
 package br.com.zup.beagle.cucumber.steps
 
+import br.com.zup.beagle.setup.DEFAULT_ELEMENT_WAIT_TIME_IN_MILL
 import br.com.zup.beagle.setup.SuiteSetup
 import br.com.zup.beagle.utils.AppiumUtil
 import br.com.zup.beagle.utils.SwipeDirection
@@ -26,6 +27,7 @@ import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import org.junit.Assert
+import org.junit.runners.Suite
 import org.openqa.selenium.By
 
 class ScrollViewScreenSteps : AbstractStep() {
@@ -141,7 +143,11 @@ class ScrollViewScreenSteps : AbstractStep() {
 
         // ScrollView 1 second state: new texts showing instead of text 2 and 3
         textElement2.click()
-        Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement1, text2))
+        if (SuiteSetup.isAndroid()) {
+            waitForElementTextToContain(textElement2, newTextPrefix)
+        } else {
+            waitForScrollViewChildElementToDisappear(scrollViewElement1, text2)
+        }
         textElement2 = getScrollViewChildrenTextElementByText(scrollViewElement1, newTextPrefix).last()
         Assert.assertTrue(textElement2.text.startsWith(newTextPrefix))
         Assert.assertTrue(textElement2.text.endsWith(newTextSufix))
@@ -155,7 +161,11 @@ class ScrollViewScreenSteps : AbstractStep() {
         // reloads element
         textElement3 = getScrollViewChildTextElement(scrollViewElement1, text3)
         textElement3.click()
-        Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement1, text3))
+        if (SuiteSetup.isAndroid()) {
+            waitForElementTextToContain(textElement3, newTextPrefix)
+        } else {
+            waitForScrollViewChildElementToDisappear(scrollViewElement1, text3)
+        }
         textElement3 = getScrollViewChildrenTextElementByText(scrollViewElement1, newTextPrefix).last()
         Assert.assertTrue(textElement3.text.startsWith(newTextPrefix))
         Assert.assertTrue(textElement3.text.endsWith(newTextSufix))
@@ -182,7 +192,11 @@ class ScrollViewScreenSteps : AbstractStep() {
 
         // ScrollView 2 second state: new texts showing instead of text 2 and 3
         textElement2.click()
-        Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement2, text2))
+        if (SuiteSetup.isAndroid()) {
+            waitForElementTextToContain(textElement2, newTextPrefix)
+        } else {
+            waitForScrollViewChildElementToDisappear(scrollViewElement2, text2)
+        }
         textElement2 = getScrollViewChildrenTextElementByText(scrollViewElement2, newTextPrefix).last()
         Assert.assertTrue(textElement2.text.startsWith(newTextPrefix))
         Assert.assertTrue(textElement2.text.endsWith(newTextSufix))
@@ -197,8 +211,11 @@ class ScrollViewScreenSteps : AbstractStep() {
         // reloads element
         var textElement3 = getScrollViewChildTextElement(scrollViewElement2, text3)
         textElement3.click()
-
-        Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement2, text3))
+        if (SuiteSetup.isAndroid()) {
+            waitForElementTextToContain(textElement3, newTextPrefix)
+        } else {
+            waitForScrollViewChildElementToDisappear(scrollViewElement2, text3)
+        }
         textElement3 = getScrollViewChildrenTextElementByText(scrollViewElement2, newTextPrefix).last()
         Assert.assertTrue(textElement3.text.startsWith(newTextPrefix))
         Assert.assertTrue(textElement3.text.endsWith(newTextSufix))
@@ -225,7 +242,11 @@ class ScrollViewScreenSteps : AbstractStep() {
 
         // ScrollView 3 second state: only the new text showing
         textElement2.click()
-        Assert.assertFalse(scrollViewChildElementTextExists(scrollViewElement3, text2))
+        if (SuiteSetup.isAndroid()) {
+            waitForElementTextToContain(textElement2, newTextPrefix)
+        } else {
+            waitForScrollViewChildElementToDisappear(scrollViewElement3, text2)
+        }
         textElement2 = getScrollViewChildrenTextElementByText(scrollViewElement3, newTextPrefix).last()
         Assert.assertTrue(textElement2.text.startsWith(newTextPrefix))
         Assert.assertTrue(textElement2.text.endsWith(newTextSufix))
@@ -328,18 +349,21 @@ class ScrollViewScreenSteps : AbstractStep() {
         return waitForChildElementToBePresent(scrollViewElement, locator)
     }
 
-    private fun scrollViewChildElementTextExists(
+    private fun waitForScrollViewChildElementToDisappear(
         scrollViewElement: MobileElement,
-        elementTextQuery: String
-    ): Boolean {
+        childElementTextQuery: String
+    ) {
 
         val locator: By = if (SuiteSetup.isIos()) {
-            MobileBy.iOSClassChain("**/XCUIElementTypeTextView[`value == \"$elementTextQuery\"`]")
+            MobileBy.iOSClassChain("**/XCUIElementTypeTextView[`value == \"$childElementTextQuery\"`]")
         } else {
-            By.xpath(".//android.widget.TextView[@text='$elementTextQuery']")
+            By.xpath(".//android.widget.TextView[@text='$childElementTextQuery']")
         }
 
-        return childElementExists(scrollViewElement, locator)
+        AppiumUtil.waitForChildElementToBeInvisible(
+            getDriver(),
+            scrollViewElement, locator, DEFAULT_ELEMENT_WAIT_TIME_IN_MILL
+        )
     }
 
     private fun isButtonShowing(buttonText: String): Boolean {

@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "yarn beagle view-engine && ng serve",
-    "preinstall": "yarn --cwd ../../../beagle-web-angular && yarn --cwd ../../../beagle-web-angular build"
+    "preinstall": "./config_beagle_dependencies.sh",
+    "postinstall": "./post_install.sh"
   },
   "private": true,
   "dependencies": {

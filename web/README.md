@@ -40,7 +40,7 @@ To test the Angular app after installing it, run the following command to start 
 # angular
 cd apps/angular9
 dos2unix -F node_modules/.bin/beagle
-yarn start
+yarn serve
 ```
 
 To test the React app after installing it, run the following command to start it:
