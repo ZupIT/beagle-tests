@@ -39,7 +39,7 @@ Use the following command to automatically initialize and update each submodule 
 submodules if any of the submodules in the repository have submodules themselves 
 (src: https://git-scm.com/book/en/v2/Git-Tools-Submodules):
 
-```git clone --recurse-submodules git@github.com:Orangestack-com/beagle-tests.git && git submodule update --remote```
+```git clone --recurse-submodules git@github.com:ZupIT/beagle-tests.git && git submodule update --remote```
 
 If you already cloned the project and want only to update the submodules, execute the following command:
 
