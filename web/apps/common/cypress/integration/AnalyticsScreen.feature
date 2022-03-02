@@ -53,6 +53,6 @@ Feature: Analytics validation
         Given that the analytics local storage is cleaned up
         When I press the button with title "navigateToPage"
         When I press the button with title "navigate to local screen"
-        Then an analytics record should be created with {"type":"screen","platform":"Angular","timestamp":1609459200000,"screen":"/analytics2-navigate"}
+        Then an analytics record should be created with {"type":"screen","platform":"Angular","timestamp":1609459200000,"screen":"/analytics2-navigate","rootId":"/analytics2-navigate"}}
         
 
