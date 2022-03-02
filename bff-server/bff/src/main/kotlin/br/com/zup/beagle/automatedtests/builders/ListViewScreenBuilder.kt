@@ -321,8 +321,7 @@ object ListViewScreenBuilder {
                         bottom = UnitValue.real(8),
                         left = UnitValue.real(8))
                 },
-            createThirdListView(null).setPlatform(BeaglePlatform.WEB),
-            createThirdListView(200).setPlatform(BeaglePlatform.MOBILE),
+            createThirdListView(null).setPlatform(BeaglePlatform.WEB)
         )
     )
 
@@ -385,5 +384,5 @@ object ListViewScreenBuilder {
 
         return listView
     }
-}
+} 
 
