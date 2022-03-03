@@ -322,7 +322,7 @@ object ListViewScreenBuilder {
                         left = UnitValue.real(8))
                 },
             createThirdListView(null, "booksListWeb").setPlatform(BeaglePlatform.WEB),
-            createThirdListView(200, "booksListMobile").setPlatform(BeaglePlatform.MOBILE),
+            createThirdListView(200, "booksList").setPlatform(BeaglePlatform.MOBILE),
         )
     )
 
