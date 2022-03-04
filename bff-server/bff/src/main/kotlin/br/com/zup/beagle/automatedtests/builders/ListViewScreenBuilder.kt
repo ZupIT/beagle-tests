@@ -375,7 +375,7 @@ object ListViewScreenBuilder {
                     )
                 )
             )
-        ).setId("booksList")
+        ).setId(id = "booksList")
 
         listHeight?.let { height ->
             listView.setStyle {
