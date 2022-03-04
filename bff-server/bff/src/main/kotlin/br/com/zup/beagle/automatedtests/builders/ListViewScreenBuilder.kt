@@ -321,12 +321,12 @@ object ListViewScreenBuilder {
                         bottom = UnitValue.real(8),
                         left = UnitValue.real(8))
                 },
-            createThirdListView(200, "booksList").setPlatform(BeaglePlatform.MOBILE),
-            createThirdListView(null, "booksListWeb").setPlatform(BeaglePlatform.WEB),
+            createThirdListView(null).setPlatform(BeaglePlatform.WEB),
+            createThirdListView(200).setPlatform(BeaglePlatform.MOBILE),
         )
     )
 
-    private fun createThirdListView(listHeight: Int?, id: String): ListView {
+    private fun createThirdListView(listHeight: Int?): ListView {
 
         val listView = ListView(
             isScrollIndicatorVisible = true,
@@ -375,7 +375,7 @@ object ListViewScreenBuilder {
                     )
                 )
             )
-        ).setId(id)
+        ).setId("booksList")
 
         listHeight?.let { height ->
             listView.setStyle {
