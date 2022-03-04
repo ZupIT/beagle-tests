@@ -68,10 +68,12 @@ object NavigationBarScreenBuilder {
                     text = "Ajuda",
                     accessibility = Accessibility(accessibilityLabel = "Content Description"),
                     image = "informationImage",
-                    action = Alert(
-                        title = "NavigationBar",
-                        message = "This component that allows to place titles and button action.",
-                        labelOk = "OK"
+                    onPress = listOf(
+                        Alert(
+                            title = "NavigationBar",
+                            message = "This component that allows to place titles and button action.",
+                            labelOk = "OK"
+                        )
                     )
                 )
             )
@@ -103,7 +105,7 @@ object NavigationBarScreenBuilder {
         navigationBarItems = listOf(
             NavigationBarItem(
                 text = "Entrar",
-                action = Navigate.PushView(Route.Remote(SCREEN_ACTION_CLICK_ENDPOINT))
+                onPress = listOf(Navigate.PushView(Route.Remote(SCREEN_ACTION_CLICK_ENDPOINT)))
             )
         )
     )
@@ -115,7 +117,7 @@ object NavigationBarScreenBuilder {
             NavigationBarItem(
                 text = "",
                 image = LOGO_BEAGLE,
-                action = Navigate.PushView(Route.Remote(SCREEN_ACTION_CLICK_ENDPOINT))
+                onPress = listOf(Navigate.PushView(Route.Remote(SCREEN_ACTION_CLICK_ENDPOINT)))
             )
         )
     )

@@ -21,9 +21,9 @@ class BeagleConfig {
     static func config() {
         var dependencies = BeagleDependencies()
         
-        
         dependencies.networkClient = NetworkClientDefault()
         dependencies.urlBuilder = UrlBuilder(baseUrl: URL(string: "http://127.0.0.1:8080/"))
+        dependencies.logger = BeagleLoggerDefault()
         
         dependencies.deepLinkHandler = DeepLinkScreenManager()
         dependencies.analyticsProvider = LocalAnalyticsProvider.shared
