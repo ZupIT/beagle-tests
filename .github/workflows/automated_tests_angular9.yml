@@ -56,13 +56,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - name: Print branch info
-        run: git branch
+          submodules: 'false'
+      - uses: ./.github/actions/submodules-update
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Gradle cache
         uses: actions/cache@v2
