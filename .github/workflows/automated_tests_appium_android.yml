@@ -17,6 +17,15 @@
 name: Beagle Appium Android tests
 on:
   workflow_dispatch:
+    inputs:
+      beagle_android_branch:
+        description: 'Beagle Android Branch'
+        required: false
+        default: 'main'
+      beagle_backend_kotlin_branch:
+        description: 'Beagle Backend Kotlin Branch'
+        required: false
+        default: 'main'
   workflow_run:
     workflows: [ "Beagle Appium tests trigger" ]
     types:
@@ -49,6 +58,8 @@ jobs:
       - uses: ./.github/actions/submodules-update
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_android_branch: ${{ inputs.beagle_android_branch }}
+          beagle_backend_kotlin_branch: ${{ inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2
