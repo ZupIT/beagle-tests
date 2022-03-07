@@ -46,8 +46,8 @@ jobs:
       - uses: ./.github/actions/submodules-update
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          beagle_ios_branch: ${{ inputs.beagle_ios_branch }}
-          beagle_backend_kotlin_branch: ${{ inputs.beagle_backend_kotlin_branch }}
+          beagle_ios_branch: ${{ github.event.inputs.beagle_ios_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2
