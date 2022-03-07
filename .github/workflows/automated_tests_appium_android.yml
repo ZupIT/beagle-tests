@@ -17,6 +17,15 @@
 name: Beagle Appium Android tests
 on:
   workflow_dispatch:
+    inputs:
+      beagle_android_branch:
+        description: 'Beagle Android Branch'
+        required: false
+        default: 'main'
+      beagle_backend_kotlin_branch:
+        description: 'Beagle Backend Kotlin Branch'
+        required: false
+        default: 'main'
   workflow_run:
     workflows: [ "Beagle Appium tests trigger" ]
     types:
@@ -39,7 +48,7 @@ jobs:
   artifact_generation_job:
     name: Artifact Generation
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v2
         with:
@@ -49,6 +58,8 @@ jobs:
       - uses: ./.github/actions/submodules-update
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_android_branch: ${{ github.event.inputs.beagle_android_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2

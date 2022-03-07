@@ -22,6 +22,26 @@ inputs:
   token:
     description: 'Github token'
     required: true
+  beagle_android_branch:
+    description: 'Beagle Android Branch'
+    required: false
+    default: 'main'
+  beagle_ios_branch:
+    description: 'Beagle IOS Branch'
+    required: false
+    default: 'main'
+  beagle_web_core_branch:
+    description: 'Beagle Web Core Branch'
+    required: false
+    default: 'main'
+  beagle_web_angular_branch:
+    description: 'Beagle Web Angular Branch'
+    required: false
+    default: 'main'
+  beagle_backend_kotlin_branch:
+    description: 'Beagle Backend Kotlin Branch'
+    required: false
+    default: 'main'
 runs:
   using: "composite"
   steps:
@@ -39,6 +59,18 @@ runs:
 
     - name: tell git to use https instead of ssh whenever it encounters it
       run: 'git config --global url."https://github.com/".insteadof git@github.com:'
+      shell: bash
+
+      ## Updates branch for submodules via parameters
+    - run: "git config --file=.gitmodules submodule.beagle-android.branch ${{ inputs.beagle_android_branch }}"
+      shell: bash
+    - run: "git config --file=.gitmodules submodule.beagle-backend-kotlin.branch ${{ inputs.beagle_backend_kotlin_branch }}"
+      shell: bash
+    - run: "git config --file=.gitmodules submodule.beagle-web-angular.branch ${{ inputs.beagle_web_angular_branch }}"
+      shell: bash
+    - run: "git config --file=.gitmodules submodule.beagle-web-core.branch ${{ inputs.beagle_web_core_branch }}"
+      shell: bash
+    - run: "git config --file=.gitmodules submodule.beagle-ios.branch ${{ inputs.beagle_ios_branch }}"
       shell: bash
 
     - name: Update submodules
