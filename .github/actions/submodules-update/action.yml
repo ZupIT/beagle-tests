@@ -73,8 +73,12 @@ runs:
     - run: "git config --file=.gitmodules submodule.beagle-ios.branch ${{ inputs.beagle_ios_branch }}"
       shell: bash
 
+    - name: Sync submodules
+      run: git submodule sync
+      shell: bash
+
     - name: Update submodules
-      run: git submodule sync & git submodule update --init --recursive --remote
+      run: git submodule update --init --recursive --remote
       shell: bash
 
     - name: Print branch info
