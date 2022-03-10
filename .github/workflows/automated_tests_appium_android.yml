@@ -17,6 +17,15 @@
 name: Beagle Appium Android tests
 on:
   workflow_dispatch:
+    inputs:
+      beagle_android_branch:
+        description: 'Beagle Android Branch'
+        required: false
+        default: 'main'
+      beagle_backend_kotlin_branch:
+        description: 'Beagle Backend Kotlin Branch'
+        required: false
+        default: 'main'
   workflow_run:
     workflows: [ "Beagle Appium tests trigger" ]
     types:
@@ -39,19 +48,18 @@ jobs:
   artifact_generation_job:
     name: Artifact Generation
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - name: Print branch info
-        run: git branch
+          submodules: 'false'
+      - uses: ./.github/actions/submodules-update
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_android_branch: ${{ github.event.inputs.beagle_android_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2
@@ -60,6 +68,22 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+
+      - name: Setup JDK (8)
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+
+      - name: Build project app-android to generate the .apk file
+        run: bash ./appium/app-android/gradlew assembleDebug -p appium/app-android
+
+      - name: Upload .apk file
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-file
+          path: ${{ github.workspace }}/appium/app-android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
 
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
@@ -83,15 +107,7 @@ jobs:
           path: bff-server/bff/build/libs/bff.jar
           if-no-files-found: error
 
-      - name: Build project app-android to generate the .apk file
-        run: bash ./appium/app-android/gradlew assembleDebug -p appium/app-android
 
-      - name: Upload .apk file
-        uses: actions/upload-artifact@v2
-        with:
-          name: apk-file
-          path: ${{ github.workspace }}/appium/app-android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
 
   appium_tests:
     name: Tests Matrix
@@ -107,10 +123,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
+          submodules: 'false'
 
       - run: git branch
 

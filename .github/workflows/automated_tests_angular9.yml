@@ -23,6 +23,19 @@ on:
     # src: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
     - cron: '0 0 * * 1-5'
   workflow_dispatch:
+    inputs:
+      beagle_web_core_branch:
+        description: 'Beagle Web Core Branch'
+        required: false
+        default: 'main'
+      beagle_web_angular_branch:
+        description: 'Beagle Web Angular Branch'
+        required: false
+        default: 'main'
+      beagle_backend_kotlin_branch:
+        description: 'Beagle Backend Kotlin Branch'
+        required: false
+        default: 'main'
   # invoked by merges to main (pushing a branch to main)
   # src: https://github.community/t/trigger-workflow-only-on-pull-request-merge/17359/2
   push:
@@ -56,13 +69,13 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - name: Print branch info
-        run: git branch
+          submodules: 'false'
+      - uses: ./.github/actions/submodules-update
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_web_core_branch: ${{ github.event.inputs.beagle_web_core_branch }}
+          beagle_web_angular_branch: ${{ github.event.inputs.beagle_web_angular_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2

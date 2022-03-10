@@ -47,11 +47,13 @@ object TextInputScreenBuilder {
                 NavigationBarItem(
                     text = "",
                     image = "informationImage",
-                    action = Alert(
-                        title = "Text Input",
-                        message = "This widget will define a Text Input view natively using the server driven " +
-                            "information received through Beagle.",
-                        labelOk = "OK"
+                    onPress = listOf(
+                        Alert(
+                            title = "Text Input",
+                            message = "This widget will define a Text Input view natively using the server driven " +
+                                "information received through Beagle.",
+                            labelOk = "OK"
+                        )
                     )
                 )
             )
