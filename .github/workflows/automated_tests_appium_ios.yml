@@ -18,6 +18,15 @@ name: Beagle Appium iOS Tests
 
 on:
   workflow_dispatch:
+    inputs:
+      beagle_ios_branch:
+        description: 'Beagle IOS Branch'
+        required: false
+        default: 'main'
+      beagle_backend_kotlin_branch:
+        description: 'Beagle Backend Kotlin Branch'
+        required: false
+        default: 'main'
   workflow_run:
     workflows: [ "Beagle Appium tests trigger" ]
     types:
@@ -27,19 +36,18 @@ jobs:
   compile_bff_project:
     name: Compile BFF project
     runs-on: ubuntu-20.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.BEAGLE_TEMP_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - name: Print branch info
-        run: git branch
+          submodules: 'false'
+      - uses: ./.github/actions/submodules-update
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_ios_branch: ${{ github.event.inputs.beagle_ios_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Gradle cache
         uses: actions/cache@v2
@@ -83,15 +91,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.BEAGLE_TEMP_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event.workflow_run.head_branch }}
-          submodules: 'true'
-
-      - name: Update submodules
-        run: git submodule update --init --recursive --remote
-
-      - name: Print branch info
-        run: git branch
+          submodules: 'false'
+      - uses: ./.github/actions/submodules-update
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          beagle_ios_branch: ${{ github.event.inputs.beagle_ios_branch }}
+          beagle_backend_kotlin_branch: ${{ github.event.inputs.beagle_backend_kotlin_branch }}
 
       - name: Setup JDK (11)
         uses: actions/setup-java@v2
