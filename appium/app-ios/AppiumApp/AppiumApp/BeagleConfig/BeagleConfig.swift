@@ -18,25 +18,36 @@ import Foundation
 import Beagle
 
 class BeagleConfig {
-    static func config() {
-        var dependencies = BeagleDependencies()
+    static func config() -> BeagleConfiguration {
+        var dependencies = BeagleDependenciesFactory()
         
-        dependencies.networkClient = NetworkClientDefault()
-        dependencies.urlBuilder = UrlBuilder(baseUrl: URL(string: "http://127.0.0.1:8080/"))
-        dependencies.logger = BeagleLoggerDefault()
+        dependencies.networkClient = Factory { resolver in
+            NetworkClientDefault(resolver)
+        }
+        dependencies.urlBuilder = Factory { _ in
+            UrlBuilder(baseUrl: URL(string: "http://127.0.0.1:8080/"))
+        }
+        dependencies.logger = Factory { _ in
+            BeagleLoggerDefault()
+        }
+        dependencies.deepLinkHandler = Factory { _ in
+            DeepLinkScreenManager()
+        }
+        dependencies.analyticsProvider = Factory { _ in
+            LocalAnalyticsProvider.shared
+        }
         
-        dependencies.deepLinkHandler = DeepLinkScreenManager()
-        dependencies.analyticsProvider = LocalAnalyticsProvider.shared
+        let configuration = BeagleConfiguration(dependencies: dependencies)
         
-        dependencies.navigator.registerNavigationController(
+        configuration.dependencies.navigator.registerNavigationController(
             builder: CustomBeagleNavigationController.init,
             forId: "CustomBeagleNavigation"
         )
-        dependencies.navigator.registerNavigationController(
+        configuration.dependencies.navigator.registerNavigationController(
             builder: OtherBeagleNavigationController.init,
             forId: "otherController"
         )
-        
-        BeagleConfigurator.setup(dependencies: dependencies)
+
+        return configuration
     }
 }
