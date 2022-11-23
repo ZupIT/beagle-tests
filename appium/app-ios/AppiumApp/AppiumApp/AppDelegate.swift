@@ -25,8 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL,
                      options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        BeagleConfig.config()
-        
         UIView.setAnimationsEnabled(false)
         
         // extracts the suffix of the link "appiumapp://"
@@ -53,8 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        BeagleConfig.config()
-                
         let screen = CustomBeagleNavigationController(rootViewController: MainViewController())
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = screen

@@ -65,7 +65,9 @@
 				5C296390258BB014000194EE /* Products */,
 				5C2963A7258BB0E7000194EE /* Frameworks */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		5C296390258BB014000194EE /* Products */ = {
 			isa = PBXGroup;
