@@ -81,7 +81,7 @@ jobs:
 
   appium_tests:
     name: Tests job
-    runs-on: macos-latest
+    runs-on: macos-11
     needs: compile_bff_project
     timeout-minutes: 90
     strategy:
